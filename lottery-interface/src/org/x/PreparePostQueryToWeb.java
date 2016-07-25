@@ -22,43 +22,55 @@ import org.apache.log4j.Logger;
 
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.ClientTransService;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base.ReqHead;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReq;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReqBody;
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryModifyBetAccountInfoUrlReq;
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryModifyBetAccountInfoUrlReqBody;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.ClientUtil;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
 
-public class QueryMobile {
+public class PreparePostQueryToWeb {
 
-  private static final Logger LOG = Logger.getLogger(QueryMobile.class);
+  private static final Logger LOG = Logger.getLogger(PreparePostQueryToWeb.class);
 
   private final long serialVersionUID = 8756559814195904326L;
-  private PointExchangeLotteryReqBody body = new PointExchangeLotteryReqBody();
+  private QueryModifyBetAccountInfoUrlReqBody body = new QueryModifyBetAccountInfoUrlReqBody();
 
-  private String channelId = "C12001";
+  private String channelId;
   private String transSerialNumber;
-  private String businessId = "3020";
+  private String pointTotalAmount;
   private String transData;
   private String transDataDecode;
   private String sendUrl;
 
+  public PreparePostQueryToWeb() throws RsaEncryptException {
+    super();
+    this.channelId = ClientUtil.getInstance().getChannelId();
+    this.transSerialNumber = UUID.randomUUID().toString().replaceAll("-", "");
+    configBody();
+    LOG.debug(body.getCallbackURL());
+    sendUrl = ClientUtil.getInstance().getPointExchangeLotteryUrl();
+    QueryModifyBetAccountInfoUrlReq req = new QueryModifyBetAccountInfoUrlReq();
+    req.setHead(new ReqHead(channelId));
+    req.setBody(body);
+    LOG.debug(req);
+    transData = ClientTransService.getInstance().encryptQueryModifyBetAccountInfoUrlReq(req);
+  }
+
   public static void main(String[] args) throws RsaEncryptException, RsaDecryptException, ClientProtocolException,
       IOException {
-    QueryMobile testSend = new QueryMobile();
+    PreparePostQueryToWeb testSend = new PreparePostQueryToWeb();
     testSend.sendTest();
   }
 
   public void sendTest() throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
-    transSerialNumber = UUID.randomUUID().toString().replaceAll("-", "");
     configBody();
     LOG.debug(body.getCallbackURL());
     sendUrl = ClientUtil.getInstance().getPointExchangeLotteryUrl();
-    channelId = ClientUtil.getInstance().getChannelId();
-    PointExchangeLotteryReq req = new PointExchangeLotteryReq();
+    QueryModifyBetAccountInfoUrlReq req = new QueryModifyBetAccountInfoUrlReq();
     req.setHead(new ReqHead(channelId));
     req.setBody(body);
     LOG.debug(req);
-    transData = ClientTransService.getInstance().encryptPointExchangeLotteryReq(req);
+    transData = ClientTransService.getInstance().encryptQueryModifyBetAccountInfoUrlReq(req);
     LOG.debug(transData);
     // String url =
     // "http://124.205.38.84:8480/resources/api/receiveChannelOrderAction.action";
@@ -79,19 +91,17 @@ public class QueryMobile {
   private void configBody() {
     body.setOrderNumber(UUID.randomUUID().toString().replaceAll("-", ""));
     body.setTransDateTime(new Date());
-    body.setCallbackURL("http://120.24.38.160:38080/ytCallback.jsp");
+    body.setCallbackURL("http://120.24.38.160:38080/ytQueryCallback.jsp");
     try {
-      body.setPointTotalAmount(10);
-      body.setCallbackURL("http://120.24.38.160:38080/ytCallback.jsp");
+      body.setCallbackURL("http://120.24.38.160:38080/ytQueryCallback.jsp");
       body.setChannelReserved("youka");
-      body.setOrderNumber(Long.toString(System.currentTimeMillis()));
       // body.setUserPhoneNumber("15829553521");// zhuxizhe
+      // body.setUserPhoneNumber("18025314707");// fuming
+      // body.setUserPhoneNumber("15285960182");// fuming guizhou CMCC test
       // body.setUserPhoneNumber("13603054736");// lijiaqi
-      body.setUserPhoneNumber("13530274162");//longxu
-      body.setPointMerchantId("12001");
-      body.setGameId("10001");
-      body.setNumberSelectType(1);
-      body.setBetTotalAmount(1);
+      // body.setUserPhoneNumber("13530274162");//longxu
+      body.setUserPhoneNumber("13603054735");
+      body.setOrderNumber("1469413604412");
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -127,4 +137,29 @@ public class QueryMobile {
     }
     return result;
   }
+
+  public String getChannelId() {
+    return channelId;
+  }
+
+  public void setChannelId(String channelId) {
+    this.channelId = channelId;
+  }
+
+  public String getTransData() {
+    return transData;
+  }
+
+  public void setTransData(String transData) {
+    this.transData = transData;
+  }
+
+  public String getTransSerialNumber() {
+    return transSerialNumber;
+  }
+
+  public void setTransSerialNumber(String transSerialNumber) {
+    this.transSerialNumber = transSerialNumber;
+  }
+
 }
