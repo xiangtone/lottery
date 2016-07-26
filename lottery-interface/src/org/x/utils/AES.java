@@ -2,7 +2,7 @@ package org.x.utils;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.commons.codec.binary.Base64;
+
 /**
  *
  * @author Administrator
@@ -10,44 +10,45 @@ import org.apache.commons.codec.binary.Base64;
  */
 public class AES {
 
-    // ����
+    // 加密
     public static String Encrypt(String sSrc, String sKey) throws Exception {
         if (sKey == null) {
-            System.out.print("KeyΪ��null");
+            System.out.print("Key为空null");
             return null;
         }
-        // �ж�Key�Ƿ�Ϊ16λ
+        // 判断Key是否为16位
         if (sKey.length() != 16) {
-            System.out.print("Key���Ȳ���16λ");
+            System.out.print("Key长度不是16位");
             return null;
         }
         byte[] raw = sKey.getBytes("utf-8");
         SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
-        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");//"�㷨/ģʽ/���뷽ʽ"
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");//"算法/模式/补码方式"
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
         byte[] encrypted = cipher.doFinal(sSrc.getBytes("utf-8"));
 
-        return new Base64().encodeToString(encrypted);//�˴�ʹ��BASE64��ת�빦�ܣ�ͬʱ����2�μ��ܵ����á�
+        //return new Base64().encodeToString(encrypted);//此处使用BASE64做转码功能，同时能起到2次加密的作用。
+        return Base64.encode(encrypted);//此处使用BASE64做转码功能，同时能起到2次加密的作用。
     }
 
-    // ����
+    // 解密
     public static String Decrypt(String sSrc, String sKey) throws Exception {
         try {
-            // �ж�Key�Ƿ���ȷ
+            // 判断Key是否正确
             if (sKey == null) {
-                System.out.print("KeyΪ��null");
+                System.out.print("Key为空null");
                 return null;
             }
-            // �ж�Key�Ƿ�Ϊ16λ
+            // 判断Key是否为16位
             if (sKey.length() != 16) {
-                System.out.print("Key���Ȳ���16λ");
+                System.out.print("Key长度不是16位");
                 return null;
             }
             byte[] raw = sKey.getBytes("utf-8");
             SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, skeySpec);
-            byte[] encrypted1 = new Base64().decode(sSrc);//����base64����
+            byte[] encrypted1 = new Base64().decode(sSrc);//先用base64解密
             try {
                 byte[] original = cipher.doFinal(encrypted1);
                 String originalString = new String(original,"utf-8");
@@ -64,21 +65,24 @@ public class AES {
 
     public static void main(String[] args) throws Exception {
         /*
-         * �˴�ʹ��AES-128-ECB����ģʽ��key��ҪΪ16λ��
+         * 此处使用AES-128-ECB加密模式，key需要为16位。
          */
         String cKey = "1234567890123456";
-        // ��Ҫ���ܵ��ִ�
-        String cSrc = "www.gowhere.so";
+        // 需要加密的字串
+     //   String cSrc = "zhangguangtao12345678901234561234567890123456123456789012345612345678901234561234567890123456123456789012345612345678901234561234567890123456123456789012345612345678901234561234567890123456123456789012345612345678901234561234567890123456123456789012345612345678901234561234567890123456www.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowwww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.sowww.gowhere.so";
+        String cSrc = "xxxxxx11111xxx11xxx1xxx2xxx2xxx1v5xxxxxxxxx51vxxx";
         System.out.println(cSrc);
-        // ����
+        System.out.println(cSrc.length());
+        // 加密
         String enString = AES.Encrypt(cSrc, cKey);
-        System.out.println("���ܺ���ִ��ǣ�" + enString);
+        System.out.println("加密后的字串是：" + enString);
 
-        // ����
+        // 解密
         String DeString = AES.Decrypt(enString, cKey);
-        System.out.println("���ܺ���ִ��ǣ�" + DeString);
+        System.out.println("解密后的字串是：" + DeString);
+        System.out.println("解密后的字串是：" + DeString.length());
     }
 }
 
-//Դ����Ƭ�������ƴ���http://yuncode.net
+//源代码片段来自云代码http://yuncode.net
 			

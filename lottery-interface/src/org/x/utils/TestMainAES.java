@@ -4,18 +4,7 @@ import com.alibaba.fastjson.JSON;
 
 public class TestMainAES {
 	
-	/**
-	 * @param args
-	 * @throws Exception
-	 */
-	/**
-	 * @param args
-	 * @throws Exception
-	 */
-	/**
-	 * @param args
-	 * @throws Exception
-	 */
+	
 	/**
 	 * @param args
 	 * @throws Exception
@@ -37,9 +26,6 @@ public class TestMainAES {
         System.out.println(bean.getHead().getChannelId());
         System.out.println(bean.getHead().getSignature());
         System.out.println(bean.getHead().getTransSerialNumber());
-        
-        
-        
         
 		
 	}
