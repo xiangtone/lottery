@@ -72,20 +72,10 @@ public class PreparePostToWeb {
     LOG.debug(req);
     transData = ClientTransService.getInstance().encryptPointExchangeLotteryReq(req);
     LOG.debug(transData);
-    // String url =
-    // "http://124.205.38.84:8480/resources/api/receiveChannelOrderAction.action";
     String url = "http://124.205.38.84:13135/lottomagic/jfhcp/doRequest";
     HttpEntity entity = EntityBuilder.create().setContentEncoding("utf-8").setContentType(ContentType.APPLICATION_JSON)
         .setText(transData).build();
     sendPostInterface(url);
-
-    // transDataDecode = Base64.decode(transData);
-
-    // PointExchangeLotteryResultReq result =
-    // ClientTransService.getInstance().decryptPointExchangeLotteryResultReq(
-    // channelId, transSerialNumber, transData);
-    // LOG.debug(result);
-    // body = null;
   }
 
   private void configBody() {
@@ -116,10 +106,6 @@ public class PreparePostToWeb {
     CloseableHttpClient httpclient = HttpClients.createDefault();
     try {
       HttpPost httpPost = new HttpPost(url);
-
-      // httpPost.setEntity(entity);
-      // httpPost.setHeader("channelId", "C12001");
-
       List<NameValuePair> nvps = new ArrayList<NameValuePair>();
       nvps.add(new BasicNameValuePair("channelId", "C12001"));
       nvps.add(new BasicNameValuePair("transSerialNumber", transSerialNumber));

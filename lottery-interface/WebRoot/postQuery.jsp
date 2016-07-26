@@ -28,7 +28,7 @@
 	Query UpdataInfo
 	<br>
 	<form
-		action="http://124.205.38.84:8480/resources/api/receiveChannelOrderAction.action"
+		action="http://124.205.38.84:8480/resources/api/receiveQueryBetAccountAction.action"
 		method="post">
 		<input name="channelId" type="hidden" value="<%=preparePostQueryToWeb.getChannelId()%>">
 		<input name="transSerialNumber" type="hidden" value="<%=preparePostQueryToWeb.getTransSerialNumber()%>">
