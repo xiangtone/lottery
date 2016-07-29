@@ -7,6 +7,12 @@ public class BackReqHead {
 	private String signature;
 	private String transSerialNumber;
 
+	@Override
+	public String toString() {
+		return "BackReqHead [businessId=" + businessId + ", channelId=" + channelId + ", signature=" + signature
+				+ ", transSerialNumber=" + transSerialNumber + "]";
+	}
+
 	public String getBusinessId() {
 		return businessId;
 	}
