@@ -81,10 +81,9 @@ public class PreparePostToWeb {
 	private void configBody() {
 		body.setOrderNumber(UUID.randomUUID().toString().replaceAll("-", ""));
 		body.setTransDateTime(new Date());
-		body.setCallbackURL("http://120.24.38.160:38080/ytCallback.jsp");
 		try {
 			body.setPointTotalAmount(10);
-			body.setCallbackURL("http://120.24.38.160:38080/ytCallback.jsp");
+			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallback.jsp");
 			body.setChannelReserved("youka");
 			body.setOrderNumber(Long.toString(System.currentTimeMillis()));
 			// body.setUserPhoneNumber("15829553521");// zhuxizhe
