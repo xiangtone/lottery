@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.swing.JOptionPane;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -61,6 +63,11 @@ public class PreparePostQueryToWeb {
     PreparePostQueryToWeb testSend = new PreparePostQueryToWeb();
     testSend.sendTest();
   }
+  
+  public String inputUserPhoneNumber(){
+		String userPhoneNumber=JOptionPane.showInputDialog(null,"请输入您的手机号码：");//第二个参数就是输入框显示的内容。
+		return userPhoneNumber;
+	}
 
   public void sendTest() throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
     configBody();
@@ -89,7 +96,8 @@ public class PreparePostQueryToWeb {
       // body.setUserPhoneNumber("18025314707");// fuming
       // body.setUserPhoneNumber("15285960182");// fuming guizhou CMCC test
       // body.setUserPhoneNumber("13603054736");// lijiaqi
-      body.setUserPhoneNumber("13530274162");//longxu
+      // body.setUserPhoneNumber("13530274162");//longxu
+      body.setUserPhoneNumber(inputUserPhoneNumber());
       body.setOrderNumber("1469413604412");
     } catch (Exception e) {
       e.printStackTrace();

@@ -32,8 +32,6 @@ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.ClientUtil;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 
 public class PreparePostToWeb {
@@ -71,6 +69,11 @@ public class PreparePostToWeb {
 		testSend.sendTest();
 	}
 	
+	public String inputUserPhoneNumber(){
+		String userPhoneNumber=JOptionPane.showInputDialog(null,"请输入您的手机号码：");//第二个参数就是输入框显示的内容。
+		return userPhoneNumber;
+	}
+
 	public void sendTest() throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
 		configBody();
 		LOG.debug(body.getCallbackURL());
@@ -99,8 +102,8 @@ public class PreparePostToWeb {
 			// body.setUserPhoneNumber("18025314707");// fuming
 			// body.setUserPhoneNumber("15285960182");// fuming guizhou CMCC test
 			// body.setUserPhoneNumber("13603054736");// lijiaqi
-		    body.setUserPhoneNumber("13530274162");// longxu
-			// body.setUserPhoneNumber("13530274163");
+		    body.setUserPhoneNumber(inputUserPhoneNumber());
+		    // body.setUserPhoneNumber("13530274162")// longxu
 			body.setPointMerchantId("1200100001");
 			body.setGameId("10001");
 			body.setNumberSelectType(1);

@@ -24,7 +24,7 @@
 </head>
 
 <body>
-	This is my JSP page.
+	This is my JSP page. welcome!
 	<br>
 	<form
 		action="http://www.lottomagic.com.cn/resources/api/receiveChannelOrderAction.action"
