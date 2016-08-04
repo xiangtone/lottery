@@ -89,8 +89,7 @@ public class PreparePostQueryToWeb {
       // body.setUserPhoneNumber("18025314707");// fuming
       // body.setUserPhoneNumber("15285960182");// fuming guizhou CMCC test
       // body.setUserPhoneNumber("13603054736");// lijiaqi
-      // body.setUserPhoneNumber("13530274162");//longxu
-      body.setUserPhoneNumber("13603054735");
+      body.setUserPhoneNumber("13530274162");//longxu
       body.setOrderNumber("1469413604412");
     } catch (Exception e) {
       e.printStackTrace();

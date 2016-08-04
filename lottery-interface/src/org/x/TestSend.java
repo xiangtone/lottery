@@ -86,7 +86,8 @@ public class TestSend {
       body.setChannelReserved("youka");
       body.setOrderNumber(Long.toString(System.currentTimeMillis()));
       // body.setUserPhoneNumber("15829553521");// zhuxizhe
-      body.setUserPhoneNumber("13603054736");// lijiaqi
+      // body.setUserPhoneNumber("13603054736");// lijiaqi
+      body.setUserPhoneNumber("13530274162");
       body.setPointMerchantId("12001");
       body.setGameId("10001");
       body.setNumberSelectType(1);

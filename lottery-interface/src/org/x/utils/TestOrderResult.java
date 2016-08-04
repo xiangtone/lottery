@@ -47,13 +47,13 @@ public class TestOrderResult {
 		LOG.debug(waitEncrypt);
 		waitEncrypt = waitEncrypt.replaceAll("\"null\"", "null");
 		LOG.debug(waitEncrypt);
-		String addHeadTail = "4028d896" + waitEncrypt + "a8690000";
+		String addHeadTail = "4028d894" + waitEncrypt + "11390000";
 		LOG.debug(addHeadTail);
 
 		LOG.debug("md5:" + DigestHelper.md5Hex(addHeadTail));
 		backReqHead.setSignature(DigestHelper.md5Hex(addHeadTail));
 
-		backReq.setBody(AES.Encrypt(body, "5118a4a8015118a4"));
+		backReq.setBody(AES.Encrypt(body, "54acf3110154acf3"));
 		String sendText = JSON.toJSONString(backReq);
 		LOG.debug(sendText);
 

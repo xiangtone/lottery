@@ -4,7 +4,6 @@
   String path = request.getContextPath();
   String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path
       + "/";
-  
   PreparePostToWeb preparePostToWeb =  new PreparePostToWeb();
 %>
 
@@ -28,12 +27,12 @@
 	This is my JSP page.
 	<br>
 	<form
-		action="http://124.205.38.84:8480/resources/api/receiveChannelOrderAction.action"
+		action="http://www.lottomagic.com.cn/resources/api/receiveChannelOrderAction.action"
 		method="post">
 		<input name="channelId" type="hidden" value="<%=preparePostToWeb.getChannelId()%>">
 		<input name="transSerialNumber" type="hidden" value="<%=preparePostToWeb.getTransSerialNumber()%>">
 		<input name="transData" type="hidden" value="<%=preparePostToWeb.getTransData()%>">
-		<button type="submit">submit</button>
+		<button type="submit">submit 123</button>
 	</form>
 </body>
 </html>

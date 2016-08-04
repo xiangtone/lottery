@@ -19,7 +19,7 @@ public class TestMainAES {
 		System.out.println(bean.getBody());
 		
 		   // 
-        String DeString = AES.Decrypt(bean.getBody(), "5118a4a8015118a4");
+        String DeString = AES.Decrypt(bean.getBody(), "54acf3110154acf3");
         System.out.println("" + DeString);
 		
         System.out.println(bean.getHead().getBusinessId());
