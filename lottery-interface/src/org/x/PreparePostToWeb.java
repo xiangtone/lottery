@@ -29,6 +29,7 @@ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base.ReqHead;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReq;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReqBody;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.ClientUtil;
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.TestClientUtil;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
 
@@ -44,7 +45,6 @@ public class PreparePostToWeb {
 	private String channelId;
 	private String transSerialNumber;
 	private String pointTotalAmount;
-	private String userPhoneNumber;
 	private String transData;
 	private String transDataDecode;
 	private String sendUrl;
@@ -55,11 +55,11 @@ public class PreparePostToWeb {
 		this.transSerialNumber = UUID.randomUUID().toString().replaceAll("-", "");
 		configBody();
 		LOG.debug(body.getCallbackURL());
-		sendUrl = ClientUtil.getInstance().getPointExchangeLotteryUrl();
 		PointExchangeLotteryReq req = new PointExchangeLotteryReq();
 		req.setHead(new ReqHead(channelId));
 		req.setBody(body);
 		LOG.debug(req);
+		sendUrl = ClientUtil.getInstance().getPointExchangeLotteryUrl();
 		transData = ClientTransService.getInstance().encryptPointExchangeLotteryReq(req);
 	}
 
@@ -70,7 +70,11 @@ public class PreparePostToWeb {
 	}
 	
 	public String inputUserPhoneNumber(){
-		String userPhoneNumber=JOptionPane.showInputDialog(null,"请输入您的手机号码：");//第二个参数就是输入框显示的内容。
+		String userPhoneNumber=JOptionPane.showInputDialog(null,"请输入您的手机号码：");
+		while(userPhoneNumber.length()!=11){
+			JOptionPane.showMessageDialog(null, "输入错误！！！请重新输入您的手机号码！！！","error",JOptionPane.ERROR_MESSAGE);
+			userPhoneNumber=JOptionPane.showInputDialog(null,"请输入您的手机号码：");
+		}
 		return userPhoneNumber;
 	}
 

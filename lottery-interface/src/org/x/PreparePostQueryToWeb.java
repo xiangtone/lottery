@@ -65,9 +65,12 @@ public class PreparePostQueryToWeb {
   }
   
   public String inputUserPhoneNumber(){
-		String userPhoneNumber=JOptionPane.showInputDialog(null,"请输入您的手机号码：");//第二个参数就是输入框显示的内容。
+		String userPhoneNumber=JOptionPane.showInputDialog(null,"请输入您的手机号码：");
+		while(userPhoneNumber.length()!=11){
+			userPhoneNumber=JOptionPane.showInputDialog(null, "输入错误！！！请重新输入您的手机号码:","error",JOptionPane.ERROR_MESSAGE);
+		}
 		return userPhoneNumber;
-	}
+  }
 
   public void sendTest() throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
     configBody();

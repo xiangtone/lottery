@@ -1,11 +1,16 @@
 <%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
 <%@page import="org.x.PreparePostQueryToWeb"%>
+<%@page import="org.common.util.ThreadPool" %>
+<%@page import="org.x.LogInsert" %>
 <%
   String path = request.getContextPath();
   String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path
       + "/";
   
   PreparePostQueryToWeb preparePostQueryToWeb =  new PreparePostQueryToWeb();
+  ThreadPool.mThreadPool.execute(new LogInsert(preparePostQueryToWeb.getChannelId(), 
+		  preparePostQueryToWeb.getTransSerialNumber(),
+		  preparePostQueryToWeb.getTransData()));
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -25,7 +30,7 @@
 </head>
 
 <body>
-	Query UpdataInfo
+	Query userBetInfo!!!
 	<br>
 	<form
 		action="http://www.lottomagic.com.cn/resources/api/receiveQueryBetAccountAction.action"

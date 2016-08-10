@@ -1,6 +1,6 @@
 <%@ page language="java" pageEncoding="utf-8"%>
-<%@page import="org.x.DecryptWebQueryCallback"%>
-<%@page import="org.apache.log4j.Logger"%>
+<%@ page import="org.x.DecryptWebQueryCallback"%>
+<%@ page import="org.apache.log4j.Logger"%>
 <%
 Logger LOG = Logger.getLogger(this.getClass());
 LOG.debug(request.getParameter("channelId"));
