@@ -20,7 +20,6 @@ public class DecryptWebCallback {
 		PointExchangeLotteryResultReq result = ClientTransService.getInstance()
 				.decryptPointExchangeLotteryResultReq(getChannelId(), getTransSerialNumber(), getTransData());
 		LOG.debug(result);
-		ThreadPool.mThreadPool.execute(new LogInsert(getChannelId(),getTransSerialNumber(),getTransData()));
 	}
 
 	public String getTransData() {

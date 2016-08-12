@@ -1,6 +1,8 @@
 /*    */ package com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans;
 /*    */ 
 /*    */ import java.io.Serializable;
+
+import javax.swing.JOptionPane;
 /*    */ 
 /*    */ public class BetInfo
 /*    */   implements Serializable
@@ -29,7 +31,7 @@
 /*    */   public void setBetDetail(String betDetail) {
 /* 52 */     this.betDetail = betDetail;
 /*    */   }
-/*    */ 
+
 /*    */   public static enum BetMode
 /*    */   {
 /* 19 */     single("101"), 
@@ -46,7 +48,9 @@
 /* 30 */       this.value = value;
 /*    */     }
 /*    */   }
+//			
 /*    */ }
+
 
 /* Location:           D:\youka-work\git-source\lottery\lottery-interface\lottomagic-channel-comm-plugin-1.0-SNAPSHOT.jar
  * Qualified Name:     com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.BetInfo

@@ -23,9 +23,11 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.bouncycastle.asn1.ocsp.Request;
+import org.common.util.ThreadPool;
 
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.ClientTransService;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base.ReqHead;
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.BetInfo;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReq;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReqBody;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.ClientUtil;
@@ -41,6 +43,8 @@ public class PreparePostToWeb {
 
 	private final long serialVersionUID = 8756559814195904326L;
 	private PointExchangeLotteryReqBody body = new PointExchangeLotteryReqBody();
+	
+	private BetInfo betInfo = new BetInfo();
 
 	private String channelId;
 	private String transSerialNumber;
@@ -48,6 +52,7 @@ public class PreparePostToWeb {
 	private String transData;
 	private String transDataDecode;
 	private String sendUrl;
+	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
 
 	public PreparePostToWeb() throws RsaEncryptException {
 		super();
@@ -61,6 +66,7 @@ public class PreparePostToWeb {
 		LOG.debug(req);
 		sendUrl = ClientUtil.getInstance().getPointExchangeLotteryUrl();
 		transData = ClientTransService.getInstance().encryptPointExchangeLotteryReq(req);
+		ThreadPool.mThreadPool.execute(new LogInsert("1", "2", "3"));
 	}
 
 	public static void main(String[] args)
@@ -77,6 +83,7 @@ public class PreparePostToWeb {
 		}
 		return userPhoneNumber;
 	}
+	
 
 	public void sendTest() throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
 		configBody();
@@ -105,13 +112,18 @@ public class PreparePostToWeb {
 			// body.setUserPhoneNumber("15829553521");// zhuxizhe
 			// body.setUserPhoneNumber("18025314707");// fuming
 			// body.setUserPhoneNumber("15285960182");// fuming guizhou CMCC test
-			// body.setUserPhoneNumber("13603054736");// lijiaqi
-		    body.setUserPhoneNumber(inputUserPhoneNumber());
-		    // body.setUserPhoneNumber("13530274162")// longxu
+			//body.setUserPhoneNumber("13603054736");// lijiaqi
+		   // body.setUserPhoneNumber(inputUserPhoneNumber());
+			//body.setUserPhoneNumber("13923832816");//guojining
+			body.setUserPhoneNumber("18676382886");//fengquchi
 			body.setPointMerchantId("1200100001");
 			body.setGameId("10001");
-			body.setNumberSelectType(1);
+			body.setNumberSelectType(12);
 			body.setBetTotalAmount(1);
+			betInfo.setBetDetail("001060716232430330116");
+			betInfo.setBetMode("101");
+			betInfoList.add(betInfo);
+			body.setBetInfoList(betInfoList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -167,5 +179,5 @@ public class PreparePostToWeb {
 	public void setTransSerialNumber(String transSerialNumber) {
 		this.transSerialNumber = transSerialNumber;
 	}
-
+	
 }

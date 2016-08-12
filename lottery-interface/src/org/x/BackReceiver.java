@@ -31,9 +31,6 @@ public class BackReceiver {
 			break;
 		default:
 		}
-		ThreadPool.mThreadPool.execute(new LogInsert(backReq.getHead().getChannelId(), 
-				backReq.getHead().getTransSerialNumber(),
-				backReq.getBody()));
 	}
 
 	public String getInfo() {

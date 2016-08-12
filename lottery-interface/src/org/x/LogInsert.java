@@ -16,12 +16,16 @@ public class LogInsert implements Runnable {
   private String channelId ; 
   private String transSerialNumber ; 
   private String transData ;  
+  private String businessId ;
+  private String signature;
 
   public LogInsert(String channelId, String transSerialNumber, String transData) {
     super();
     this.channelId = channelId;
-    this.transSerialNumber =transSerialNumber;
+    this.transSerialNumber = transSerialNumber;
     this.transData = transData;
+//    this.businessId = businessId;
+//    this.signature = signature;
   }
 
   public Long getId() {
@@ -56,6 +60,21 @@ public class LogInsert implements Runnable {
     this.transData = transData;
   }
 
+  public String getBusinessId() {
+		return businessId;
+	}
+
+	public void setBusinessId(String businessId) {
+		this.businessId = businessId;
+	}
+	
+	public String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
  
   @Override
   public void run() {
@@ -65,13 +84,15 @@ public class LogInsert implements Runnable {
       Connection con = null;
       try{
         con = ConnectionService.getInstance().getConnectionForLocal();
-        ps = con.prepareStatement("insert into `log_async_generals` (id,logId,para01,para02,para03) values (?,?,?,?,?)");
+        ps = con.prepareStatement("insert into `log_async_generals` (id,logId,para01,para02,para03,para04,para05) values (?,?,?,?,?,?,?)");
         int m = 1;
         ps.setLong(m++, this.getId());
         ps.setInt(m++, LOG_ID);
         ps.setString(m++, this.getChannelId());
         ps.setString(m++, this.getTransSerialNumber());
         ps.setString(m++, this.getTransData());
+        ps.setString(m++, this.getBusinessId());
+        ps.setString(m++, this.getSignature());
         ps.executeUpdate();
       }catch(Exception e){
         // TODO Auto-generated catch block
