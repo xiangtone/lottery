@@ -1,6 +1,7 @@
 package org.x;
 
 import org.apache.log4j.Logger;
+import org.common.util.ThreadPool;
 
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.ClientTransService;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryResultReq;
@@ -20,6 +21,9 @@ public class DecryptWebQueryCallback {
     LOG.debug(this);
     QueryModifyBetAccountInfoUrlResultReq result = ClientTransService.getInstance().decryptQueryModifyBetAccountInfoUrlResultReq(channelId, transSerialNumber, transData);
     LOG.debug(result);
+    ThreadPool.mThreadPool.execute(new WebCallbackLogInsert(result.getHead().getChannelId(),
+			result.getHead().getTransSerialNumber(), 
+			this.getTransData()));
   }
 
   public String getTransData() {

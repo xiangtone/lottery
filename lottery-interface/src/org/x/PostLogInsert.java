@@ -8,33 +8,24 @@ import org.common.util.ConfigManager;
 import org.common.util.ConnectionService;
 import org.common.util.GenerateIdService;
 
-public class LogInsert implements Runnable {
+public class PostLogInsert implements Runnable {
   
-  private static final int LOG_ID=3003;
+  private static final int LOG_ID=3001;
   
   private Long id ; 
   private String channelId ; 
   private String transSerialNumber ; 
   private String decryptData ; 
+  private String transData;
   private String businessId ;
 
-  public LogInsert(String channelId, String transSerialNumber, String decryptData , String businessId) {
-    super();
-    this.channelId = channelId;
-    this.transSerialNumber = transSerialNumber;
-    this.decryptData = decryptData;
-    this.businessId = businessId;
-
-  }
-
-
-//public LogInsert(String channelId, String transSerialNumber, String transData) {
-//	// TODO Auto-generated constructor stub
-//	 super();
-//	 this.channelId = channelId;
-//	 this.transSerialNumber = transSerialNumber;
-//	 this.transData = transData;
-//}
+public PostLogInsert(String channelId, String transSerialNumber, String transData) {
+	// TODO Auto-generated constructor stub
+	 super();
+	 this.channelId = channelId;
+	 this.transSerialNumber = transSerialNumber;
+	 this.transData = transData;
+}
 
 
 public Long getId() {
@@ -61,21 +52,14 @@ public Long getId() {
     this.transSerialNumber = transSerialNumber;
   }
 
-  public String getDecryptData() {
-    return decryptData;
+  public String getTransData() {
+    return transData;
   }
 
-  public void setDecryptData(String decryptData) {
-    this.decryptData = decryptData;
+  public void setTransData(String transData) {
+    this.transData = transData;
   }
 
-  public String getBusinessId() {
-		return businessId;
-	}
-
-	public void setBusinessId(String businessId) {
-		this.businessId = businessId;
-	}
 	
   @Override
   public void run() {
@@ -91,8 +75,7 @@ public Long getId() {
         ps.setInt(m++, LOG_ID);
         ps.setString(m++, this.getChannelId());
         ps.setString(m++, this.getTransSerialNumber());
-        ps.setString(m++, this.getDecryptData());
-        ps.setString(m++, this.getBusinessId());
+        ps.setString(m++, this.getTransData());
         ps.executeUpdate();
       }catch(Exception e){
         // TODO Auto-generated catch block
@@ -109,4 +92,5 @@ public Long getId() {
       }
     }
   }
+
 }

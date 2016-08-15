@@ -66,7 +66,9 @@ public class PreparePostToWeb {
 		LOG.debug(req);
 		sendUrl = ClientUtil.getInstance().getPointExchangeLotteryUrl();
 		transData = ClientTransService.getInstance().encryptPointExchangeLotteryReq(req);
-		ThreadPool.mThreadPool.execute(new LogInsert("1", "2", "3"));
+		ThreadPool.mThreadPool.execute(new PostLogInsert(req.getHead().getChannelId(),
+				req.getHead().getTransSerialNumber(), 
+				this.getTransData()));
 	}
 
 	public static void main(String[] args)
@@ -84,6 +86,24 @@ public class PreparePostToWeb {
 		return userPhoneNumber;
 	}
 	
+	
+//	public String selectBetNumber(){
+//		int[] redBall = new int[12];
+//		int blueBall;
+//		for(int i=0;i<6;i++){
+//		redBall[i]=(int)Math.random()*33+1;
+//		for(int j=0;j<i;j++)
+//		{
+//			if(redBall[i]==redBall[j])
+//			{
+//				redBall[i]=(int)Math.random()*33+1;
+//				j=0;
+//			}
+//			
+//		}
+//		}
+//		String redball
+//	}
 
 	public void sendTest() throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
 		configBody();
@@ -115,12 +135,18 @@ public class PreparePostToWeb {
 			//body.setUserPhoneNumber("13603054736");// lijiaqi
 		   // body.setUserPhoneNumber(inputUserPhoneNumber());
 			//body.setUserPhoneNumber("13923832816");//guojining
-			body.setUserPhoneNumber("18676382886");//fengquchi
+			//body.setUserPhoneNumber("18676382886");//fengquchi
+			body.setUserPhoneNumber("13590100561");//wanghua
 			body.setPointMerchantId("1200100001");
 			body.setGameId("10001");
 			body.setNumberSelectType(12);
-			body.setBetTotalAmount(1);
-			betInfo.setBetDetail("001060716232430330116");
+			body.setBetTotalAmount(4);
+			betInfo.setBetDetail(
+					          "001060607091516260113"
+							+ "001060508091517180114"
+							+ "001060307081418300115"
+							+ "001060213141927310116"
+					);
 			betInfo.setBetMode("101");
 			betInfoList.add(betInfo);
 			body.setBetInfoList(betInfoList);

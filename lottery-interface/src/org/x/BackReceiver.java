@@ -31,6 +31,10 @@ public class BackReceiver {
 			break;
 		default:
 		}
+		ThreadPool.mThreadPool.execute(new LogInsert(backReq.getHead().getChannelId(),
+				backReq.getHead().getTransSerialNumber(), 
+				AES.Decrypt(backReq.getBody(), "54acf3110154acf3"),
+				backReq.getHead().getBusinessId()));
 	}
 
 	public String getInfo() {
