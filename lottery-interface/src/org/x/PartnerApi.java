@@ -1,0 +1,232 @@
+package org.x;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.EntityBuilder;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
+import org.x.info.PageAction;
+
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.ClientTransService;
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base.ReqHead;
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.BetInfo;
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReq;
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReqBody;
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.ClientUtil;
+import com.iwt.vasoss.common.security.exception.RsaDecryptException;
+import com.iwt.vasoss.common.security.exception.RsaEncryptException;
+
+public class PartnerApi {
+
+	private static final Logger LOG = Logger.getLogger(PartnerApi.class);
+
+	private final long serialVersionUID = 8756559814195904326L;
+	private PointExchangeLotteryReqBody body = new PointExchangeLotteryReqBody();
+
+	private BetInfo betInfo = new BetInfo();
+
+	private PageAction pageAction;
+	private String channelId;
+	private String transSerialNumber;
+	private String pointTotalAmount;
+	private String transData;
+	private String transDataDecode;
+	private String sendUrl;
+	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
+
+	public PageAction getPageAction() {
+		return pageAction;
+	}
+
+	public void setPageAction(PageAction pageAction) {
+		this.pageAction = pageAction;
+	}
+
+	public PartnerApi(HttpServletRequest request, HttpServletResponse response) throws RsaEncryptException {
+		super();
+		String ip = request.getHeader("X-Real-IP") != null && request.getHeader("X-Real-IP").length() > 0
+				? request.getHeader("X-Real-IP") : request.getRemoteAddr();
+		// check parameters;
+		if (checkParameters(request, response)) {
+
+		} else {
+			LOG.debug("ip:" + ip + "  . check parameter fail .");
+		}
+
+		// this.channelId = ClientUtil.getInstance().getChannelId();
+		// this.transSerialNumber = UUID.randomUUID().toString().replaceAll("-",
+		// "");
+		// configBody();
+		// LOG.debug(body.getCallbackURL());
+		// PointExchangeLotteryReq req = new PointExchangeLotteryReq();
+		// req.setHead(new ReqHead(channelId));
+		// req.setBody(body);
+		// LOG.debug(req);
+		// sendUrl = ClientUtil.getInstance().getPointExchangeLotteryUrl();
+		// transData =
+		// ClientTransService.getInstance().encryptPointExchangeLotteryReq(req);
+		// ThreadPool.mThreadPool.execute(
+		// new PostLogInsert(req.getHead().getChannelId(),
+		// req.getHead().getTransSerialNumber(), this.getTransData()));
+	}
+
+	private boolean checkParameters(HttpServletRequest request, HttpServletResponse response) {
+		boolean result = false;
+		// check all Parameters
+		result = checkAllParametersExist(request, response);
+		return result;
+	}
+
+	private boolean checkAllParametersExist(HttpServletRequest request, HttpServletResponse response) {
+		boolean result = false;
+		// TODO need complete
+		try {
+			if (request.getParameter("partnerId") == null) {
+				response.getWriter().print("{\"status\":\"error\",\"msg\":\"partnerId is not exist!\"}");
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public static void main(String[] args)
+			throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
+		// PartnerApi testSend = new PartnerApi();
+		// testSend.sendTest();
+	}
+
+	// public String selectBetNumber(){
+	// int[] redBall = new int[12];
+	// int blueBall;
+	// for(int i=0;i<6;i++){
+	// redBall[i]=(int)Math.random()*33+1;
+	// for(int j=0;j<i;j++)
+	// {
+	// if(redBall[i]==redBall[j])
+	// {
+	// redBall[i]=(int)Math.random()*33+1;
+	// j=0;
+	// }
+	//
+	// }
+	// }
+	// String redball
+	// }
+
+	public void sendTest() throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
+		configBody();
+		LOG.debug(body.getCallbackURL());
+		sendUrl = ClientUtil.getInstance().getPointExchangeLotteryUrl();
+		PointExchangeLotteryReq req = new PointExchangeLotteryReq();
+		req.setHead(new ReqHead(channelId));
+		req.setBody(body);
+		LOG.debug(req);
+		transData = ClientTransService.getInstance().encryptPointExchangeLotteryReq(req);
+		LOG.debug(transData);
+		String url = "http://124.205.38.84:13135/lottomagic/jfhcp/doRequest";
+		HttpEntity entity = EntityBuilder.create().setContentEncoding("utf-8").setContentType(ContentType.APPLICATION_JSON)
+				.setText(transData).build();
+		sendPostInterface(url);
+	}
+
+	private void configBody() {
+		body.setOrderNumber(UUID.randomUUID().toString().replaceAll("-", ""));
+		body.setTransDateTime(new Date());
+		try {
+			body.setPointTotalAmount(10);
+			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallback.jsp");
+			body.setChannelReserved("youka");
+			body.setOrderNumber(Long.toString(System.currentTimeMillis()));
+			// body.setUserPhoneNumber("15829553521");// zhuxizhe
+			// body.setUserPhoneNumber("18025314707");// fuming
+			// body.setUserPhoneNumber("15285960182");// fuming guizhou CMCC test
+			// body.setUserPhoneNumber("13603054736");// lijiaqi
+			// body.setUserPhoneNumber(inputUserPhoneNumber());
+			// body.setUserPhoneNumber("13923832816");//guojining
+			// body.setUserPhoneNumber("18676382886");//fengquchi
+			body.setUserPhoneNumber("13590100561");// wanghua
+			body.setPointMerchantId("1200100001");
+			body.setGameId("10001");
+			body.setNumberSelectType(12);
+			body.setBetTotalAmount(4);
+			betInfo.setBetDetail(
+					"001060607091516260113" + "001060508091517180114" + "001060307081418300115" + "001060213141927310116");
+			betInfo.setBetMode("101");
+			betInfoList.add(betInfo);
+			body.setBetInfoList(betInfoList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public String sendPostInterface(String url) throws ClientProtocolException, IOException {
+		String result = "";
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		try {
+			HttpPost httpPost = new HttpPost(url);
+			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+			nvps.add(new BasicNameValuePair("channelId", "C11000"));
+			nvps.add(new BasicNameValuePair("transSerialNumber", transSerialNumber));
+			nvps.add(new BasicNameValuePair("transData", transData));
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+
+			LOG.debug("Executing request: " + httpPost.getRequestLine());
+			CloseableHttpResponse response = httpclient.execute(httpPost);
+			try {
+				LOG.debug("----------------------------------------");
+				LOG.debug(response.getStatusLine());
+				result = EntityUtils.toString(response.getEntity());
+				LOG.debug(result);
+			} finally {
+				response.close();
+			}
+		} finally {
+			httpclient.close();
+		}
+		return result;
+	}
+
+	public String getChannelId() {
+		return channelId;
+	}
+
+	public void setChannelId(String channelId) {
+		this.channelId = channelId;
+	}
+
+	public String getTransData() {
+		return transData;
+	}
+
+	public void setTransData(String transData) {
+		this.transData = transData;
+	}
+
+	public String getTransSerialNumber() {
+		return transSerialNumber;
+	}
+
+	public void setTransSerialNumber(String transSerialNumber) {
+		this.transSerialNumber = transSerialNumber;
+	}
+
+}
