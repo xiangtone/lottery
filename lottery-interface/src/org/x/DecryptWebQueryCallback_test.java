@@ -13,9 +13,9 @@ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryMo
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryModifyBetAccountInfoUrlResultReq;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 
-public class DecryptWebQueryCallback {
+public class DecryptWebQueryCallback_test {
 
-  private final static Logger LOG = Logger.getLogger(DecryptWebQueryCallback.class);
+  private final static Logger LOG = Logger.getLogger(DecryptWebQueryCallback_test.class);
 
   private String transData;
   private String channelId;
@@ -29,8 +29,7 @@ public class DecryptWebQueryCallback {
     ThreadPool.mThreadPool.execute(new WebCallbackLogInsert(result.getHead().getChannelId(),
     		result.getHead().getTransSerialNumber(), 
 			this.getTransData(),
-//			AES.Decrypt(this.transData,"54acf3110154acf3"),
-			"",
+			AES.Decrypt(this.transData,"54acf3110154acf3"),
 			result.getBody().getChannelReserved(),
 			result.getBody().getOrderNumber(),
 			result.getBody().getResult(),
@@ -71,7 +70,7 @@ public class DecryptWebQueryCallback {
   }
 
   public static void main(String args[]) throws RsaDecryptException {
-    DecryptWebQueryCallback decryptWebQueryCallback = new DecryptWebQueryCallback();
+    DecryptWebQueryCallback_test decryptWebQueryCallback = new DecryptWebQueryCallback_test();
     decryptWebQueryCallback
         .setTransData("dF_s13NGcBmk3rXJ7-0k31IcHyDBAEe9mSDTf6-tL7haDdJF6CA7645GulRY5jDibmcz05XH3GEB4eTAfj8X09_UNlS4PP7748fU3bG5Sw763Fi8ps9_LDduYacHJ0Hbtvsvu36F95uj08_v6WgmlpMl_YGCzrEZ92XDqmCSRf1roAon-6Q_xVBDS5UtPKtjVtB6xStkrQGF8G9FHKrV6cJE4X4nerVpm0h86aLR3zrR_L3NaqKUmnZKp12-EPvtJ-ewU-dtKSmAMelwD9E2pdQ7FylIoc3-PQxs-BM7tg9SBh_XwF-d3jmMeBF_LN5e0b9OGSlhFSP8AD8_WLB0Rw");
     decryptWebQueryCallback.setChannelId("C12001");

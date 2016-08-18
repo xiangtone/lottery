@@ -1,9 +1,6 @@
 package org.x;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +19,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
-import org.bouncycastle.asn1.ocsp.Request;
 import org.common.util.ThreadPool;
 
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.ClientTransService;
@@ -31,10 +27,10 @@ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.BetInfo
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReq;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReqBody;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.ClientUtil;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.TestClientUtil;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.swing.*;
 
 public class PreparePostToWeb {
@@ -52,10 +48,23 @@ public class PreparePostToWeb {
 	private String transData;
 	private String transDataDecode;
 	private String sendUrl;
+	private String ip;
+	
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
 	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
 
 	public PreparePostToWeb() throws RsaEncryptException {
 		super();
+	}
+
+	public void process() throws RsaEncryptException {
 		this.channelId = ClientUtil.getInstance().getChannelId();
 		this.transSerialNumber = UUID.randomUUID().toString().replaceAll("-", "");
 		configBody();
@@ -66,9 +75,22 @@ public class PreparePostToWeb {
 		LOG.debug(req);
 		sendUrl = ClientUtil.getInstance().getPointExchangeLotteryUrl();
 		transData = ClientTransService.getInstance().encryptPointExchangeLotteryReq(req);
-		ThreadPool.mThreadPool.execute(new PostLogInsert(req.getHead().getChannelId(),
+		ThreadPool.mThreadPool.execute(new PostLogInsert(
+				req.getHead().getChannelId(),
 				req.getHead().getTransSerialNumber(), 
-				this.getTransData()));
+				this.getTransData(),
+				req.getBody().getChannelReserved(),
+				req.getBody().getOrderNumber(),
+				req.getBody().getUserPhoneNumber(),
+				req.getBody().getUserName(),
+				req.getBody().getPointMerchantId(),
+		        req.getBody().getGameId(),
+				req.getBody().getNumberSelectType(),
+				req.getBody().getBetTotalAmount(),
+				req.getBody().getPointTotalAmount(),
+				req.getBody().getCallbackURL(),
+				betInfo.getBetDetail(),
+				ip));
 	}
 
 	public static void main(String[] args)
@@ -86,24 +108,6 @@ public class PreparePostToWeb {
 		return userPhoneNumber;
 	}
 	
-	
-//	public String selectBetNumber(){
-//		int[] redBall = new int[12];
-//		int blueBall;
-//		for(int i=0;i<6;i++){
-//		redBall[i]=(int)Math.random()*33+1;
-//		for(int j=0;j<i;j++)
-//		{
-//			if(redBall[i]==redBall[j])
-//			{
-//				redBall[i]=(int)Math.random()*33+1;
-//				j=0;
-//			}
-//			
-//		}
-//		}
-//		String redball
-//	}
 
 	public void sendTest() throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
 		configBody();
@@ -140,13 +144,8 @@ public class PreparePostToWeb {
 			body.setPointMerchantId("1200100001");
 			body.setGameId("10001");
 			body.setNumberSelectType(12);
-			body.setBetTotalAmount(4);
-			betInfo.setBetDetail(
-					          "001060607091516260113"
-							+ "001060508091517180114"
-							+ "001060307081418300115"
-							+ "001060213141927310116"
-					);
+			body.setBetTotalAmount(1);
+			betInfo.setBetDetail("001060510152028300106");
 			betInfo.setBetMode("101");
 			betInfoList.add(betInfo);
 			body.setBetInfoList(betInfoList);

@@ -21,4 +21,9 @@ public class BackReq {
 		this.head = head;
 	}
 
+	@Override
+	public String toString() {
+		return "BackReq [body=" + body + ", head=" + head + "]";
+	}
+
 }

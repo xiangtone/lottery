@@ -3,6 +3,8 @@ package org.x;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
 
 import org.common.util.ConfigManager;
 import org.common.util.ConnectionService;
@@ -16,14 +18,49 @@ public class WebCallbackLogInsert implements Runnable {
   private String channelId ; 
   private String transSerialNumber ;  
   private String transData;
-  private String businessId ;
+  private String decryptData ;
+  private String channelReserved;
+  private String orderNumber;
+  private int result;
+  private String resultDesc;
+  private String issueNumber;
+  private int betSuccAmount;
+  private String ticketInfo;
+ // private String ip ; 
 
 
-public WebCallbackLogInsert(String channelId, String transSerialNumber, String transData) {
+public WebCallbackLogInsert(String channelId, String transSerialNumber, String transData,String decryptData, String channelReserved,String orderNumber,int result,String resultDesc) {
 	 super();
 	 this.channelId = channelId;
 	 this.transSerialNumber = transSerialNumber;
 	 this.transData = transData;
+	 this.decryptData = decryptData;
+	 this.channelReserved = channelReserved;
+	 this.orderNumber = orderNumber;
+	 this.result = result;
+	 this.resultDesc = resultDesc;
+//	 this.ip = ip;
+}
+
+
+public WebCallbackLogInsert(String channelId, String transSerialNumber, String transData, String decryptData,
+		String channelReserved, String orderNumber, int result, String resultDesc,
+		String issueNumber, int betSuccAmount,String ticketInfo) {
+	
+	 super();
+	 this.channelId = channelId;
+	 this.transSerialNumber = transSerialNumber;
+	 this.transData = transData;
+	 this.decryptData = decryptData;
+	 this.channelReserved = channelReserved;
+	 this.orderNumber = orderNumber;
+	 this.result = result;
+	 this.resultDesc = resultDesc;
+	 this.issueNumber = issueNumber;
+	 this.betSuccAmount = betSuccAmount;
+	 this.ticketInfo = ticketInfo;
+//	 this.ip = ip;
+	 
 }
 
 
@@ -59,14 +96,79 @@ public Long getId() {
     this.transData = transData;
   }
 
-  public String getBusinessId() {
-		return businessId;
-	}
+  public String getDecryptData() {
+	    return decryptData;
+	  }
 
-	public void setBusinessId(String businessId) {
-		this.businessId = businessId;
-	}
-	
+  public void setDecryptData(String decryptData) {
+	    this.decryptData = decryptData;
+	  }
+
+  public String getChannelReserved(){
+	    return channelReserved;
+	  }
+
+  public void setChannelReserved(String channelReserved) {
+	    this.channelReserved = channelReserved;
+	  }
+
+  public String getOrderNumber(){
+	    return orderNumber;
+	  }
+
+  public void setOrderNumber(String orderNumber) {
+	    this.orderNumber = orderNumber;
+	  }
+  
+  public int getResult(){
+	    return result;
+	  }
+
+  public void setResult(int result) {
+	    this.result = result;
+	  }
+  
+  public String getResultDesc(){
+	    return resultDesc;
+	  }
+
+  public void setResult(String resultDesc) {
+	    this.resultDesc = resultDesc;
+	  }
+  
+  public String getIssueNumber(){
+	    return issueNumber;
+	  }
+
+  public void setIssueNumber(String issueNumber) {
+	    this.issueNumber = issueNumber;
+  }
+  
+  public int getBetSuccAmount(){
+	    return betSuccAmount;
+	  }
+
+  public void setBetSuccAmount(int betSuccAmount) {
+	    this.betSuccAmount = betSuccAmount;
+}
+
+  public String getTicketInfo(){
+	    return ticketInfo;
+	  }
+
+  public void setTicketInfo(String ticketInfo) {
+	    this.ticketInfo = ticketInfo;
+	  }
+  
+//  public String getIp() {
+//	    return ip;
+//	  }
+//
+//  public void setIp(String ip) {
+//	    this.ip = ip;
+//	  }
+	  
+  
   @Override
   public void run() {
     setId(GenerateIdService.getInstance().generateNew(Integer.parseInt(ConfigManager.getConfigData("server.id")), "clicks", 1));
@@ -75,13 +177,22 @@ public Long getId() {
       Connection con = null;
       try{
         con = ConnectionService.getInstance().getConnectionForLocal();
-        ps = con.prepareStatement("insert into `log_async_generals` (id,logId,para01,para02,para03,para04,para05) values (?,?,?,?,?,?,?)");
+        ps = con.prepareStatement("insert into `log_async_generals` (id,logId,para01,para02,para03,para04,para05,para06,para07,para08,para09,para10,para11) values (?,?,?,?,?,?,?,?,?,?,?,?,?)");
         int m = 1;
         ps.setLong(m++, this.getId());
         ps.setInt(m++, LOG_ID);
         ps.setString(m++, this.getChannelId());
         ps.setString(m++, this.getTransSerialNumber());
         ps.setString(m++, this.getTransData());
+        ps.setString(m++, this.getDecryptData());
+        ps.setString(m++, this.getChannelReserved());
+        ps.setString(m++, this.getOrderNumber());
+        ps.setInt(m++, this.getResult());
+        ps.setString(m++, this.getResultDesc());
+        ps.setString(m++, this.getIssueNumber());
+        ps.setInt(m++, this.getBetSuccAmount());
+        ps.setString(m++, this.getTicketInfo());
+//      ps.setString(m++, this.getIp());
         ps.executeUpdate();
       }catch(Exception e){
         // TODO Auto-generated catch block

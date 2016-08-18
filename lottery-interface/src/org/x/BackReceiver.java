@@ -1,11 +1,11 @@
 package org.x;
 
+import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.x.info.BackReq;
 import org.x.utils.AES;
 
 import com.alibaba.fastjson.JSON;
-
 import org.common.util.ThreadPool;
 
 import org.x.LogInsert;
@@ -16,11 +16,19 @@ public class BackReceiver {
 
 	private String info;
 	private BackReq backReq;
+	private String ip;
 
 	public void process() throws Exception {
 		backReq = JSON.parseObject(info, BackReq.class);
 		LOG.debug(backReq);
-		LOG.debug(AES.Decrypt(backReq.getBody(), "54acf3110154acf3"));
+		switch (ip) {
+		case "124.205.38.84":
+			break;
+		default:
+			break;
+		}
+		String decryptInfo = AES.Decrypt(backReq.getBody(), "54acf3110154acf3");
+		LOG.debug(decryptInfo);
 		LOG.debug(backReq.getHead().toString());
 		switch (backReq.getHead().getBusinessId()) {
 		case "3011":
@@ -31,10 +39,17 @@ public class BackReceiver {
 			break;
 		default:
 		}
-		ThreadPool.mThreadPool.execute(new LogInsert(backReq.getHead().getChannelId(),
-				backReq.getHead().getTransSerialNumber(), 
-				AES.Decrypt(backReq.getBody(), "54acf3110154acf3"),
-				backReq.getHead().getBusinessId()));
+		ThreadPool.mThreadPool
+				.execute(new LogInsert(backReq.getHead().getChannelId(), backReq.getHead().getTransSerialNumber(),
+						backReq.getHead().getBusinessId(), backReq.getBody(), decryptInfo, ""));
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 
 	public String getInfo() {

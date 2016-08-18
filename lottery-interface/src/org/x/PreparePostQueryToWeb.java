@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.swing.JOptionPane;
 
 import org.apache.http.HttpEntity;
@@ -21,12 +22,13 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
+import org.common.util.ThreadPool;
 
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.ClientTransService;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base.ReqHead;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryModifyBetAccountInfoUrlReq;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryModifyBetAccountInfoUrlReqBody;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.ClientUtil;
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.TestClientUtil;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
 
@@ -43,19 +45,29 @@ public class PreparePostQueryToWeb {
   private String transData;
   private String transDataDecode;
   private String sendUrl;
+  private HttpServletRequest request;
 
   public PreparePostQueryToWeb() throws RsaEncryptException {
     super();
-    this.channelId = ClientUtil.getInstance().getChannelId();
+    this.channelId = TestClientUtil.getInstance().getChannelId();
     this.transSerialNumber = UUID.randomUUID().toString().replaceAll("-", "");
     configBody();
     LOG.debug(body.getCallbackURL());
-    sendUrl = ClientUtil.getInstance().getPointExchangeLotteryUrl();
+    sendUrl = TestClientUtil.getInstance().getPointExchangeLotteryUrl();
     QueryModifyBetAccountInfoUrlReq req = new QueryModifyBetAccountInfoUrlReq();
     req.setHead(new ReqHead(channelId));
     req.setBody(body);
     LOG.debug(req);
     transData = ClientTransService.getInstance().encryptQueryModifyBetAccountInfoUrlReq(req);
+    ThreadPool.mThreadPool.execute(new PostLogInsert(req.getHead().getChannelId(),
+			req.getHead().getTransSerialNumber(), 
+			this.getTransData(),
+			req.getBody().getChannelReserved(),
+			req.getBody().getOrderNumber(),
+			req.getBody().getUserPhoneNumber(),
+			req.getBody().getCallbackURL(),
+			""
+					));
   }
 
   public static void main(String[] args) throws RsaEncryptException, RsaDecryptException, ClientProtocolException,
@@ -75,7 +87,7 @@ public class PreparePostQueryToWeb {
   public void sendTest() throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
     configBody();
     LOG.debug(body.getCallbackURL());
-    sendUrl = ClientUtil.getInstance().getPointExchangeLotteryUrl();
+    sendUrl = TestClientUtil.getInstance().getPointExchangeLotteryUrl();
     QueryModifyBetAccountInfoUrlReq req = new QueryModifyBetAccountInfoUrlReq();
     req.setHead(new ReqHead(channelId));
     req.setBody(body);
@@ -91,16 +103,16 @@ public class PreparePostQueryToWeb {
   private void configBody() {
     body.setOrderNumber(UUID.randomUUID().toString().replaceAll("-", ""));
     body.setTransDateTime(new Date());
-    body.setCallbackURL("http://120.24.38.160:38080/ytQueryCallback.jsp");
     try {
-      body.setCallbackURL("http://120.24.38.160:38080/ytQueryCallback.jsp");
+      body.setCallbackURL("http://a.yt.youkala.com:38080/ytQueryCallback.jsp");
       body.setChannelReserved("youka");
       // body.setUserPhoneNumber("15829553521");// zhuxizhe
       // body.setUserPhoneNumber("18025314707");// fuming
       // body.setUserPhoneNumber("15285960182");// fuming guizhou CMCC test
       // body.setUserPhoneNumber("13603054736");// lijiaqi
       // body.setUserPhoneNumber("13530274162");//longxu
-      body.setUserPhoneNumber(inputUserPhoneNumber());
+//      body.setUserPhoneNumber(inputUserPhoneNumber());
+      body.setUserPhoneNumber("13530274162");
       body.setOrderNumber("1469413604412");
     } catch (Exception e) {
       e.printStackTrace();

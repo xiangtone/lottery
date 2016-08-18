@@ -7,7 +7,7 @@ import org.x.LogInsert;
 public class Test {
 	
 	public void process(){
-//		ThreadPool.mThreadPool.execute(new LogInsert("1", "2", "3"));
+//		ThreadPool.mThreadPool.execute(new LogInsert("1", "2", "3","4"));
 	}
 
 }

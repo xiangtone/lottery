@@ -1,10 +1,14 @@
 package org.x;
 
+//import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.common.util.ThreadPool;
+import org.x.utils.AES;
 
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.ClientTransService;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryResultReq;
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.TicketInfo;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 
 public class DecryptWebCallback {
@@ -14,15 +18,28 @@ public class DecryptWebCallback {
 	private String transData;
 	private String channelId;
 	private String transSerialNumber;
+	private TicketInfo ticketInfo = new TicketInfo();
+//	HttpServletRequest request;
 
-	public void decrypt() throws RsaDecryptException {
+	public void decrypt() throws Exception {
 		LOG.debug(this);
 		PointExchangeLotteryResultReq result = ClientTransService.getInstance()
 				.decryptPointExchangeLotteryResultReq(getChannelId(), getTransSerialNumber(), getTransData());
 		LOG.debug(result);
 		ThreadPool.mThreadPool.execute(new WebCallbackLogInsert(result.getHead().getChannelId(),
 				result.getHead().getTransSerialNumber(), 
-				this.getTransData()));
+				this.getTransData(),
+				AES.Decrypt(this.transData, "54acf3110154acf3"),		
+				result.getBody().getChannelReserved(),
+				result.getBody().getOrderNumber(),
+				result.getBody().getResult(),
+				result.getBody().getResultDesc(),
+				result.getBody().getIssueNumber(),
+				result.getBody().getBetSuccAmount(),
+				ticketInfo.getBetDetail()
+//				request.getHeader("X-Real-IP") != null && request.getHeader("X-Real-IP").length() > 0
+//				? request.getHeader("X-Real-IP") : request.getRemoteAddr()
+				));
 	}
 
 	public String getTransData() {

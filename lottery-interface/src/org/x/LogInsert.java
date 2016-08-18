@@ -12,30 +12,23 @@ public class LogInsert implements Runnable {
   
   private static final int LOG_ID=3003;
   
-  private Long id ; 
+  private Long id;
   private String channelId ; 
   private String transSerialNumber ; 
   private String decryptData ; 
+  private String transData;
   private String businessId ;
+  private String ip;
 
-  public LogInsert(String channelId, String transSerialNumber, String decryptData , String businessId) {
+  public LogInsert(String channelId, String transSerialNumber, String businessId,String transData, String decryptData,String ip ) {
     super();
     this.channelId = channelId;
     this.transSerialNumber = transSerialNumber;
-    this.decryptData = decryptData;
     this.businessId = businessId;
-
+    this.transData = transData;
+    this.decryptData = decryptData; 
+    this.ip = ip;
   }
-
-
-//public LogInsert(String channelId, String transSerialNumber, String transData) {
-//	// TODO Auto-generated constructor stub
-//	 super();
-//	 this.channelId = channelId;
-//	 this.transSerialNumber = transSerialNumber;
-//	 this.transData = transData;
-//}
-
 
 public Long getId() {
     return id;
@@ -68,6 +61,16 @@ public Long getId() {
   public void setDecryptData(String decryptData) {
     this.decryptData = decryptData;
   }
+  
+  public String getTransData() {
+	    return transData;
+	  }
+
+  public void setTransData(String transData) {
+	    this.transData = transData;
+	  }
+ 
+
 
   public String getBusinessId() {
 		return businessId;
@@ -77,6 +80,15 @@ public Long getId() {
 		this.businessId = businessId;
 	}
 	
+	public String getIp() {
+	    return ip;
+	  }
+
+	public void setIp(String ip) {
+	    this.ip = ip;
+	  }
+	  
+	  
   @Override
   public void run() {
     setId(GenerateIdService.getInstance().generateNew(Integer.parseInt(ConfigManager.getConfigData("server.id")), "clicks", 1));
@@ -85,14 +97,16 @@ public Long getId() {
       Connection con = null;
       try{
         con = ConnectionService.getInstance().getConnectionForLocal();
-        ps = con.prepareStatement("insert into `log_async_generals` (id,logId,para01,para02,para03,para04,para05) values (?,?,?,?,?,?,?)");
+        ps = con.prepareStatement("insert into `log_async_generals` (id,logId,para01,para02,para03,para04,para05,para06) values (?,?,?,?,?,?,?,?)");
         int m = 1;
         ps.setLong(m++, this.getId());
         ps.setInt(m++, LOG_ID);
         ps.setString(m++, this.getChannelId());
-        ps.setString(m++, this.getTransSerialNumber());
-        ps.setString(m++, this.getDecryptData());
+        ps.setString(m++, this.getTransSerialNumber()); 
         ps.setString(m++, this.getBusinessId());
+        ps.setString(m++, this.getTransData());
+        ps.setString(m++, this.getDecryptData());
+        ps.setString(m++, this.getIp());
         ps.executeUpdate();
       }catch(Exception e){
         // TODO Auto-generated catch block

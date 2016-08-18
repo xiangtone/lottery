@@ -17,7 +17,7 @@
 /*    */ 
 /*    */ public class TestClientUtil
 /*    */ {
-/* 22 */   private static TestClientUtil clientUtil = new TestClientUtil();
+/* 22 */   private static TestClientUtil testClientUtil = new TestClientUtil();
 /*    */   private Map<String, String> paramMap;
 /*    */   private Map<String, RSAPrivateKey> privateKeyMap;
 /*    */   private static final String LOTTOMAGIC_CHANNEL_COMM_PLUGIN_PROPERTIES = "lottomagic-channel-comm-plugin-test.properties";
@@ -34,7 +34,7 @@
 /*    */   }
 /*    */ 
 /*    */   public static TestClientUtil getInstance() {
-/* 41 */     return clientUtil;
+/* 41 */     return testClientUtil;
 /*    */   }
 /*    */ 
 /*    */   public String getChannelId() {

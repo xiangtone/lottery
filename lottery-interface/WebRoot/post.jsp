@@ -7,7 +7,9 @@
   String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path
       + "/";
   PreparePostToWeb preparePostToWeb =  new PreparePostToWeb();
-  ThreadPool.mThreadPool.execute(new PostLogInsert(preparePostToWeb.getChannelId(), preparePostToWeb.getTransSerialNumber(), preparePostToWeb.getTransData()));
+  preparePostToWeb.setIp(request.getHeader("X-Real-IP") != null && request.getHeader("X-Real-IP").length() > 0
+			? request.getHeader("X-Real-IP") : request.getRemoteAddr());
+  preparePostToWeb.process();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
