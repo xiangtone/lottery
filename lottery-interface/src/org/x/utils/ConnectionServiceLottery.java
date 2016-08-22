@@ -1,4 +1,4 @@
-package org.x;
+package org.x.utils;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -10,23 +10,22 @@ import org.common.util.ConfigManager;
 
 /**
  */
-public class ConnectionServiceConfig {
+public class ConnectionServiceLottery {
 
-	private static final String DB_PREFIX = "config";
-	private static ConnectionServiceConfig instance = new ConnectionServiceConfig();
+	private static ConnectionServiceLottery instance = new ConnectionServiceLottery();
 
-	private ConnectionServiceConfig() {
+	private ConnectionServiceLottery() {
 	}
 
-	public static ConnectionServiceConfig getInstance() {
+	public static ConnectionServiceLottery getInstance() {
 		return instance;
 	}
 
-	private DataSource ds_islocal = setupDataSource(DB_PREFIX, 5, 10, 5, 2);
-
-	public synchronized Connection getConnectionForLocal() {
+	private DataSource ds_isLottery = setupDataSource("lottery");
+	
+	public synchronized Connection getConnectionForLottery() {
 		try {
-			return ds_islocal.getConnection();
+			return ds_isLottery.getConnection();
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -63,6 +62,25 @@ public class ConnectionServiceConfig {
 		return ds;
 	}
 
+	public static DataSource setupDataSource(String db) {
+		BasicDataSource ds = new BasicDataSource();
+		ds.setDriverClassName("com.mysql.jdbc.Driver");
+		ds.setUrl(ConfigManager.getConfigData(db + ".url"));
+		ds.setUsername(ConfigManager.getConfigData(db + ".user"));
+		ds.setPassword(ConfigManager.getConfigData(db + ".password"));
+		ds.setInitialSize(Integer.valueOf(ConfigManager.getConfigData(db + ".initialSize")));
+		ds.setMaxActive(Integer.valueOf(ConfigManager.getConfigData(db + ".maxActive")));
+		ds.setMaxIdle(Integer.valueOf(ConfigManager.getConfigData(db + ".maxIdle")));
+		ds.setMinIdle(Integer.valueOf(ConfigManager.getConfigData(db + ".minIdle")));
+		ds.setMaxWait(Long.valueOf(ConfigManager.getConfigData(db + ".maxWait")));
+		ds.setRemoveAbandoned(true);
+		ds.setRemoveAbandonedTimeout(60);
+		ds.setLogAbandoned(true);
+		ds.setMinEvictableIdleTimeMillis(30 * 1000);
+		ds.setTimeBetweenEvictionRunsMillis(10 * 1000);
+		return ds;
+	}
+
 	public static void printDataSourceStats(DataSource ds) throws SQLException {
 		BasicDataSource bds = (BasicDataSource) ds;
 		System.out.println("NumActive: " + bds.getNumActive());
@@ -72,6 +90,10 @@ public class ConnectionServiceConfig {
 	public static void shutdownDataSource(DataSource ds) throws SQLException {
 		BasicDataSource bds = (BasicDataSource) ds;
 		bds.close();
+	}
+
+	public static void main(String[] args) {
+
 	}
 
 }

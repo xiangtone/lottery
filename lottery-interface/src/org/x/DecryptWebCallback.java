@@ -1,7 +1,5 @@
 package org.x;
 
-//import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.common.util.ThreadPool;
 import org.x.utils.AES;
@@ -19,7 +17,7 @@ public class DecryptWebCallback {
 	private String channelId;
 	private String transSerialNumber;
 	private TicketInfo ticketInfo = new TicketInfo();
-//	HttpServletRequest request;
+	private String ip;
 
 	public void decrypt() throws Exception {
 		LOG.debug(this);
@@ -27,19 +25,17 @@ public class DecryptWebCallback {
 				.decryptPointExchangeLotteryResultReq(getChannelId(), getTransSerialNumber(), getTransData());
 		LOG.debug(result);
 		ThreadPool.mThreadPool.execute(new WebCallbackLogInsert(result.getHead().getChannelId(),
-				result.getHead().getTransSerialNumber(), 
-				this.getTransData(),
-				AES.Decrypt(this.transData, "54acf3110154acf3"),		
-				result.getBody().getChannelReserved(),
-				result.getBody().getOrderNumber(),
-				result.getBody().getResult(),
-				result.getBody().getResultDesc(),
-				result.getBody().getIssueNumber(),
-				result.getBody().getBetSuccAmount(),
-				ticketInfo.getBetDetail()
-//				request.getHeader("X-Real-IP") != null && request.getHeader("X-Real-IP").length() > 0
-//				? request.getHeader("X-Real-IP") : request.getRemoteAddr()
-				));
+				result.getHead().getTransSerialNumber(), this.getTransData(), result.getBody().getChannelReserved(),
+				result.getBody().getOrderNumber(), result.getBody().getResult(), result.getBody().getResultDesc(),
+				result.getBody().getIssueNumber(), result.getBody().getBetSuccAmount(), ticketInfo.getBetDetail(), ip));
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 
 	public String getTransData() {

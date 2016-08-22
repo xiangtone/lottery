@@ -23,7 +23,7 @@ public class BackReq {
 
 	@Override
 	public String toString() {
-		return "BackReq [body=" + body + ", head=" + head + "]";
+		return "backReq " + super.toString() + " [head=" + this.head + ", body=" + this.body + "]";
 	}
 
 }

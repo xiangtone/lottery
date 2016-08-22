@@ -79,8 +79,7 @@ public final class Base64 {
 
 		int fewerThan24bits = lengthDataBits % TWENTYFOURBITGROUP;
 		int numberTriplets = lengthDataBits / TWENTYFOURBITGROUP;
-		int numberQuartet = fewerThan24bits != 0 ? numberTriplets + 1
-				: numberTriplets;
+		int numberQuartet = fewerThan24bits != 0 ? numberTriplets + 1 : numberTriplets;
 		char encodedData[] = null;
 
 		encodedData = new char[numberQuartet * 4];
@@ -98,12 +97,9 @@ public final class Base64 {
 			l = (byte) (b2 & 0x0f);
 			k = (byte) (b1 & 0x03);
 
-			byte val1 = ((b1 & SIGN) == 0) ? (byte) (b1 >> 2)
-					: (byte) ((b1) >> 2 ^ 0xc0);
-			byte val2 = ((b2 & SIGN) == 0) ? (byte) (b2 >> 4)
-					: (byte) ((b2) >> 4 ^ 0xf0);
-			byte val3 = ((b3 & SIGN) == 0) ? (byte) (b3 >> 6)
-					: (byte) ((b3) >> 6 ^ 0xfc);
+			byte val1 = ((b1 & SIGN) == 0) ? (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
+			byte val2 = ((b2 & SIGN) == 0) ? (byte) (b2 >> 4) : (byte) ((b2) >> 4 ^ 0xf0);
+			byte val3 = ((b3 & SIGN) == 0) ? (byte) (b3 >> 6) : (byte) ((b3) >> 6 ^ 0xfc);
 
 			encodedData[encodedIndex++] = lookUpBase64Alphabet[val1];
 			encodedData[encodedIndex++] = lookUpBase64Alphabet[val2 | (k << 4)];
@@ -115,9 +111,8 @@ public final class Base64 {
 		if (fewerThan24bits == EIGHTBIT) {
 			b1 = binaryData[dataIndex];
 			k = (byte) (b1 & 0x03);
-			
-			byte val1 = ((b1 & SIGN) == 0) ? (byte) (b1 >> 2)
-					: (byte) ((b1) >> 2 ^ 0xc0);
+
+			byte val1 = ((b1 & SIGN) == 0) ? (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
 			encodedData[encodedIndex++] = lookUpBase64Alphabet[val1];
 			encodedData[encodedIndex++] = lookUpBase64Alphabet[k << 4];
 			encodedData[encodedIndex++] = PAD;
@@ -128,10 +123,8 @@ public final class Base64 {
 			l = (byte) (b2 & 0x0f);
 			k = (byte) (b1 & 0x03);
 
-			byte val1 = ((b1 & SIGN) == 0) ? (byte) (b1 >> 2)
-					: (byte) ((b1) >> 2 ^ 0xc0);
-			byte val2 = ((b2 & SIGN) == 0) ? (byte) (b2 >> 4)
-					: (byte) ((b2) >> 4 ^ 0xf0);
+			byte val1 = ((b1 & SIGN) == 0) ? (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
+			byte val2 = ((b2 & SIGN) == 0) ? (byte) (b2 >> 4) : (byte) ((b2) >> 4 ^ 0xf0);
 
 			encodedData[encodedIndex++] = lookUpBase64Alphabet[val1];
 			encodedData[encodedIndex++] = lookUpBase64Alphabet[val2 | (k << 4)];
@@ -180,12 +173,10 @@ public final class Base64 {
 
 		for (; i < numberQuadruple - 1; i++) {
 
-			if (!isData((d1 = base64Data[dataIndex++]))
-					|| !isData((d2 = base64Data[dataIndex++]))
-					|| !isData((d3 = base64Data[dataIndex++]))
-					|| !isData((d4 = base64Data[dataIndex++]))) {
+			if (!isData((d1 = base64Data[dataIndex++])) || !isData((d2 = base64Data[dataIndex++]))
+					|| !isData((d3 = base64Data[dataIndex++])) || !isData((d4 = base64Data[dataIndex++]))) {
 				return null;
-			}// if found "no data" just return null
+			} // if found "no data" just return null
 
 			b1 = base64Alphabet[d1];
 			b2 = base64Alphabet[d2];
@@ -197,8 +188,7 @@ public final class Base64 {
 			decodedData[encodedIndex++] = (byte) (b3 << 6 | b4);
 		}
 
-		if (!isData((d1 = base64Data[dataIndex++]))
-				|| !isData((d2 = base64Data[dataIndex++]))) {
+		if (!isData((d1 = base64Data[dataIndex++])) || !isData((d2 = base64Data[dataIndex++]))) {
 			return null;// if found "no data" just return null
 		}
 

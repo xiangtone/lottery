@@ -39,7 +39,7 @@ public class PreparePostToWeb {
 
 	private final long serialVersionUID = 8756559814195904326L;
 	private PointExchangeLotteryReqBody body = new PointExchangeLotteryReqBody();
-	
+
 	private BetInfo betInfo = new BetInfo();
 
 	private String channelId;
@@ -49,7 +49,7 @@ public class PreparePostToWeb {
 	private String transDataDecode;
 	private String sendUrl;
 	private String ip;
-	
+
 	public String getIp() {
 		return ip;
 	}
@@ -75,22 +75,12 @@ public class PreparePostToWeb {
 		LOG.debug(req);
 		sendUrl = ClientUtil.getInstance().getPointExchangeLotteryUrl();
 		transData = ClientTransService.getInstance().encryptPointExchangeLotteryReq(req);
-		ThreadPool.mThreadPool.execute(new PostLogInsert(
-				req.getHead().getChannelId(),
-				req.getHead().getTransSerialNumber(), 
-				this.getTransData(),
-				req.getBody().getChannelReserved(),
-				req.getBody().getOrderNumber(),
-				req.getBody().getUserPhoneNumber(),
-				req.getBody().getUserName(),
-				req.getBody().getPointMerchantId(),
-		        req.getBody().getGameId(),
-				req.getBody().getNumberSelectType(),
-				req.getBody().getBetTotalAmount(),
-				req.getBody().getPointTotalAmount(),
-				req.getBody().getCallbackURL(),
-				betInfo.getBetDetail(),
-				ip));
+		ThreadPool.mThreadPool.execute(new PostLogInsert(req.getHead().getChannelId(),
+				req.getHead().getTransSerialNumber(), this.getTransData(), req.getBody().getChannelReserved(),
+				req.getBody().getOrderNumber(), req.getBody().getUserPhoneNumber(), req.getBody().getTransDateTime(),
+				req.getBody().getUserName(), req.getBody().getPointMerchantId(), req.getBody().getGameId(),
+				req.getBody().getNumberSelectType(), req.getBody().getBetTotalAmount(),
+				req.getBody().getPointTotalAmount(), betInfo.getBetDetail(), req.getBody().getCallbackURL(), ip));
 	}
 
 	public static void main(String[] args)
@@ -98,16 +88,15 @@ public class PreparePostToWeb {
 		PreparePostToWeb testSend = new PreparePostToWeb();
 		testSend.sendTest();
 	}
-	
-	public String inputUserPhoneNumber(){
-		String userPhoneNumber=JOptionPane.showInputDialog(null,"请输入您的手机号码：");
-		while(userPhoneNumber.length()!=11){
-			JOptionPane.showMessageDialog(null, "输入错误！！！请重新输入您的手机号码！！！","error",JOptionPane.ERROR_MESSAGE);
-			userPhoneNumber=JOptionPane.showInputDialog(null,"请输入您的手机号码：");
+
+	public String inputUserPhoneNumber() {
+		String userPhoneNumber = JOptionPane.showInputDialog(null, "请输入您的手机号码：");
+		while (userPhoneNumber.length() != 11) {
+			JOptionPane.showMessageDialog(null, "输入错误！！！请重新输入您的手机号码！！！", "error", JOptionPane.ERROR_MESSAGE);
+			userPhoneNumber = JOptionPane.showInputDialog(null, "请输入您的手机号码：");
 		}
 		return userPhoneNumber;
 	}
-	
 
 	public void sendTest() throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
 		configBody();
@@ -120,14 +109,14 @@ public class PreparePostToWeb {
 		transData = ClientTransService.getInstance().encryptPointExchangeLotteryReq(req);
 		LOG.debug(transData);
 		String url = "http://124.205.38.84:13135/lottomagic/jfhcp/doRequest";
-		HttpEntity entity = EntityBuilder.create().setContentEncoding("utf-8").setContentType(ContentType.APPLICATION_JSON)
-				.setText(transData).build();
+		HttpEntity entity = EntityBuilder.create().setContentEncoding("utf-8")
+				.setContentType(ContentType.APPLICATION_JSON).setText(transData).build();
 		sendPostInterface(url);
 	}
 
 	private void configBody() {
 		body.setOrderNumber(UUID.randomUUID().toString().replaceAll("-", ""));
-		body.setTransDateTime(new Date());	
+		body.setTransDateTime(new Date());
 		try {
 			body.setPointTotalAmount(10);
 			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallback.jsp");
@@ -135,17 +124,19 @@ public class PreparePostToWeb {
 			body.setOrderNumber(Long.toString(System.currentTimeMillis()));
 			// body.setUserPhoneNumber("15829553521");// zhuxizhe
 			// body.setUserPhoneNumber("18025314707");// fuming
-			// body.setUserPhoneNumber("15285960182");// fuming guizhou CMCC test
-			//body.setUserPhoneNumber("13603054736");// lijiaqi
-		   // body.setUserPhoneNumber(inputUserPhoneNumber());
-			//body.setUserPhoneNumber("13923832816");//guojining
-			//body.setUserPhoneNumber("18676382886");//fengquchi
-			body.setUserPhoneNumber("13590100561");//wanghua
+			// body.setUserPhoneNumber("15285960182");// fuming guizhou CMCC
+			// test
+			// body.setUserPhoneNumber("13603054736");// lijiaqi
+			// body.setUserPhoneNumber(inputUserPhoneNumber());
+			// body.setUserPhoneNumber("13923832816");//guojining
+			// body.setUserPhoneNumber("18676382886");//fengquchi
+			// body.setUserPhoneNumber("13590100561");//wanghua
+			body.setUserPhoneNumber("13530274162");// longxu
 			body.setPointMerchantId("1200100001");
 			body.setGameId("10001");
 			body.setNumberSelectType(12);
 			body.setBetTotalAmount(1);
-			betInfo.setBetDetail("001060510152028300106");
+			betInfo.setBetDetail("001060514152628310106");
 			betInfo.setBetMode("101");
 			betInfoList.add(betInfo);
 			body.setBetInfoList(betInfoList);
@@ -204,5 +195,5 @@ public class PreparePostToWeb {
 	public void setTransSerialNumber(String transSerialNumber) {
 		this.transSerialNumber = transSerialNumber;
 	}
-	
+
 }
