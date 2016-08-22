@@ -27,15 +27,18 @@
 </head>
 
 <body>
-	This is my JSP page. welcome!
 	<br>
-	<form
-		action="http://www.lottomagic.com.cn/resources/api/receiveChannelOrderAction.action"
+	<form id="formid"
+		action="http://124.205.38.84:8480/resources/api/receiveChannelOrderAction.action"
 		method="post">
+<!-- 		action="http://www.lottomagic.com.cn/resources/api/receiveChannelOrderAction.action" -->
 		<input name="channelId" type="hidden" value="<%=preparePostToWeb.getChannelId()%>">
 		<input name="transSerialNumber" type="hidden" value="<%=preparePostToWeb.getTransSerialNumber()%>">
 		<input name="transData" type="hidden" value="<%=preparePostToWeb.getTransData()%>">
-		<button type="submit">submit 123</button>
+		<button type="submit">submit </button>
 	</form>
 </body>
+<script>
+document.getElementById("formid").submit();
+</script>
 </html>
