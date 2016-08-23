@@ -1,20 +1,22 @@
 /*    */ package com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util;
-/*    */ 
-/*    */ import com.iwt.vasoss.common.security.RsaHelper;
-/*    */ import com.iwt.vasoss.common.security.exception.RsaDecryptException;
-/*    */ import com.iwt.vasoss.common.security.exception.RsaEncryptException;
+
 /*    */ import java.io.BufferedInputStream;
 /*    */ import java.io.File;
 /*    */ import java.io.FileInputStream;
 /*    */ import java.io.InputStream;
 /*    */ import java.io.ObjectInputStream;
-/*    */ import java.net.URL;
 /*    */ import java.net.URLDecoder;
 /*    */ import java.security.interfaces.RSAPrivateKey;
 /*    */ import java.util.Map;
 /*    */ import java.util.Properties;
 /*    */ import java.util.concurrent.ConcurrentHashMap;
-/*    */ 
+
+/*    */
+/*    */ import com.iwt.vasoss.common.security.RsaHelper;
+/*    */ import com.iwt.vasoss.common.security.exception.RsaDecryptException;
+/*    */ import com.iwt.vasoss.common.security.exception.RsaEncryptException;
+
+/*    */
 /*    */ public class TestClientUtil
 /*    */ {
 /* 22 */   private static TestClientUtil testClientUtil = new TestClientUtil();
@@ -71,9 +73,9 @@
 /*    */ 
 /*    */   private void initPrivateKeyFile() {
 /*    */     try {
-/* 78 */       String privateKeyPath = URLDecoder.decode(TestClientUtil.class.getClassLoader().getResource("lottomagic-channel-comm-plugin-test.properties").getPath(), "UTF-8");
+/* 78 */       String privateKeyPath = URLDecoder.decode(TestClientUtil.class.getClassLoader().getResource(LOTTOMAGIC_CHANNEL_COMM_PLUGIN_PROPERTIES).getPath(), "UTF-8");
 /*    */ 
-/* 81 */       String dirPath = privateKeyPath.substring(0, privateKeyPath.length() - "lottomagic-channel-comm-plugin-test.properties".length());
+/* 81 */       String dirPath = privateKeyPath.substring(0, privateKeyPath.length() - LOTTOMAGIC_CHANNEL_COMM_PLUGIN_PROPERTIES.length());
 /*    */ 
 /* 83 */       InputStream in = new BufferedInputStream(new FileInputStream(privateKeyPath));
 /* 84 */       Properties priKeyProps = new Properties();
@@ -93,7 +95,11 @@
 /*    */   }
 /*    */ }
 
-/* Location:           D:\youka-work\git-source\lottery\lottery-interface\lottomagic-channel-comm-plugin-1.0-SNAPSHOT.jar
- * Qualified Name:     com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.ClientUtil
- * JD-Core Version:    0.6.2
+
+/*
+ * Location:
+ * D:\youka-work\git-source\lottery\lottery-interface\lottomagic-channel-comm-
+ * plugin-1.0-SNAPSHOT.jar Qualified Name:
+ * com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.ClientUtil
+ * JD-Core Version: 0.6.2
  */
