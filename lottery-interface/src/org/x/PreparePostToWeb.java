@@ -131,7 +131,7 @@ public class PreparePostToWeb {
 			// body.setUserPhoneNumber("13923832816");//guojining
 			// body.setUserPhoneNumber("18676382886");//fengquchi
 			// body.setUserPhoneNumber("13590100561");//wanghua
-			body.setUserPhoneNumber("13530274162");// longxu
+			body.setUserPhoneNumber("13530274161");// longxu
 			body.setPointMerchantId("1200100001");
 			body.setGameId("10001");
 			body.setNumberSelectType(12);

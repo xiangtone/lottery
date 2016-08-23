@@ -39,7 +39,6 @@ public class LogInsert implements Runnable {
 		this.businessId = businessId;
 		this.transData = transData;
 		this.decryptInfo = decryptInfo;
-
 		this.ip = ip;
 	}
 
@@ -62,6 +61,51 @@ public class LogInsert implements Runnable {
 		this.ticketInfoList = ticketInfoList;
 		this.channelReserved = channelReserved;
 		this.ip = ip;
+	}
+
+	@Override
+	public void run() {
+		setId(GenerateIdService.getInstance().generateNew(Integer.parseInt(ConfigManager.getConfigData("server.id")),
+				"clicks", 1));
+		if (this.id > 0) {
+			PreparedStatement ps = null;
+			Connection con = null;
+			try {
+				con = ConnectionService.getInstance().getConnectionForLocal();
+				ps = con.prepareStatement(
+						"insert into `log_async_generals` (id,logId,para01,para02,para03,para04,para05,para06,para07,para08,para09,para10,para11,para12,para13,para14) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+				int m = 1;
+				ps.setLong(m++, this.getId());
+				ps.setInt(m++, LOG_ID);
+				ps.setString(m++, this.getChannelId());
+				ps.setString(m++, this.getTransSerialNumber());
+				ps.setString(m++, this.getBusinessId());
+				ps.setString(m++, this.getTransData());
+				ps.setString(m++, this.getDecryptInfo());
+				ps.setString(m++, this.getOrderNumber());
+				ps.setString(m++, this.getChannelReserved());
+				ps.setString(m++, this.getIssueNumber());
+				ps.setInt(m++, this.getBetSuccAmount());
+				ps.setString(m++, this.getOrderAcceptTime().toString());
+				ps.setInt(m++, this.getResult());
+				ps.setString(m++, this.getResultDesc());
+				ps.setString(m++, this.getTicketInfoList().toString());
+				ps.setString(m++, this.getIp());
+				ps.executeUpdate();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				if (con != null) {
+					try {
+						con.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 
 	public Long getId() {
@@ -182,50 +226,5 @@ public class LogInsert implements Runnable {
 
 	public void setIp(String ip) {
 		this.ip = ip;
-	}
-
-	@Override
-	public void run() {
-		setId(GenerateIdService.getInstance().generateNew(Integer.parseInt(ConfigManager.getConfigData("server.id")),
-				"clicks", 1));
-		if (this.id > 0) {
-			PreparedStatement ps = null;
-			Connection con = null;
-			try {
-				con = ConnectionService.getInstance().getConnectionForLocal();
-				ps = con.prepareStatement(
-						"insert into `log_async_generals` (id,logId,para01,para02,para03,para04,para05,para06,para07,para08,para09,para10,para11,para12,para13,para14) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-				int m = 1;
-				ps.setLong(m++, this.getId());
-				ps.setInt(m++, LOG_ID);
-				ps.setString(m++, this.getChannelId());
-				ps.setString(m++, this.getTransSerialNumber());
-				ps.setString(m++, this.getBusinessId());
-				ps.setString(m++, this.getTransData());
-				ps.setString(m++, this.getDecryptInfo());
-				ps.setString(m++, this.getOrderNumber());
-				ps.setString(m++, this.getChannelReserved());
-				ps.setString(m++, this.getIssueNumber());
-				ps.setInt(m++, this.getBetSuccAmount());
-				ps.setString(m++, this.getOrderAcceptTime().toString());
-				ps.setInt(m++, this.getResult());
-				ps.setString(m++, this.getResultDesc());
-				ps.setString(m++, this.getTicketInfoList().toString());
-				ps.setString(m++, this.getIp());
-				ps.executeUpdate();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} finally {
-				if (con != null) {
-					try {
-						con.close();
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-		}
 	}
 }

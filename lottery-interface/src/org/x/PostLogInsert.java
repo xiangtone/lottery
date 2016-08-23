@@ -71,6 +71,53 @@ public class PostLogInsert implements Runnable {
 		this.ip = ip;
 	}
 
+	@Override
+	public void run() {
+		setId(GenerateIdService.getInstance().generateNew(Integer.parseInt(ConfigManager.getConfigData("server.id")),
+				"clicks", 1));
+		if (this.id > 0) {
+			PreparedStatement ps = null;
+			Connection con = null;
+			try {
+				con = ConnectionService.getInstance().getConnectionForLocal();
+				ps = con.prepareStatement(
+						"insert into `log_async_generals` (id,logId,para01,para02,para03,para04,para05,para06,para07,para08,para09,para10,para11,para12,para13,para14,para15,para16) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+				int m = 1;
+				ps.setLong(m++, this.getId());
+				ps.setInt(m++, LOG_ID);
+				ps.setString(m++, this.getChannelId());
+				ps.setString(m++, this.getTransSerialNumber());
+				ps.setString(m++, this.getTransData());
+				ps.setString(m++, this.getChannelReserved());
+				ps.setString(m++, this.getOrderNumber());
+				ps.setString(m++, this.getUserPhoneNumber());
+				ps.setString(m++, this.getUserName());
+				ps.setString(m++, this.getPointMerchantId());
+				ps.setString(m++, this.getGameId());
+				ps.setString(m++, this.getTransDateTime().toString());
+				ps.setInt(m++, this.getnumberSelectType());
+				ps.setInt(m++, this.getBetTotalAmount());
+				ps.setLong(m++, this.getPointTotalAmount());
+				ps.setString(m++, this.getbetDetail());
+				ps.setString(m++, this.getCallbackURL());
+				ps.setString(m++, this.getIp());
+				ps.executeUpdate();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				if (con != null) {
+					try {
+						con.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -205,53 +252,6 @@ public class PostLogInsert implements Runnable {
 
 	public void setIp(String ip) {
 		this.ip = ip;
-	}
-
-	@Override
-	public void run() {
-		setId(GenerateIdService.getInstance().generateNew(Integer.parseInt(ConfigManager.getConfigData("server.id")),
-				"clicks", 1));
-		if (this.id > 0) {
-			PreparedStatement ps = null;
-			Connection con = null;
-			try {
-				con = ConnectionService.getInstance().getConnectionForLocal();
-				ps = con.prepareStatement(
-						"insert into `log_async_generals` (id,logId,para01,para02,para03,para04,para05,para06,para07,para08,para09,para10,para11,para12,para13,para14,para15,para16) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-				int m = 1;
-				ps.setLong(m++, this.getId());
-				ps.setInt(m++, LOG_ID);
-				ps.setString(m++, this.getChannelId());
-				ps.setString(m++, this.getTransSerialNumber());
-				ps.setString(m++, this.getTransData());
-				ps.setString(m++, this.getChannelReserved());
-				ps.setString(m++, this.getOrderNumber());
-				ps.setString(m++, this.getUserPhoneNumber());
-				ps.setString(m++, this.getUserName());
-				ps.setString(m++, this.getPointMerchantId());
-				ps.setString(m++, this.getGameId());
-				ps.setString(m++, this.getTransDateTime().toString());
-				ps.setInt(m++, this.getnumberSelectType());
-				ps.setInt(m++, this.getBetTotalAmount());
-				ps.setLong(m++, this.getPointTotalAmount());
-				ps.setString(m++, this.getbetDetail());
-				ps.setString(m++, this.getCallbackURL());
-				ps.setString(m++, this.getIp());
-				ps.executeUpdate();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} finally {
-				if (con != null) {
-					try {
-						con.close();
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-		}
 	}
 
 }

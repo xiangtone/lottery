@@ -44,7 +44,8 @@ public class BackReceiver {
 			LOG.debug(backBetBodyInfo);
 			LOG.debug(betInfoList);
 			sucessExchangeOrderInfoLogInsert(backBetBodyInfo);
-			successExchangeTicketsiInfoLogInsert(betInfoList, backBetBodyInfo);
+			successExchangeTicketsInfoLogInsert(betInfoList, backBetBodyInfo);
+			successExchangeBetsInfoLogInsert(betInfoList, backBetBodyInfo);
 			break;
 		default:
 		}
@@ -56,7 +57,42 @@ public class BackReceiver {
 				backBetBodyInfo.getTicketInfoList(), ip));
 	}
 
-	private void successExchangeTicketsiInfoLogInsert(List<BetInfo> betInfoList, BackBetBodyInfo backBetBodyInfo) {
+	private void successExchangeBetsInfoLogInsert(List<BetInfo> betInfoList, BackBetBodyInfo backBetBodyInfo) {
+		try {
+			String betDetail = betInfoList.get(0).getBetDetail();
+			do
+			{
+				con = ConnectionServiceLottery.getInstance().getConnectionForLottery();
+				ps = con.prepareStatement(
+						"insert into `tbl_success_exchange_bets` (ticketId,betDateTime,betDetail,orderNumber,insertTime,rewardlevel,rewardMoney,rewardUpdateTime) values (?,?,?,?,?,?,?,?)");
+				int m = 1;
+				ps.setString(m++, betInfoList.get(0).getTicketId());
+				ps.setString(m++, betInfoList.get(0).getBetDateTime());
+				ps.setString(m++, betDetail.substring(0, 21));
+				ps.setString(m++, backBetBodyInfo.getOrderNumber());
+				ps.setLong(m++, System.currentTimeMillis());
+				ps.setLong(m++, 1);// rewardLevel
+				ps.setInt(m++, 5);// rewardMoney
+				ps.setLong(m++, 1);// rewardUpdateTime
+				ps.executeUpdate();
+				betDetail = betDetail.substring(21);
+			}while(betDetail.length()!=0);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private void successExchangeTicketsInfoLogInsert(List<BetInfo> betInfoList, BackBetBodyInfo backBetBodyInfo) {
 		try {
 			con = ConnectionServiceLottery.getInstance().getConnectionForLottery();
 			ps = con.prepareStatement(
