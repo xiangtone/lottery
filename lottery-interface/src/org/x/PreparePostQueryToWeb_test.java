@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.swing.JOptionPane;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -23,24 +25,18 @@ import org.common.util.ThreadPool;
 
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.ClientTransService;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base.ReqHead;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.BetInfo;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReq;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReqBody;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.ClientUtil;
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryModifyBetAccountInfoUrlReq;
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryModifyBetAccountInfoUrlReqBody;
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.TestClientUtil;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.swing.*;
+public class PreparePostQueryToWeb_test {
 
-public class PreparePostToWeb {
-
-	private static final Logger LOG = Logger.getLogger(PreparePostToWeb.class);
+	private static final Logger LOG = Logger.getLogger(PreparePostQueryToWeb_test.class);
 
 	private final long serialVersionUID = 8756559814195904326L;
-	private PointExchangeLotteryReqBody body = new PointExchangeLotteryReqBody();
-
-	private BetInfo betInfo = new BetInfo();
+	private QueryModifyBetAccountInfoUrlReqBody body = new QueryModifyBetAccountInfoUrlReqBody();
 
 	private String channelId;
 	private String transSerialNumber;
@@ -50,50 +46,38 @@ public class PreparePostToWeb {
 	private String sendUrl;
 	private String ip;
 
-	public String getIp() {
-		return ip;
-	}
-
-	public void setIp(String ip) {
-		this.ip = ip;
-	}
-
-	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
-
-	public PreparePostToWeb() throws RsaEncryptException {
+	public PreparePostQueryToWeb_test() throws RsaEncryptException {
 		super();
 	}
 
 	public void process() throws RsaEncryptException {
-		this.channelId = ClientUtil.getInstance().getChannelId();
+		this.channelId = TestClientUtil.getInstance().getChannelId();
 		this.transSerialNumber = UUID.randomUUID().toString().replaceAll("-", "");
 		configBody();
 		LOG.debug(body.getCallbackURL());
-		PointExchangeLotteryReq req = new PointExchangeLotteryReq();
+		sendUrl = TestClientUtil.getInstance().getPointExchangeLotteryUrl();
+		QueryModifyBetAccountInfoUrlReq req = new QueryModifyBetAccountInfoUrlReq();
 		req.setHead(new ReqHead(channelId));
 		req.setBody(body);
 		LOG.debug(req);
-		sendUrl = ClientUtil.getInstance().getPointExchangeLotteryUrl();
-		transData = ClientTransService.getInstance().encryptPointExchangeLotteryReq(req);
+		transData = ClientTransService.getInstance().encryptQueryModifyBetAccountInfoUrlReq(req);
 		ThreadPool.mThreadPool.execute(new PostLogInsert(req.getHead().getChannelId(),
 				req.getHead().getTransSerialNumber(), this.getTransData(), req.getBody().getChannelReserved(),
 				req.getBody().getOrderNumber(), req.getBody().getUserPhoneNumber(), req.getBody().getTransDateTime(),
-				req.getBody().getUserName(), req.getBody().getPointMerchantId(), req.getBody().getGameId(),
-				req.getBody().getNumberSelectType(), req.getBody().getBetTotalAmount(),
-				req.getBody().getPointTotalAmount(), betInfo.getBetDetail(), req.getBody().getCallbackURL(), ip));
+				req.getBody().getCallbackURL(), ip));
 	}
 
 	public static void main(String[] args)
 			throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
-		PreparePostToWeb testSend = new PreparePostToWeb();
+		PreparePostQueryToWeb_test testSend = new PreparePostQueryToWeb_test();
 		testSend.sendTest();
 	}
 
 	public String inputUserPhoneNumber() {
 		String userPhoneNumber = JOptionPane.showInputDialog(null, "请输入您的手机号码：");
 		while (userPhoneNumber.length() != 11) {
-			JOptionPane.showMessageDialog(null, "输入错误！！！请重新输入您的手机号码！！！", "error", JOptionPane.ERROR_MESSAGE);
-			userPhoneNumber = JOptionPane.showInputDialog(null, "请输入您的手机号码：");
+			userPhoneNumber = JOptionPane.showInputDialog(null, "输入错误！！！请重新输入您的手机号码:", "error",
+					JOptionPane.ERROR_MESSAGE);
 		}
 		return userPhoneNumber;
 	}
@@ -101,12 +85,12 @@ public class PreparePostToWeb {
 	public void sendTest() throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
 		configBody();
 		LOG.debug(body.getCallbackURL());
-		sendUrl = ClientUtil.getInstance().getPointExchangeLotteryUrl();
-		PointExchangeLotteryReq req = new PointExchangeLotteryReq();
+		sendUrl = TestClientUtil.getInstance().getPointExchangeLotteryUrl();
+		QueryModifyBetAccountInfoUrlReq req = new QueryModifyBetAccountInfoUrlReq();
 		req.setHead(new ReqHead(channelId));
 		req.setBody(body);
 		LOG.debug(req);
-		transData = ClientTransService.getInstance().encryptPointExchangeLotteryReq(req);
+		transData = ClientTransService.getInstance().encryptQueryModifyBetAccountInfoUrlReq(req);
 		LOG.debug(transData);
 		String url = "http://124.205.38.84:13135/lottomagic/jfhcp/doRequest";
 		HttpEntity entity = EntityBuilder.create().setContentEncoding("utf-8")
@@ -118,28 +102,17 @@ public class PreparePostToWeb {
 		body.setOrderNumber(UUID.randomUUID().toString().replaceAll("-", ""));
 		body.setTransDateTime(new Date());
 		try {
-			body.setPointTotalAmount(10);
-			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallback.jsp");
+			body.setCallbackURL("http://a.yt.youkala.com:38080/ytQueryCallback.jsp");
 			body.setChannelReserved("youka");
-			body.setOrderNumber(Long.toString(System.currentTimeMillis()));
 			// body.setUserPhoneNumber("15829553521");// zhuxizhe
 			// body.setUserPhoneNumber("18025314707");// fuming
 			// body.setUserPhoneNumber("15285960182");// fuming guizhou CMCC
 			// test
 			// body.setUserPhoneNumber("13603054736");// lijiaqi
+			// body.setUserPhoneNumber("13530274162");//longxu
 			// body.setUserPhoneNumber(inputUserPhoneNumber());
-			// body.setUserPhoneNumber("13923832816");//guojining
-			// body.setUserPhoneNumber("18676382886");//fengquchi
-			// body.setUserPhoneNumber("13590100561");//wanghua
-			body.setUserPhoneNumber("13530274161");// longxu
-			body.setPointMerchantId("1200100001");
-			body.setGameId("10001");
-			body.setNumberSelectType(12);
-			body.setBetTotalAmount(1);
-			betInfo.setBetDetail("001060514152628310106");
-			betInfo.setBetMode("101");
-			betInfoList.add(betInfo);
-			body.setBetInfoList(betInfoList);
+			body.setUserPhoneNumber("13530274162");
+			body.setOrderNumber("1469413604412");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -151,7 +124,7 @@ public class PreparePostToWeb {
 		try {
 			HttpPost httpPost = new HttpPost(url);
 			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-			nvps.add(new BasicNameValuePair("channelId", "C11000"));
+			nvps.add(new BasicNameValuePair("channelId", "C12001"));
 			nvps.add(new BasicNameValuePair("transSerialNumber", transSerialNumber));
 			nvps.add(new BasicNameValuePair("transData", transData));
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
@@ -170,6 +143,14 @@ public class PreparePostToWeb {
 			httpclient.close();
 		}
 		return result;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 
 	public String getChannelId() {

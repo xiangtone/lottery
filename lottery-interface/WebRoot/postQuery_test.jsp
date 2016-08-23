@@ -1,11 +1,11 @@
 <%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
-<%@page import="org.x.PreparePostQueryToWeb"%>
+<%@page import="org.x.PreparePostQueryToWeb_test"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 
-	PreparePostQueryToWeb preparePostQueryToWeb = new PreparePostQueryToWeb();
+	PreparePostQueryToWeb_test preparePostQueryToWeb = new PreparePostQueryToWeb_test();
 	preparePostQueryToWeb
 			.setIp(request.getHeader("X-Real-IP") != null && request.getHeader("X-Real-IP").length() > 0
 					? request.getHeader("X-Real-IP") : request.getRemoteAddr());
@@ -32,7 +32,7 @@
 	Query userBetInfo!!!
 	<br>
 	<form
-		action="http://www.lottomagic.com.cn/resources/api/receiveQueryBetAccountAction.action"
+		action="http://124.205.38.84:8480/resources/api/receiveQueryBetAccountAction.action"
 		method="post">
 		<input name="channelId" type="hidden"
 			value="<%=preparePostQueryToWeb.getChannelId()%>"> <input

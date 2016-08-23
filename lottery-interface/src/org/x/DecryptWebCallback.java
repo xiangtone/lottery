@@ -2,9 +2,9 @@ package org.x;
 
 import org.apache.log4j.Logger;
 import org.common.util.ThreadPool;
-
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.ClientTransService;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryResultReq;
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.TicketInfo;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 
 public class DecryptWebCallback {
@@ -14,15 +14,26 @@ public class DecryptWebCallback {
 	private String transData;
 	private String channelId;
 	private String transSerialNumber;
+	private TicketInfo ticketInfo = new TicketInfo();
+	private String ip;
 
-	public void decrypt() throws RsaDecryptException {
+	public void decrypt() throws Exception {
 		LOG.debug(this);
 		PointExchangeLotteryResultReq result = ClientTransService.getInstance()
 				.decryptPointExchangeLotteryResultReq(getChannelId(), getTransSerialNumber(), getTransData());
 		LOG.debug(result);
 		ThreadPool.mThreadPool.execute(new WebCallbackLogInsert(result.getHead().getChannelId(),
-				result.getHead().getTransSerialNumber(), 
-				this.getTransData()));
+				result.getHead().getTransSerialNumber(), this.getTransData(), result.getBody().getChannelReserved(),
+				result.getBody().getOrderNumber(), result.getBody().getResult(), result.getBody().getResultDesc(),
+				result.getBody().getIssueNumber(), result.getBody().getBetSuccAmount(), ticketInfo.getBetDetail(), ip));
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 
 	public String getTransData() {

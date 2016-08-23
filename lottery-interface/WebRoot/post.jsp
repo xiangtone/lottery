@@ -1,13 +1,15 @@
 <%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
 <%@page import="org.x.PreparePostToWeb"%>
-<%@page import="org.common.util.ThreadPool" %>
-<%@page import="org.x.PostLogInsert" %>
+<%@page import="org.common.util.ThreadPool"%>
+<%@page import="org.x.PostLogInsert"%>
 <%
-  String path = request.getContextPath();
-  String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path
-      + "/";
-  PreparePostToWeb preparePostToWeb =  new PreparePostToWeb();
-  ThreadPool.mThreadPool.execute(new PostLogInsert(preparePostToWeb.getChannelId(), preparePostToWeb.getTransSerialNumber(), preparePostToWeb.getTransData()));
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+	PreparePostToWeb preparePostToWeb = new PreparePostToWeb();
+	preparePostToWeb.setIp(request.getHeader("X-Real-IP") != null && request.getHeader("X-Real-IP").length() > 0
+			? request.getHeader("X-Real-IP") : request.getRemoteAddr());
+	preparePostToWeb.process();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">

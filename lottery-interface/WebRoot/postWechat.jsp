@@ -1,11 +1,11 @@
 <%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
 <%@page import="org.x.PreparePostToWeb"%>
 <%
-  String path = request.getContextPath();
-  String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path
-      + "/";
-  
-  PreparePostToWeb preparePostToWeb =  new PreparePostToWeb();
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+
+	PreparePostToWeb preparePostToWeb = new PreparePostToWeb();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -30,10 +30,13 @@
 	<form
 		action="http://t.lottomagic.com.cn:11704/resources/api/receiveChannelOrderAction.action"
 		method="post">
-		<input name="channelId" type="hidden" value="<%=preparePostToWeb.getChannelId()%>">
-		<input name="transSerialNumber" type="hidden" value="<%=preparePostToWeb.getTransSerialNumber()%>">
-		<input name="transData" type="hidden" value="<%=preparePostToWeb.getTransData()%>">
-		<button type="submit" >submit</button>
+		<input name="channelId" type="hidden"
+			value="<%=preparePostToWeb.getChannelId()%>"> <input
+			name="transSerialNumber" type="hidden"
+			value="<%=preparePostToWeb.getTransSerialNumber()%>"> <input
+			name="transData" type="hidden"
+			value="<%=preparePostToWeb.getTransData()%>">
+		<button type="submit">submit</button>
 	</form>
 </body>
 </html>
