@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
 <%@page import="org.x.PreparePostToWeb"%>
+<%@page import="org.x.PartnerApi"%>
 <%@page import="org.common.util.ThreadPool"%>
 <%@page import="org.x.PostLogInsert"%>
 <%@page import="org.apache.log4j.Logger"%>
@@ -7,6 +8,14 @@
 	Logger LOG = Logger.getLogger(this.getClass());
 	LOG.debug(request.getParameter("partnerId"));
 	LOG.debug(request.getParameter("transData"));
+	
+	PartnerApi partnerApi = new PartnerApi();
+	partnerApi.setIp(request.getHeader("X-Real-IP") != null && request.getHeader("X-Real-IP").length() > 0
+			? request.getHeader("X-Real-IP") : request.getRemoteAddr());
+	partnerApi.setPartnerId(request.getParameter("partnerId"));
+	partnerApi.setPartnerTransData(request.getParameter("transData"));
+	
+	
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";

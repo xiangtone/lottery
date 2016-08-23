@@ -6,7 +6,7 @@
   String path = request.getContextPath();
   String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path
       + "/";
-  PartnerApi partnerApi =  new PartnerApi(request,response);
+  PartnerApi partnerApi =  new PartnerApi();
   if (partnerApi.getPageAction()==null){
   	return;
   }

@@ -6,9 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -23,7 +20,11 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.x.info.PageAction;
+import org.x.info.PartnerInfo;
+import org.x.info.PartnerOrderInfo;
+import org.x.service.PartnerService;
 
+import com.alibaba.fastjson.JSON;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.ClientTransService;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base.ReqHead;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.BetInfo;
@@ -43,6 +44,10 @@ public class PartnerApi {
 	private BetInfo betInfo = new BetInfo();
 
 	private PageAction pageAction;
+	private String localErrorMsg; // can not do callback error message
+	private String partnerId;
+	private String partnerTransData;
+	private String ip;
 	private String channelId;
 	private String transSerialNumber;
 	private String pointTotalAmount;
@@ -50,6 +55,8 @@ public class PartnerApi {
 	private String transDataDecode;
 	private String sendUrl;
 	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
+	private PartnerInfo partnerInfo;
+	private PartnerOrderInfo partnerOrderInfo;
 
 	public PageAction getPageAction() {
 		return pageAction;
@@ -59,52 +66,105 @@ public class PartnerApi {
 		this.pageAction = pageAction;
 	}
 
-	public PartnerApi(HttpServletRequest request, HttpServletResponse response) throws RsaEncryptException {
+	public String getLocalErrorMsg() {
+		return localErrorMsg;
+	}
+
+	public void setLocalErrorMsg(String localErrorMsg) {
+		this.localErrorMsg = localErrorMsg;
+	}
+
+	public String getPartnerId() {
+		return partnerId;
+	}
+
+	public void setPartnerId(String partnerId) {
+		this.partnerId = partnerId;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
+	public String getPartnerTransData() {
+		return partnerTransData;
+	}
+
+	public void setPartnerTransData(String partnerTransData) {
+		this.partnerTransData = partnerTransData;
+	}
+
+	public PartnerApi() throws RsaEncryptException {
 		super();
-		String ip = request.getHeader("X-Real-IP") != null && request.getHeader("X-Real-IP").length() > 0
-				? request.getHeader("X-Real-IP") : request.getRemoteAddr();
+	}
+
+	public void process() {
 		// check parameters;
-		if (checkParameters(request, response)) {
+		if (checkParameters()) {
 
 		} else {
 			LOG.debug("ip:" + ip + "  . check parameter fail .");
+			return;
 		}
-
-		// this.channelId = ClientUtil.getInstance().getChannelId();
-		// this.transSerialNumber = UUID.randomUUID().toString().replaceAll("-",
-		// "");
-		// configBody();
-		// LOG.debug(body.getCallbackURL());
-		// PointExchangeLotteryReq req = new PointExchangeLotteryReq();
-		// req.setHead(new ReqHead(channelId));
-		// req.setBody(body);
-		// LOG.debug(req);
-		// sendUrl = ClientUtil.getInstance().getPointExchangeLotteryUrl();
-		// transData =
-		// ClientTransService.getInstance().encryptPointExchangeLotteryReq(req);
-		// ThreadPool.mThreadPool.execute(
-		// new PostLogInsert(req.getHead().getChannelId(),
-		// req.getHead().getTransSerialNumber(), this.getTransData()));
 	}
 
-	private boolean checkParameters(HttpServletRequest request, HttpServletResponse response) {
+	private boolean checkParameters() {
 		boolean result = false;
 		// check all Parameters
-		result = checkAllParametersExist(request, response);
+		result = checkAllParametersExist();
 		return result;
 	}
 
-	private boolean checkAllParametersExist(HttpServletRequest request, HttpServletResponse response) {
+	private boolean checkAllParametersExist() {
 		boolean result = false;
 		// TODO need complete
 		try {
-			if (request.getParameter("partnerId") == null) {
-				response.getWriter().print("{\"status\":\"error\",\"msg\":\"partnerId is not exist!\"}");
+			if (!(partnerId != null && partnerId.length() > 0)) {
+				setLocalErrorMsg("{\"status\":\"error\",\"result\":4001,\"msg\":\"partnerId is not exist!\"}");
+				return result;
 			}
-		} catch (IOException e) {
+			partnerInfo = PartnerService.getInstance().getNameLoadingCache(partnerId);
+			LOG.debug(partnerInfo);
+			if (partnerInfo != null) {
+				setLocalErrorMsg("{\"status\":\"error\",\"result\":4001,\"msg\":\"partnerId is not exist!\"}");
+				return result;
+			} else {
+				processTransData();
+				if (partnerOrderInfo == null) {
+					setLocalErrorMsg("{\"status\":\"error\",\"result\":4002,\"msg\":\"decrypt order info failure!\"}");
+					return result;
+				} else {
+					if (partnerOrderInfo.getPartnerCallbackURL() != null
+							&& partnerOrderInfo.getPartnerCallbackURL().length() > 0) {
+						// todo check match http or https
+					} else {
+						setLocalErrorMsg("{\"status\":\"error\",\"result\":4005,\"msg\":\"Web callback URL is no currect!\"}");
+						return result;
+					}
+				}
+			}
+			result = checkParnterId();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return result;
+	}
+
+	private void processTransData() {
+		String json = partnerTransData;
+		if (partnerInfo.getKeyAES() != null && partnerInfo.getKeyAES().length() > 0) {
+			// todo decrypt
+		}
+		partnerOrderInfo = JSON.parseObject(json, PartnerOrderInfo.class);
+	}
+
+	private boolean checkParnterId() {
+		boolean result = false;
 		return result;
 	}
 
