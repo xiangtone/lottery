@@ -15,6 +15,8 @@
 	partnerApi.setPartnerId(request.getParameter("partnerId"));
 	partnerApi.setPartnerTransData(request.getParameter("transData"));
 	
+	partnerApi.process();
+	
 	
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()

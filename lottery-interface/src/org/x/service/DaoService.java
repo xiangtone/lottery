@@ -5,8 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import org.apache.log4j.Logger;
-import org.x.ConnectionServiceConfig;
 import org.x.info.PartnerInfo;
+import org.x.utils.ConnectionServiceLottery;
 
 public class DaoService {
 
@@ -18,9 +18,9 @@ public class DaoService {
 		Connection con = null;
 		ResultSet rs = null;
 		try {
-			con = ConnectionServiceConfig.getInstance().getConnectionForLocal();
+			con = ConnectionServiceLottery.getInstance().getConnectionForLottery();
 			String sql = "SELECT * FROM `tbl_partners` where id=?;";
-			LOG.debug("query");
+			LOG.debug("query:" + sql);
 			ps = con.prepareStatement(sql);
 			int m = 1;
 			ps.setString(m++, id);
