@@ -20,7 +20,7 @@ public class DaoService {
 		try {
 			con = ConnectionServiceLottery.getInstance().getConnectionForLottery();
 			String sql = "SELECT * FROM `tbl_partners` where id=?;";
-			LOG.debug("query:" + sql);
+			// LOG.debug("query:" + sql);
 			ps = con.prepareStatement(sql);
 			int m = 1;
 			ps.setString(m++, id);
