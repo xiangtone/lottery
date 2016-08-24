@@ -71,9 +71,9 @@
 /*    */ 
 /*    */   private void initPrivateKeyFile() {
 /*    */     try {
-/* 78 */       String privateKeyPath = URLDecoder.decode(ClientUtil.class.getClassLoader().getResource("lottomagic-channel-comm-plugin.properties").getPath(), "UTF-8");
+/* 78 */       String privateKeyPath = URLDecoder.decode(ClientUtil.class.getClassLoader().getResource(LOTTOMAGIC_CHANNEL_COMM_PLUGIN_PROPERTIES).getPath(), "UTF-8");
 /*    */ 
-/* 81 */       String dirPath = privateKeyPath.substring(0, privateKeyPath.length() - "lottomagic-channel-comm-plugin.properties".length());
+/* 81 */       String dirPath = privateKeyPath.substring(0, privateKeyPath.length() - LOTTOMAGIC_CHANNEL_COMM_PLUGIN_PROPERTIES.length());
 /*    */ 
 /* 83 */       InputStream in = new BufferedInputStream(new FileInputStream(privateKeyPath));
 /* 84 */       Properties priKeyProps = new Properties();

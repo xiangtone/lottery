@@ -8,6 +8,9 @@ import java.util.Date;
 import org.common.util.ConfigManager;
 import org.common.util.ConnectionService;
 import org.common.util.GenerateIdService;
+import org.x.utils.ConnectionServiceLog;
+
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.BetInfo;
 
 public class PostLogInsert implements Runnable {
 
@@ -27,7 +30,7 @@ public class PostLogInsert implements Runnable {
 	private int numberSelectType;
 	private int betTotalAmount;
 	private long pointTotalAmount;
-	private String betDetail;
+	private BetInfo betInfo;
 	private String callbackURL;
 	private String ip;
 
@@ -49,7 +52,7 @@ public class PostLogInsert implements Runnable {
 
 	public PostLogInsert(String channelId, String transSerialNumber, String transData, String channelReserved,
 			String orderNumber, String userPhoneNumber, Date transDateTime, String userName, String pointMerchantId,
-			String gameId, int numberSelectType, int betTotalAmount, long pointTotalAmount, String betDetail,
+			String gameId, int numberSelectType, int betTotalAmount, long pointTotalAmount, BetInfo betInfo,
 			String callbackURL, String ip) {
 		// TODO Auto-generated constructor stub
 		super();
@@ -67,7 +70,7 @@ public class PostLogInsert implements Runnable {
 		this.betTotalAmount = betTotalAmount;
 		this.pointTotalAmount = pointTotalAmount;
 		this.callbackURL = callbackURL;
-		this.betDetail = betDetail;
+		this.betInfo = betInfo;
 		this.ip = ip;
 	}
 
@@ -98,7 +101,7 @@ public class PostLogInsert implements Runnable {
 				ps.setInt(m++, this.getnumberSelectType());
 				ps.setInt(m++, this.getBetTotalAmount());
 				ps.setLong(m++, this.getPointTotalAmount());
-				ps.setString(m++, this.getbetDetail());
+				ps.setString(m++, this.getBetInfo().toString());
 				ps.setString(m++, this.getCallbackURL());
 				ps.setString(m++, this.getIp());
 				ps.executeUpdate();
@@ -230,12 +233,12 @@ public class PostLogInsert implements Runnable {
 		this.pointTotalAmount = pointTotalAmount;
 	}
 
-	public String getbetDetail() {
-		return betDetail;
+	public BetInfo getBetInfo() {
+		return betInfo;
 	}
 
-	public void setBetDetail(String betDetail) {
-		this.betDetail = betDetail;
+	public void setBetDetail(BetInfo betInfo) {
+		this.betInfo = betInfo;
 	}
 
 	public String getCallbackURL() {

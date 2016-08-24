@@ -23,7 +23,7 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.common.util.ThreadPool;
 
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.ClientTransService;
+import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.TestClientTransService;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base.ReqHead;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryModifyBetAccountInfoUrlReq;
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryModifyBetAccountInfoUrlReqBody;
@@ -60,7 +60,7 @@ public class PreparePostQueryToWebTest {
 		req.setHead(new ReqHead(channelId));
 		req.setBody(body);
 		LOG.debug(req);
-		transData = ClientTransService.getInstance().encryptQueryModifyBetAccountInfoUrlReq(req);
+		transData = TestClientTransService.getInstance().encryptQueryModifyBetAccountInfoUrlReq(req);
 		ThreadPool.mThreadPool.execute(new PostLogInsert(req.getHead().getChannelId(),
 				req.getHead().getTransSerialNumber(), this.getTransData(), req.getBody().getChannelReserved(),
 				req.getBody().getOrderNumber(), req.getBody().getUserPhoneNumber(), req.getBody().getTransDateTime(),
@@ -90,7 +90,7 @@ public class PreparePostQueryToWebTest {
 		req.setHead(new ReqHead(channelId));
 		req.setBody(body);
 		LOG.debug(req);
-		transData = ClientTransService.getInstance().encryptQueryModifyBetAccountInfoUrlReq(req);
+		transData = TestClientTransService.getInstance().encryptQueryModifyBetAccountInfoUrlReq(req);
 		LOG.debug(transData);
 		String url = "http://124.205.38.84:13135/lottomagic/jfhcp/doRequest";
 		HttpEntity entity = EntityBuilder.create().setContentEncoding("utf-8")
@@ -102,7 +102,7 @@ public class PreparePostQueryToWebTest {
 		body.setOrderNumber(UUID.randomUUID().toString().replaceAll("-", ""));
 		body.setTransDateTime(new Date());
 		try {
-			body.setCallbackURL("http://a.yt.youkala.com:38080/ytQueryCallback.jsp");
+			body.setCallbackURL("http://120.24.38.160:38080/ytQueryCallbackTest.jsp");
 			body.setChannelReserved("youka");
 			// body.setUserPhoneNumber("15829553521");// zhuxizhe
 			// body.setUserPhoneNumber("18025314707");// fuming
@@ -124,7 +124,7 @@ public class PreparePostQueryToWebTest {
 		try {
 			HttpPost httpPost = new HttpPost(url);
 			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-			nvps.add(new BasicNameValuePair("channelId", "C12001"));
+			nvps.add(new BasicNameValuePair("channelId", "C11000"));
 			nvps.add(new BasicNameValuePair("transSerialNumber", transSerialNumber));
 			nvps.add(new BasicNameValuePair("transData", transData));
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
