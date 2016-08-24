@@ -21,14 +21,14 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.common.util.ThreadPool;
 
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.ClientTransService;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base.ReqHead;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.BetInfo;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReq;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReqBody;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.ClientUtil;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
+import com.iwt.yt.api.base.ReqHead;
+import com.iwt.yt.api.trans.BetInfo;
+import com.iwt.yt.api.trans.PointExchangeLotteryReq;
+import com.iwt.yt.api.trans.PointExchangeLotteryReqBody;
+import com.iwt.yt.plugin.ClientTransService;
+import com.iwt.yt.util.ClientUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.*;

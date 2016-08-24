@@ -23,13 +23,13 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.common.util.ThreadPool;
 
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.ClientTransService;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base.ReqHead;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryModifyBetAccountInfoUrlReq;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryModifyBetAccountInfoUrlReqBody;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.TestClientUtil;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
+import com.iwt.yt.api.base.ReqHead;
+import com.iwt.yt.api.trans.QueryModifyBetAccountInfoUrlReq;
+import com.iwt.yt.api.trans.QueryModifyBetAccountInfoUrlReqBody;
+import com.iwt.yt.plugin.ClientTransService;
+import com.iwt.yt.util.TestClientUtil;
 
 public class PreparePostQueryToWeb_test {
 

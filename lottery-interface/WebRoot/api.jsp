@@ -17,6 +17,14 @@
 	
 	partnerApi.process();
 	
+	if (partnerApi.getLocalErrorMsg()!=null&&partnerApi.getLocalErrorMsg().length()>0){
+		out.print(partnerApi.getLocalErrorMsg());
+		return;
+	}
+	if (partnerApi.getPageAction()==null){
+		out.print(" error:page action is null");
+		return;
+	}
 	
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -45,15 +53,16 @@
 <body>
 	<br>
 	<form id="formid"
-		action="http://124.205.38.84:8480/resources/api/receiveChannelOrderAction.action"
+		action="<%=partnerApi.getPageAction().getUrl() %>"
 		method="post">
-		<!-- 		action="http://www.lottomagic.com.cn/resources/api/receiveChannelOrderAction.action" -->
-		<input name="channelId" type="hidden"
-			value="<%=preparePostToWeb.getChannelId()%>"> <input
-			name="transSerialNumber" type="hidden"
-			value="<%=preparePostToWeb.getTransSerialNumber()%>"> <input
-			name="transData" type="hidden"
-			value="<%=preparePostToWeb.getTransData()%>">
+		<%
+		for(String key : partnerApi.getPageAction().getEntity().keySet()){
+			%>
+			<input name="<%=key %>" type="hidden"
+			value="<%=partnerApi.getPageAction().getEntity().get(key)%>">
+			<%
+		}
+		%>
 		<button type="submit">submit</button>
 	</form>
 </body>
