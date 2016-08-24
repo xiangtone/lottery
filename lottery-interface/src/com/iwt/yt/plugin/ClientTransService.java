@@ -71,7 +71,7 @@ import com.iwt.yt.util.ClientUtil;
 
 	/*    */
 	/*    */ public String encryptQueryModifyBetAccountInfoUrlReq(
-			QueryModifyBetAccountInfoUrlReq queryModifyBetAccountInfoUrlReq)/*    */ throws RsaEncryptException
+			QueryModifyBetAccountInfoUrlReq queryModifyBetAccountInfoUrlReq) throws RsaEncryptException
 	/*    */ {
 		/* 73 */ String channelId = queryModifyBetAccountInfoUrlReq.getHead().getChannelId();
 		/* 74 */ String transEncryptData = JSON.toJSONString(queryModifyBetAccountInfoUrlReq.getBody(),
