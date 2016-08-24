@@ -112,7 +112,7 @@ public class PreparePostQueryToWeb {
 			// body.setUserPhoneNumber("13603054736");// lijiaqi
 			// body.setUserPhoneNumber("13530274162");//longxu
 			// body.setUserPhoneNumber(inputUserPhoneNumber());
-			body.setUserPhoneNumber("13530274162");
+			body.setUserPhoneNumber("17090415005");
 			body.setOrderNumber("1469413604412");
 		} catch (Exception e) {
 			e.printStackTrace();

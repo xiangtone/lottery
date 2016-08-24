@@ -5,7 +5,7 @@
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 
-	PreparePostToWebTest preparePostToWeb = new PreparePostToWebTest();
+	PreparePostToWebTest preparePostToWebTest = new PreparePostToWebTest();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -31,11 +31,11 @@
 		action="http://124.205.38.84:8880/resources/api/receiveChannelOrderAction.action"
 		method="post">
 		<input name="channelId" type="hidden"
-			value="<%=preparePostToWeb.getChannelId()%>"> <input
+			value="<%=preparePostToWebTest.getChannelId()%>"> <input
 			name="transSerialNumber" type="hidden"
-			value="<%=preparePostToWeb.getTransSerialNumber()%>"> <input
+			value="<%=preparePostToWebTest.getTransSerialNumber()%>"> <input
 			name="transData" type="hidden"
-			value="<%=preparePostToWeb.getTransData()%>">
+			value="<%=preparePostToWebTest.getTransData()%>">
 		<button type="submit">submit</button>
 	</form>
 </body>

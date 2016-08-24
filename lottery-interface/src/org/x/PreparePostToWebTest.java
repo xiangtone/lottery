@@ -30,7 +30,6 @@ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.TestClientUt
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.swing.*;
 
 public class PreparePostToWebTest {
@@ -39,16 +38,26 @@ public class PreparePostToWebTest {
 
 	private final long serialVersionUID = 8756559814195904326L;
 	private PointExchangeLotteryReqBody body = new PointExchangeLotteryReqBody();
-
+	
+	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
 	private BetInfo betInfo = new BetInfo();
 
 	private String channelId;
 	private String transSerialNumber;
 	private String pointTotalAmount;
+	private String userPhoneNumber;
 	private String transData;
 	private String transDataDecode;
 	private String sendUrl;
 	private String ip;
+
+	public String getUserPhoneNumber() {
+		return userPhoneNumber;
+	}
+
+	public void setUserPhoneNumber(String userPhoneNumber) {
+		this.userPhoneNumber = userPhoneNumber;
+	}
 
 	public String getIp() {
 		return ip;
@@ -57,8 +66,6 @@ public class PreparePostToWebTest {
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
-
-	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
 
 	public PreparePostToWebTest() throws RsaEncryptException {
 		super();
@@ -80,7 +87,7 @@ public class PreparePostToWebTest {
 				req.getBody().getOrderNumber(), req.getBody().getUserPhoneNumber(), req.getBody().getTransDateTime(),
 				req.getBody().getUserName(), req.getBody().getPointMerchantId(), req.getBody().getGameId(),
 				req.getBody().getNumberSelectType(), req.getBody().getBetTotalAmount(),
-				req.getBody().getPointTotalAmount(), betInfo.getBetDetail(), req.getBody().getCallbackURL(), ip));
+				req.getBody().getPointTotalAmount(), betInfo, req.getBody().getCallbackURL(), ip));
 	}
 
 	public static void main(String[] args)
@@ -113,31 +120,30 @@ public class PreparePostToWebTest {
 				.setContentType(ContentType.APPLICATION_JSON).setText(transData).build();
 		sendPostInterface(url);
 	}
-
+	
 	private void configBody() {
 		body.setOrderNumber(UUID.randomUUID().toString().replaceAll("-", ""));
 		body.setTransDateTime(new Date());
 		try {
 			body.setPointTotalAmount(10);
-			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallback.jsp");
+			body.setCallbackURL("http://120.24.38.160:38080/ytCallbackTest.jsp");
 			body.setChannelReserved("youka");
 			body.setOrderNumber(Long.toString(System.currentTimeMillis()));
 			// body.setUserPhoneNumber("15829553521");// zhuxizhe
 			// body.setUserPhoneNumber("18025314707");// fuming
-			// body.setUserPhoneNumber("15285960182");// fuming guizhou CMCC
-			// test
+			// body.setUserPhoneNumber("15285960182");// fuming guizhou CMCCtest
 			// body.setUserPhoneNumber("13603054736");// lijiaqi
 			// body.setUserPhoneNumber(inputUserPhoneNumber());
 			// body.setUserPhoneNumber("13923832816");//guojining
 			// body.setUserPhoneNumber("18676382886");//fengquchi
 			// body.setUserPhoneNumber("13590100561");//wanghua
 			body.setUserPhoneNumber("13530274162");// longxu
+			//body.setUserPhoneNumber("17090415005");
 			body.setPointMerchantId("1200100001");
 			body.setGameId("10001");
-			body.setNumberSelectType(12);
+			body.setNumberSelectType(1);
 			body.setBetTotalAmount(1);
-			betInfo.setBetDetail("001060514152628310106");
-			betInfo.setBetMode("101");
+			BetInfo betInfo = new BetInfo("101","001060514152628310106");
 			betInfoList.add(betInfo);
 			body.setBetInfoList(betInfoList);
 		} catch (Exception e) {
@@ -151,11 +157,10 @@ public class PreparePostToWebTest {
 		try {
 			HttpPost httpPost = new HttpPost(url);
 			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-			nvps.add(new BasicNameValuePair("channelId", "C12001"));
+			nvps.add(new BasicNameValuePair("channelId", "C11000"));
 			nvps.add(new BasicNameValuePair("transSerialNumber", transSerialNumber));
 			nvps.add(new BasicNameValuePair("transData", transData));
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
-
 			LOG.debug("Executing request: " + httpPost.getRequestLine());
 			CloseableHttpResponse response = httpclient.execute(httpPost);
 			try {

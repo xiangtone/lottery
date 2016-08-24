@@ -5,11 +5,11 @@
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 
-	PreparePostQueryToWebTest preparePostQueryToWeb = new PreparePostQueryToWebTest();
-	preparePostQueryToWeb
+	PreparePostQueryToWebTest preparePostQueryToWebTest = new PreparePostQueryToWebTest();
+	preparePostQueryToWebTest
 			.setIp(request.getHeader("X-Real-IP") != null && request.getHeader("X-Real-IP").length() > 0
 					? request.getHeader("X-Real-IP") : request.getRemoteAddr());
-	preparePostQueryToWeb.process();
+	preparePostQueryToWebTest.process();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -35,11 +35,11 @@
 		action="http://124.205.38.84:8480/resources/api/receiveQueryBetAccountAction.action"
 		method="post">
 		<input name="channelId" type="hidden"
-			value="<%=preparePostQueryToWeb.getChannelId()%>"> <input
+			value="<%=preparePostQueryToWebTest.getChannelId()%>"> <input
 			name="transSerialNumber" type="hidden"
-			value="<%=preparePostQueryToWeb.getTransSerialNumber()%>"> <input
+			value="<%=preparePostQueryToWebTest.getTransSerialNumber()%>"> <input
 			name="transData" type="hidden"
-			value="<%=preparePostQueryToWeb.getTransData()%>">
+			value="<%=preparePostQueryToWebTest.getTransData()%>">
 		<button type="submit">submit</button>
 	</form>
 </body>

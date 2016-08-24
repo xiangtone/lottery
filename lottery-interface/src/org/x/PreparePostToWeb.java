@@ -30,7 +30,6 @@ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.ClientUtil;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.swing.*;
 
 public class PreparePostToWeb {
@@ -39,7 +38,8 @@ public class PreparePostToWeb {
 
 	private final long serialVersionUID = 8756559814195904326L;
 	private PointExchangeLotteryReqBody body = new PointExchangeLotteryReqBody();
-
+	
+	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
 	private BetInfo betInfo = new BetInfo();
 
 	private String channelId;
@@ -57,9 +57,7 @@ public class PreparePostToWeb {
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
-
-	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
-
+	
 	public PreparePostToWeb() throws RsaEncryptException {
 		super();
 	}
@@ -80,7 +78,7 @@ public class PreparePostToWeb {
 				req.getBody().getOrderNumber(), req.getBody().getUserPhoneNumber(), req.getBody().getTransDateTime(),
 				req.getBody().getUserName(), req.getBody().getPointMerchantId(), req.getBody().getGameId(),
 				req.getBody().getNumberSelectType(), req.getBody().getBetTotalAmount(),
-				req.getBody().getPointTotalAmount(), betInfo.getBetDetail(), req.getBody().getCallbackURL(), ip));
+				req.getBody().getPointTotalAmount(), betInfo, req.getBody().getCallbackURL(), ip));
 	}
 
 	public static void main(String[] args)
@@ -131,13 +129,12 @@ public class PreparePostToWeb {
 			// body.setUserPhoneNumber("13923832816");//guojining
 			// body.setUserPhoneNumber("18676382886");//fengquchi
 			// body.setUserPhoneNumber("13590100561");//wanghua
-			body.setUserPhoneNumber("13530274161");// longxu
+			body.setUserPhoneNumber("17090415005");// longxu
 			body.setPointMerchantId("1200100001");
 			body.setGameId("10001");
-			body.setNumberSelectType(12);
+			body.setNumberSelectType(1);
 			body.setBetTotalAmount(1);
-			betInfo.setBetDetail("001060514152628310106");
-			betInfo.setBetMode("101");
+			BetInfo betInfo = new BetInfo("101", "001060514152628310106");
 			betInfoList.add(betInfo);
 			body.setBetInfoList(betInfoList);
 		} catch (Exception e) {

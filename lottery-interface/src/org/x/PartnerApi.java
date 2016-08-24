@@ -41,8 +41,6 @@ public class PartnerApi {
 	private final long serialVersionUID = 8756559814195904326L;
 	private PointExchangeLotteryReqBody body = new PointExchangeLotteryReqBody();
 
-	private BetInfo betInfo = new BetInfo();
-
 	private PageAction pageAction;
 	private String localErrorMsg; // can not do callback error message
 	private String partnerId;
@@ -55,6 +53,7 @@ public class PartnerApi {
 	private String transDataDecode;
 	private String sendUrl;
 	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
+	private BetInfo betInfo = new BetInfo();
 	private PartnerInfo partnerInfo;
 	private PartnerOrderInfo partnerOrderInfo;
 
@@ -142,7 +141,8 @@ public class PartnerApi {
 							&& partnerOrderInfo.getPartnerCallbackURL().length() > 0) {
 						// todo check match http or https
 					} else {
-						setLocalErrorMsg("{\"status\":\"error\",\"result\":4005,\"msg\":\"Web callback URL is no currect!\"}");
+						setLocalErrorMsg(
+								"{\"status\":\"error\",\"result\":4005,\"msg\":\"Web callback URL is no currect!\"}");
 						return result;
 					}
 				}
@@ -203,8 +203,8 @@ public class PartnerApi {
 		transData = ClientTransService.getInstance().encryptPointExchangeLotteryReq(req);
 		LOG.debug(transData);
 		String url = "http://124.205.38.84:13135/lottomagic/jfhcp/doRequest";
-		HttpEntity entity = EntityBuilder.create().setContentEncoding("utf-8").setContentType(ContentType.APPLICATION_JSON)
-				.setText(transData).build();
+		HttpEntity entity = EntityBuilder.create().setContentEncoding("utf-8")
+				.setContentType(ContentType.APPLICATION_JSON).setText(transData).build();
 		sendPostInterface(url);
 	}
 
@@ -218,7 +218,8 @@ public class PartnerApi {
 			body.setOrderNumber(Long.toString(System.currentTimeMillis()));
 			// body.setUserPhoneNumber("15829553521");// zhuxizhe
 			// body.setUserPhoneNumber("18025314707");// fuming
-			// body.setUserPhoneNumber("15285960182");// fuming guizhou CMCC test
+			// body.setUserPhoneNumber("15285960182");// fuming guizhou CMCC
+			// test
 			// body.setUserPhoneNumber("13603054736");// lijiaqi
 			// body.setUserPhoneNumber(inputUserPhoneNumber());
 			// body.setUserPhoneNumber("13923832816");//guojining
@@ -228,9 +229,8 @@ public class PartnerApi {
 			body.setGameId("10001");
 			body.setNumberSelectType(12);
 			body.setBetTotalAmount(4);
-			betInfo.setBetDetail(
-					"001060607091516260113" + "001060508091517180114" + "001060307081418300115" + "001060213141927310116");
-			betInfo.setBetMode("101");
+			BetInfo betInfo = new BetInfo("101", "001060607091516260113" + "001060508091517180114"
+					+ "001060307081418300115" + "001060213141927310116");
 			betInfoList.add(betInfo);
 			body.setBetInfoList(betInfoList);
 		} catch (Exception e) {

@@ -10,6 +10,7 @@ import org.common.util.ConfigManager;
 import org.common.util.ConnectionService;
 import org.common.util.GenerateIdService;
 import org.x.info.BetInfo;
+import org.x.utils.ConnectionServiceLog;
 
 public class LogInsert implements Runnable {
 
