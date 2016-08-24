@@ -10,6 +10,16 @@ import javax.swing.JOptionPane;
 /*    */   private static final long serialVersionUID = 1L;
 /*    */   private String betMode;
 /*    */   private String betDetail;
+
+			public BetInfo(String betMode, String betDetail) {
+				// TODO Auto-generated constructor stub
+				this.betDetail = betDetail;
+				this.betMode = betMode ;
+				
+			}
+           public BetInfo() {
+				// TODO Auto-generated constructor stub
+			}
 /*    */ 
 /*    */   public String toString()
 /*    */   {

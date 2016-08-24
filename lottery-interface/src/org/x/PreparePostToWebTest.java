@@ -6,40 +6,36 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.http.HttpEntity;
+import javax.swing.JOptionPane;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.entity.EntityBuilder;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
-import org.common.util.ThreadPool;
 
-import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
 import com.iwt.yt.api.base.ReqHead;
 import com.iwt.yt.api.trans.BetInfo;
 import com.iwt.yt.api.trans.PointExchangeLotteryReq;
 import com.iwt.yt.api.trans.PointExchangeLotteryReqBody;
-import com.iwt.yt.plugin.ClientTransService;
+import com.iwt.yt.plugin.ClientTransServiceInterface;
+import com.iwt.yt.plugin.ClientTransTestWebService;
 import com.iwt.yt.util.TestClientUtil;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.swing.*;
+public class PreparePostToWebTest {
 
-public class PreparePostToWeb_test {
-
-	private static final Logger LOG = Logger.getLogger(PreparePostToWeb_test.class);
+	private static final Logger LOG = Logger.getLogger(PreparePostQueryToWebTest.class);
 
 	private final long serialVersionUID = 8756559814195904326L;
 	private PointExchangeLotteryReqBody body = new PointExchangeLotteryReqBody();
 
+	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
 	private BetInfo betInfo = new BetInfo();
 
 	private String channelId;
@@ -58,9 +54,7 @@ public class PreparePostToWeb_test {
 		this.ip = ip;
 	}
 
-	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
-
-	public PreparePostToWeb_test() throws RsaEncryptException {
+	public PreparePostToWebTest() throws RsaEncryptException {
 		super();
 	}
 
@@ -74,19 +68,19 @@ public class PreparePostToWeb_test {
 		req.setBody(body);
 		LOG.debug(req);
 		sendUrl = TestClientUtil.getInstance().getPointExchangeLotteryUrl();
-		transData = ClientTransService.getInstance().encryptPointExchangeLotteryReq(req);
-		ThreadPool.mThreadPool.execute(new PostLogInsert(req.getHead().getChannelId(),
-				req.getHead().getTransSerialNumber(), this.getTransData(), req.getBody().getChannelReserved(),
-				req.getBody().getOrderNumber(), req.getBody().getUserPhoneNumber(), req.getBody().getTransDateTime(),
-				req.getBody().getUserName(), req.getBody().getPointMerchantId(), req.getBody().getGameId(),
-				req.getBody().getNumberSelectType(), req.getBody().getBetTotalAmount(),
-				req.getBody().getPointTotalAmount(), betInfo.getBetDetail(), req.getBody().getCallbackURL(), ip));
-	}
-
-	public static void main(String[] args)
-			throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
-		PreparePostToWeb_test testSend = new PreparePostToWeb_test();
-		testSend.sendTest();
+		ClientTransServiceInterface clientTransService = ClientTransTestWebService.getInstance();
+		transData = clientTransService.encryptPointExchangeLotteryReq(req);
+		// ThreadPool.mThreadPool.execute(new
+		// PostLogInsert(req.getHead().getChannelId(),
+		// req.getHead().getTransSerialNumber(), this.getTransData(),
+		// req.getBody().getChannelReserved(),
+		// req.getBody().getOrderNumber(), req.getBody().getUserPhoneNumber(),
+		// req.getBody().getTransDateTime(),
+		// req.getBody().getUserName(), req.getBody().getPointMerchantId(),
+		// req.getBody().getGameId(),
+		// req.getBody().getNumberSelectType(), req.getBody().getBetTotalAmount(),
+		// req.getBody().getPointTotalAmount(), betInfo,
+		// req.getBody().getCallbackURL(), ip));
 	}
 
 	public String inputUserPhoneNumber() {
@@ -98,46 +92,29 @@ public class PreparePostToWeb_test {
 		return userPhoneNumber;
 	}
 
-	public void sendTest() throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
-		configBody();
-		LOG.debug(body.getCallbackURL());
-		sendUrl = TestClientUtil.getInstance().getPointExchangeLotteryUrl();
-		PointExchangeLotteryReq req = new PointExchangeLotteryReq();
-		req.setHead(new ReqHead(channelId));
-		req.setBody(body);
-		LOG.debug(req);
-		transData = ClientTransService.getInstance().encryptPointExchangeLotteryReq(req);
-		LOG.debug(transData);
-		String url = "http://124.205.38.84:13135/lottomagic/jfhcp/doRequest";
-		HttpEntity entity = EntityBuilder.create().setContentEncoding("utf-8")
-				.setContentType(ContentType.APPLICATION_JSON).setText(transData).build();
-		sendPostInterface(url);
-	}
-
 	private void configBody() {
 		body.setOrderNumber(UUID.randomUUID().toString().replaceAll("-", ""));
 		body.setTransDateTime(new Date());
 		try {
 			body.setPointTotalAmount(10);
-			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallback.jsp");
+			body.setCallbackURL("http://120.24.38.160:38080/ytCallbackTest.jsp");
 			body.setChannelReserved("youka");
 			body.setOrderNumber(Long.toString(System.currentTimeMillis()));
 			// body.setUserPhoneNumber("15829553521");// zhuxizhe
 			// body.setUserPhoneNumber("18025314707");// fuming
-			// body.setUserPhoneNumber("15285960182");// fuming guizhou CMCC
-			// test
+			// body.setUserPhoneNumber("15285960182");// fuming guizhou CMCCtest
 			// body.setUserPhoneNumber("13603054736");// lijiaqi
 			// body.setUserPhoneNumber(inputUserPhoneNumber());
 			// body.setUserPhoneNumber("13923832816");//guojining
 			// body.setUserPhoneNumber("18676382886");//fengquchi
 			// body.setUserPhoneNumber("13590100561");//wanghua
 			body.setUserPhoneNumber("13530274162");// longxu
+			// body.setUserPhoneNumber("17090415005");
 			body.setPointMerchantId("1200100001");
 			body.setGameId("10001");
 			body.setNumberSelectType(12);
 			body.setBetTotalAmount(1);
-			betInfo.setBetDetail("001060514152628310106");
-			betInfo.setBetMode("101");
+			BetInfo betInfo = new BetInfo("101", "001060514152628310106");
 			betInfoList.add(betInfo);
 			body.setBetInfoList(betInfoList);
 		} catch (Exception e) {
@@ -155,7 +132,6 @@ public class PreparePostToWeb_test {
 			nvps.add(new BasicNameValuePair("transSerialNumber", transSerialNumber));
 			nvps.add(new BasicNameValuePair("transData", transData));
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
-
 			LOG.debug("Executing request: " + httpPost.getRequestLine());
 			CloseableHttpResponse response = httpclient.execute(httpPost);
 			try {

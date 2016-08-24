@@ -3,12 +3,10 @@ package org.x;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-
 import org.common.util.ConfigManager;
 import org.common.util.ConnectionService;
 import org.common.util.GenerateIdService;
+import org.x.utils.ConnectionServiceLog;
 
 public class WebCallbackLogInsert implements Runnable {
 
