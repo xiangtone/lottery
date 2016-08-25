@@ -7,9 +7,8 @@
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	PreparePostToWebTest preparePostToWebTest = new PreparePostToWebTest();
-	preparePostToWebTest
-			.setIp(request.getHeader("X-Real-IP") != null && request.getHeader("X-Real-IP").length() > 0
-					? request.getHeader("X-Real-IP") : request.getRemoteAddr());
+	preparePostToWebTest.setIp(request.getHeader("X-Real-IP") != null && request.getHeader("X-Real-IP").length() > 0
+			? request.getHeader("X-Real-IP") : request.getRemoteAddr());
 	preparePostToWebTest.process();
 %>
 
@@ -40,7 +39,7 @@
 			name="transSerialNumber" type="hidden"
 			value="<%=preparePostToWebTest.getTransSerialNumber()%>"> <input
 			name="transData" type="hidden"
-			value="<%=preparePostToWebTest.getTransData()%>"> <br>
+			value="<%=preparePostToWebTest.getTransData()%>">
 		<button type="submit">submit 123</button>
 	</form>
 </body>

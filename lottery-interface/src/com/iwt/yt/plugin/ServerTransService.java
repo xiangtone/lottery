@@ -1,17 +1,17 @@
-/*    */ package com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin;
+/*    */ package com.iwt.yt.plugin;
 /*    */ 
 /*    */ import com.alibaba.fastjson.JSON;
 /*    */ import com.alibaba.fastjson.serializer.SerializerFeature;
-/*    */ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base.ReqHead;
-/*    */ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReq;
-/*    */ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReqBody;
-/*    */ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryResultReq;
-/*    */ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryModifyBetAccountInfoUrlReq;
-/*    */ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryModifyBetAccountInfoUrlReqBody;
-/*    */ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryModifyBetAccountInfoUrlResultReq;
-/*    */ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.ServerUtil;
 /*    */ import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 /*    */ import com.iwt.vasoss.common.security.exception.RsaEncryptException;
+import com.iwt.yt.api.base.ReqHead;
+import com.iwt.yt.api.trans.PointExchangeLotteryReq;
+import com.iwt.yt.api.trans.PointExchangeLotteryReqBody;
+import com.iwt.yt.api.trans.PointExchangeLotteryResultReq;
+import com.iwt.yt.api.trans.QueryModifyBetAccountInfoUrlReq;
+import com.iwt.yt.api.trans.QueryModifyBetAccountInfoUrlReqBody;
+import com.iwt.yt.api.trans.QueryModifyBetAccountInfoUrlResultReq;
+import com.iwt.yt.util.ServerUtil;
 /*    */ 
 /*    */ public class ServerTransService
 /*    */ {

@@ -21,14 +21,14 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.common.util.ThreadPool;
 
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.ClientTransService;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base.ReqHead;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.BetInfo;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReq;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryReqBody;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util.ClientUtil;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
+import com.iwt.yt.api.base.ReqHead;
+import com.iwt.yt.api.trans.BetInfo;
+import com.iwt.yt.api.trans.PointExchangeLotteryReq;
+import com.iwt.yt.api.trans.PointExchangeLotteryReqBody;
+import com.iwt.yt.plugin.ClientTransService;
+import com.iwt.yt.util.ClientUtil;
 
 import javax.swing.*;
 
@@ -129,15 +129,17 @@ public class PreparePostToWeb {
 			// body.setUserPhoneNumber("13923832816");//guojining
 			// body.setUserPhoneNumber("18676382886");//fengquchi
 			// body.setUserPhoneNumber("13590100561");//wanghua
-			body.setUserPhoneNumber("17090415005");// longxu
+			//body.setUserPhoneNumber("17090415005");
+			//body.setUserPhoneNumber("15910667914");// longxu
 			body.setPointMerchantId("1200100001");
 			body.setGameId("10001");
-			body.setNumberSelectType(1);
+			body.setNumberSelectType(12);
 			body.setBetTotalAmount(1);
-			BetInfo betInfo = new BetInfo("101", "001060514152628310106");
+			BetInfo betInfo = new BetInfo("101", "001060514252628310110");
 			betInfoList.add(betInfo);
 			body.setBetInfoList(betInfoList);
 		} catch (Exception e) {
+			
 			e.printStackTrace();
 		}
 	}

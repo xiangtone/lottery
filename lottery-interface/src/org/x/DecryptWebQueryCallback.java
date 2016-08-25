@@ -4,11 +4,11 @@ import org.apache.log4j.Logger;
 import org.common.util.ThreadPool;
 import org.x.utils.AES;
 
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.ClientTransService;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryResultReq;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryModifyBetAccountInfoUrlReqBody;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.QueryModifyBetAccountInfoUrlResultReq;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
+import com.iwt.yt.api.trans.PointExchangeLotteryResultReq;
+import com.iwt.yt.api.trans.QueryModifyBetAccountInfoUrlReqBody;
+import com.iwt.yt.api.trans.QueryModifyBetAccountInfoUrlResultReq;
+import com.iwt.yt.plugin.ClientTransService;
 
 public class DecryptWebQueryCallback {
 

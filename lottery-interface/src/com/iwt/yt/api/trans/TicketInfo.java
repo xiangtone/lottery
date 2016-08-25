@@ -1,4 +1,4 @@
-/*    */ package com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans;
+/*    */ package com.iwt.yt.api.trans;
 /*    */ 
 /*    */ import com.alibaba.fastjson.annotation.JSONField;
 /*    */ import java.io.Serializable;
