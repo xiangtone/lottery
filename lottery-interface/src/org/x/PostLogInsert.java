@@ -8,6 +8,7 @@ import java.util.Date;
 import org.common.util.ConfigManager;
 import org.common.util.ConnectionService;
 import org.common.util.GenerateIdService;
+
 import com.iwt.yt.api.trans.BetInfo;
 
 public class PostLogInsert implements Runnable {

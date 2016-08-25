@@ -28,12 +28,14 @@ import com.iwt.yt.plugin.ClientTransServiceInterface;
 import com.iwt.yt.plugin.ClientTransTestWebService;
 import com.iwt.yt.util.TestClientUtil;
 
+
 public class PreparePostToWebTest {
 
 	private static final Logger LOG = Logger.getLogger(PreparePostQueryToWebTest.class);
 
 	private final long serialVersionUID = 8756559814195904326L;
 	private PointExchangeLotteryReqBody body = new PointExchangeLotteryReqBody();
+
 	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
 	private BetInfo betInfo = new BetInfo();
 
@@ -90,17 +92,6 @@ public class PreparePostToWebTest {
 		// req.getBody().getPointTotalAmount(), betInfo,
 		// req.getBody().getCallbackURL(), ip));
 	}
-
-//	public String inputUserPhoneNumber() {
-//		String userPhoneNumber = JOptionPane.showInputDialog(null, "请输入您的手机号码：");
-//		while (userPhoneNumber.length() != 11) {
-//			JOptionPane.showMessageDialog(null, "输入错误！！！请重新输入您的手机号码！！！", "error", JOptionPane.ERROR_MESSAGE);
-//			userPhoneNumber = JOptionPane.showInputDialog(null, "请输入您的手机号码：");
-//		}
-//		return userPhoneNumber;
-//	}
-
-
 	private void configBody() {
 		body.setOrderNumber(UUID.randomUUID().toString().replaceAll("-", ""));
 		body.setTransDateTime(new Date());
