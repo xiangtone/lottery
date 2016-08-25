@@ -145,7 +145,7 @@ public class PartnerApi {
 	}
 
 	private void switchPartnerState() {
-		switch (partnerInfo.getState().toLowerCase()) {
+		switch (partnerInfo.getState()) {
 		case "web":
 			clientUtil = ClientUtil.getInstance();
 			clientTransService = ClientTransService.getInstance();
@@ -156,12 +156,12 @@ public class PartnerApi {
 			clientTransService = ClientTransH5Service.getInstance();
 			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallback.jsp");
 			break;
-		case "test-web":
+		case "test":
 			clientUtil = TestWebClientUtil.getInstance();
 			clientTransService = ClientTransTestWebService.getInstance();
 			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallbackTest.jsp");
 			break;
-		case "test-h5":
+		case "testH5":
 			clientUtil = TestH5ClientUtil.getInstance();
 			clientTransService = ClientTransTestH5Service.getInstance();
 			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallbackTest.jsp");

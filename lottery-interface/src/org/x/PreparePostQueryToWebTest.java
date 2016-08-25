@@ -20,10 +20,7 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.common.util.ThreadPool;
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 51637f7f898719d92853a91791790f80af1c9c7b
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
 import com.iwt.yt.api.base.ReqHead;
 import com.iwt.yt.api.trans.QueryModifyBetAccountInfoUrlReq;

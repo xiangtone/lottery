@@ -122,15 +122,15 @@ public class PreparePostToWeb {
 			body.setOrderNumber(Long.toString(System.currentTimeMillis()));
 			// body.setUserPhoneNumber("15829553521");// zhuxizhe
 			// body.setUserPhoneNumber("18025314707");// fuming
-			// body.setUserPhoneNumber("15285960182");// fuming guizhou CMCC
-			// test
+			// body.setUserPhoneNumber("15285960182");// fuming guizhou CMCCtest
 			// body.setUserPhoneNumber("13603054736");// lijiaqi
 			// body.setUserPhoneNumber(inputUserPhoneNumber());
 			// body.setUserPhoneNumber("13923832816");//guojining
 			// body.setUserPhoneNumber("18676382886");//fengquchi
 			// body.setUserPhoneNumber("13590100561");//wanghua
 			//body.setUserPhoneNumber("17090415005");
-			//body.setUserPhoneNumber("15910667914");// longxu
+			//body.setUserPhoneNumber("15910667914");
+			body.setUserPhoneNumber("13530274162");// longxu
 			body.setPointMerchantId("1200100001");
 			body.setGameId("10001");
 			body.setNumberSelectType(12);
