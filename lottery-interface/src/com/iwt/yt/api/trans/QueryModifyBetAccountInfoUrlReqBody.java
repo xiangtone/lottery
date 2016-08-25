@@ -1,6 +1,5 @@
-/*    */ package com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans;
-/*    */ 
-/*    */ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base.TransReqBody;
+/*    */ package com.iwt.yt.api.trans;
+import com.iwt.yt.api.base.TransReqBody;
 /*    */ 
 /*    */ public class QueryModifyBetAccountInfoUrlReqBody extends TransReqBody
 /*    */ {

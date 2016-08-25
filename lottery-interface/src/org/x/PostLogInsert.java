@@ -12,6 +12,8 @@ import org.x.utils.ConnectionServiceLog;
 
 import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.BetInfo;
 
+import com.iwt.yt.api.trans.BetInfo;
+
 public class PostLogInsert implements Runnable {
 
 	private static final int LOG_ID = 3001;

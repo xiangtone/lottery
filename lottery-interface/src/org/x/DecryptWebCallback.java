@@ -2,10 +2,11 @@ package org.x;
 
 import org.apache.log4j.Logger;
 import org.common.util.ThreadPool;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.ClientTransService;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.PointExchangeLotteryResultReq;
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.TicketInfo;
+
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
+import com.iwt.yt.api.trans.PointExchangeLotteryResultReq;
+import com.iwt.yt.api.trans.TicketInfo;
+import com.iwt.yt.plugin.ClientTransService;
 
 public class DecryptWebCallback {
 

@@ -34,7 +34,7 @@
 	<br> betTotalAmount:
 	<input id="betTotalAmount" name="betTotalAmount" value="1" size="40">
 	<br> partnerCallbackURL:
-	<input id="partnerCallbackURL" name="partnerCallbackURL" value=""
+	<input id="partnerCallbackURL" name="partnerCallbackURL" value="http://"
 		size="40">
 	<button id="testButton">test</button>
 </body>

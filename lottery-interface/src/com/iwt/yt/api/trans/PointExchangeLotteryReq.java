@@ -1,8 +1,8 @@
-/*    */ package com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans;
-/*    */ 
-/*    */ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base.IMessage;
-/*    */ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base.ReqHead;
+/*    */ package com.iwt.yt.api.trans;
 /*    */ import java.util.List;
+
+import com.iwt.yt.api.base.IMessage;
+import com.iwt.yt.api.base.ReqHead;
 /*    */ 
 /*    */ public class PointExchangeLotteryReq
 /*    */   implements IMessage<ReqHead, PointExchangeLotteryReqBody>

@@ -1,4 +1,4 @@
-/*    */ package com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.util;
+/*    */ package com.iwt.yt.util;
 /*    */ 
 /*    */ import com.iwt.vasoss.common.security.RsaHelper;
 /*    */ import com.iwt.vasoss.common.security.exception.RsaDecryptException;

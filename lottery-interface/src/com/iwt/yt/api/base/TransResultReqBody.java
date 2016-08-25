@@ -1,4 +1,4 @@
-/*    */ package com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base;
+/*    */ package com.iwt.yt.api.base;
 /*    */ 
 /*    */ public abstract class TransResultReqBody extends TransReqBody
 /*    */ {

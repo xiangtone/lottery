@@ -1,7 +1,8 @@
-/*     */ package com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans;
+/*     */ package com.iwt.yt.api.trans;
 /*     */ 
 /*     */ import com.alibaba.fastjson.annotation.JSONField;
-/*     */ import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.base.TransResultReqBody;
+import com.iwt.yt.api.base.TransResultReqBody;
+
 /*     */ import java.util.Date;
 /*     */ import java.util.List;
 /*     */ 
