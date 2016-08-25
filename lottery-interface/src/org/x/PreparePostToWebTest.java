@@ -19,6 +19,9 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 
+<<<<<<< HEAD
+import javax.swing.*;
+=======
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
 import com.iwt.yt.api.base.ReqHead;
 import com.iwt.yt.api.trans.BetInfo;
@@ -27,6 +30,7 @@ import com.iwt.yt.api.trans.PointExchangeLotteryReqBody;
 import com.iwt.yt.plugin.ClientTransServiceInterface;
 import com.iwt.yt.plugin.ClientTransTestWebService;
 import com.iwt.yt.util.TestClientUtil;
+>>>>>>> 50b1ed89cc971dd0bd655b1583bc1161447b076a
 
 public class PreparePostToWebTest {
 
@@ -34,17 +38,30 @@ public class PreparePostToWebTest {
 
 	private final long serialVersionUID = 8756559814195904326L;
 	private PointExchangeLotteryReqBody body = new PointExchangeLotteryReqBody();
+<<<<<<< HEAD
+	
+=======
 
+>>>>>>> 50b1ed89cc971dd0bd655b1583bc1161447b076a
 	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
 	private BetInfo betInfo = new BetInfo();
 
 	private String channelId;
 	private String transSerialNumber;
 	private String pointTotalAmount;
+	private String userPhoneNumber;
 	private String transData;
 	private String transDataDecode;
 	private String sendUrl;
 	private String ip;
+
+	public String getUserPhoneNumber() {
+		return userPhoneNumber;
+	}
+
+	public void setUserPhoneNumber(String userPhoneNumber) {
+		this.userPhoneNumber = userPhoneNumber;
+	}
 
 	public String getIp() {
 		return ip;
@@ -81,6 +98,7 @@ public class PreparePostToWebTest {
 		// req.getBody().getNumberSelectType(), req.getBody().getBetTotalAmount(),
 		// req.getBody().getPointTotalAmount(), betInfo,
 		// req.getBody().getCallbackURL(), ip));
+>>>>>>> 50b1ed89cc971dd0bd655b1583bc1161447b076a
 	}
 
 	public String inputUserPhoneNumber() {
@@ -91,6 +109,7 @@ public class PreparePostToWebTest {
 		}
 		return userPhoneNumber;
 	}
+
 
 	private void configBody() {
 		body.setOrderNumber(UUID.randomUUID().toString().replaceAll("-", ""));
@@ -109,12 +128,10 @@ public class PreparePostToWebTest {
 			// body.setUserPhoneNumber("18676382886");//fengquchi
 			// body.setUserPhoneNumber("13590100561");//wanghua
 			body.setUserPhoneNumber("13530274162");// longxu
-			// body.setUserPhoneNumber("17090415005");
 			body.setPointMerchantId("1200100001");
 			body.setGameId("10001");
-			body.setNumberSelectType(12);
+			body.setNumberSelectType(1);
 			body.setBetTotalAmount(1);
-			BetInfo betInfo = new BetInfo("101", "001060514152628310106");
 			betInfoList.add(betInfo);
 			body.setBetInfoList(betInfoList);
 		} catch (Exception e) {

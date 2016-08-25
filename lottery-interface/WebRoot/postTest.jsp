@@ -39,7 +39,11 @@
 			name="transSerialNumber" type="hidden"
 			value="<%=preparePostToWebTest.getTransSerialNumber()%>"> <input
 			name="transData" type="hidden"
+<<<<<<< HEAD:lottery-interface/WebRoot/postTest.jsp
+			value="<%=preparePostToWebTest.getTransData()%>"> <br>
+=======
 			value="<%=preparePostToWebTest.getTransData()%>">
+>>>>>>> 50b1ed89cc971dd0bd655b1583bc1161447b076a:lottery-interface/WebRoot/postTest.jsp
 		<button type="submit">submit 123</button>
 	</form>
 </body>

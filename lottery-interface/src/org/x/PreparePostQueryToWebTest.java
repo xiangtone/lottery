@@ -20,6 +20,7 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.common.util.ThreadPool;
 
+
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
 import com.iwt.yt.api.base.ReqHead;
 import com.iwt.yt.api.trans.QueryModifyBetAccountInfoUrlReq;
@@ -57,11 +58,13 @@ public class PreparePostQueryToWebTest {
 		req.setHead(new ReqHead(channelId));
 		req.setBody(body);
 		LOG.debug(req);
+
 		ClientTransServiceInterface clientTransService = ClientTransTestWebService.getInstance();
 		transData = clientTransService.encryptQueryModifyBetAccountInfoUrlReq(req);
 		ThreadPool.mThreadPool.execute(new PostLogInsert(req.getHead().getChannelId(), req.getHead().getTransSerialNumber(),
 				this.getTransData(), req.getBody().getChannelReserved(), req.getBody().getOrderNumber(),
 				req.getBody().getUserPhoneNumber(), req.getBody().getTransDateTime(), req.getBody().getCallbackURL(), ip));
+		
 	}
 
 	public String inputUserPhoneNumber() {
@@ -71,7 +74,6 @@ public class PreparePostQueryToWebTest {
 		}
 		return userPhoneNumber;
 	}
-
 	private void configBody() {
 		body.setOrderNumber(UUID.randomUUID().toString().replaceAll("-", ""));
 		body.setTransDateTime(new Date());

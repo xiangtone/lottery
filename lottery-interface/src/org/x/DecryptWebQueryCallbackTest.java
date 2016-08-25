@@ -3,9 +3,11 @@ package org.x;
 import org.apache.log4j.Logger;
 import org.common.util.ThreadPool;
 
+
 import com.iwt.yt.api.trans.QueryModifyBetAccountInfoUrlResultReq;
 import com.iwt.yt.plugin.ClientTransServiceInterface;
 import com.iwt.yt.plugin.ClientTransTestWebService;
+
 
 public class DecryptWebQueryCallbackTest {
 
@@ -18,6 +20,7 @@ public class DecryptWebQueryCallbackTest {
 
 	public void decrypt() throws Exception {
 		LOG.debug(this);
+
 		ClientTransServiceInterface clientTransService = ClientTransTestWebService.getInstance();
 		QueryModifyBetAccountInfoUrlResultReq result = clientTransService
 				.decryptQueryModifyBetAccountInfoUrlResultReq(channelId, transSerialNumber, transData);
@@ -64,5 +67,4 @@ public class DecryptWebQueryCallbackTest {
 		return "DecryptWebCallback [transData=" + transData + ", channelId=" + channelId + ", transSerialNumber="
 				+ transSerialNumber + "]";
 	}
-
 }

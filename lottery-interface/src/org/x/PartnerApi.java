@@ -50,6 +50,7 @@ public class PartnerApi {
 	private String pointTotalAmount;
 	private String transDataDecode;
 	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
+	private BetInfo betInfo = new BetInfo();
 	private PartnerInfo partnerInfo;
 	private PartnerOrderInfo partnerOrderInfo;
 	private ClientUtilInterface clientUtil;
@@ -200,7 +201,8 @@ public class PartnerApi {
 							&& partnerOrderInfo.getPartnerCallbackURL().length() > 0) {
 						// todo check match http or https
 					} else {
-						setLocalErrorMsg("{\"status\":\"error\",\"result\":4005,\"msg\":\"Web callback URL is no currect!\"}");
+						setLocalErrorMsg(
+								"{\"status\":\"error\",\"result\":4005,\"msg\":\"Web callback URL is no currect!\"}");
 						return result;
 					}
 				}
@@ -250,6 +252,7 @@ public class PartnerApi {
 	// }
 	// String redball
 	// }
+
 
 	private void configBody() {
 		body.setOrderNumber(UUID.randomUUID().toString().replaceAll("-", ""));
