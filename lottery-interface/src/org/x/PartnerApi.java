@@ -24,9 +24,15 @@ import com.iwt.yt.api.base.ReqHead;
 import com.iwt.yt.api.trans.BetInfo;
 import com.iwt.yt.api.trans.PointExchangeLotteryReq;
 import com.iwt.yt.api.trans.PointExchangeLotteryReqBody;
+import com.iwt.yt.plugin.ClientTransH5Service;
+import com.iwt.yt.plugin.ClientTransService;
 import com.iwt.yt.plugin.ClientTransServiceInterface;
+import com.iwt.yt.plugin.ClientTransTestH5Service;
 import com.iwt.yt.plugin.ClientTransTestWebService;
+import com.iwt.yt.util.ClientH5Util;
+import com.iwt.yt.util.ClientUtil;
 import com.iwt.yt.util.ClientUtilInterface;
+import com.iwt.yt.util.TestH5ClientUtil;
 import com.iwt.yt.util.TestWebClientUtil;
 
 public class PartnerApi {
@@ -46,6 +52,8 @@ public class PartnerApi {
 	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
 	private PartnerInfo partnerInfo;
 	private PartnerOrderInfo partnerOrderInfo;
+	private ClientUtilInterface clientUtil;
+	private ClientTransServiceInterface clientTransService;
 
 	public PageAction getPageAction() {
 		return pageAction;
@@ -103,12 +111,11 @@ public class PartnerApi {
 	}
 
 	public void processToYT() throws RsaEncryptException {
-		ClientUtilInterface clientUtil = TestWebClientUtil.getInstance();
-		ClientTransServiceInterface clientTransService = ClientTransTestWebService.getInstance();
+		switchPartnerState();
 		String channelId = clientUtil.getChannelId();
 		String transSerialNumber = UUID.randomUUID().toString().replaceAll("-", "");
 		configBody();
-		LOG.debug(body.getCallbackURL());
+		// LOG.debug(body.getCallbackURL());
 		PointExchangeLotteryReq req = new PointExchangeLotteryReq();
 		req.setHead(new ReqHead(channelId));
 		req.setBody(body);
@@ -121,6 +128,7 @@ public class PartnerApi {
 		entity.put("channelId", channelId);
 		entity.put("transSerialNumber", transSerialNumber);
 		entity.put("transData", transData);
+		LOG.debug(transData);
 		pageAction.setEntity(entity);
 		// ThreadPool.mThreadPool
 		// .execute(new PostLogInsert(req.getHead().getChannelId(),
@@ -133,6 +141,33 @@ public class PartnerApi {
 		// req.getBody().getBetTotalAmount(),
 		// req.getBody().getPointTotalAmount(), req.getBody().get
 		// betInfo.getBetDetail(), req.getBody().getCallbackURL(), ip));
+	}
+
+	private void switchPartnerState() {
+		switch (partnerInfo.getState().toLowerCase()) {
+		case "web":
+			clientUtil = ClientUtil.getInstance();
+			clientTransService = ClientTransService.getInstance();
+			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallback.jsp");
+			break;
+		case "h5":
+			clientUtil = ClientH5Util.getInstance();
+			clientTransService = ClientTransH5Service.getInstance();
+			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallback.jsp");
+			break;
+		case "test-web":
+			clientUtil = TestWebClientUtil.getInstance();
+			clientTransService = ClientTransTestWebService.getInstance();
+			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallbackTest.jsp");
+			break;
+		case "test-h5":
+			clientUtil = TestH5ClientUtil.getInstance();
+			clientTransService = ClientTransTestH5Service.getInstance();
+			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallbackTest.jsp");
+			break;
+		default:
+			break;
+		}
 	}
 
 	private boolean checkParameters() {
@@ -221,7 +256,6 @@ public class PartnerApi {
 		body.setTransDateTime(new Date());
 		try {
 			body.setPointTotalAmount(10);
-			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallback.jsp");
 			body.setChannelReserved("youka");
 			body.setOrderNumber(Long.toString(GenerateIdService.getInstance()
 					.generateNew(Integer.parseInt(ConfigManager.getConfigData("server.id")), "order", 1)));
