@@ -8,9 +8,6 @@ import java.util.Date;
 import org.common.util.ConfigManager;
 import org.common.util.ConnectionService;
 import org.common.util.GenerateIdService;
-import org.x.utils.ConnectionServiceLog;
-
-import com.iwt.vasoss.bsf.agent.lottomagic.channel.comm.plugin.api.trans.BetInfo;
 
 import com.iwt.yt.api.trans.BetInfo;
 
