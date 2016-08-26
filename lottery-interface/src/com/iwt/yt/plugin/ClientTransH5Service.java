@@ -11,12 +11,12 @@ import com.iwt.yt.api.trans.PointExchangeLotteryResultReqBody;
 import com.iwt.yt.api.trans.QueryModifyBetAccountInfoUrlReq;
 import com.iwt.yt.api.trans.QueryModifyBetAccountInfoUrlResultReq;
 import com.iwt.yt.api.trans.QueryModifyBetAccountInfoUrlResultReqBody;
-import com.iwt.yt.util.TestH5ClientUtil;
+import com.iwt.yt.util.ClientH5Util;
 
 public class ClientTransH5Service implements ClientTransServiceInterface {
 
 	private static ClientTransH5Service clientTransService = new ClientTransH5Service();
-	private static TestH5ClientUtil clientUtil = TestH5ClientUtil.getInstance();
+	private static ClientH5Util clientUtil = ClientH5Util.getInstance();
 
 	/*    */
 	/*    */ public static ClientTransH5Service getInstance()
