@@ -66,7 +66,13 @@
 		<button type="submit">submit</button>
 	</form>
 </body>
-<script>
-	// document.getElementById("formid").submit();
-</script>
+<%
+if (request.getParameter("partnerDebug")!=null&&request.getParameter("partnerDebug").equals("true")){
+	out.println("partnerId:"+request.getParameter("partnerId"));
+	out.println("<br>");
+	out.println("transData:"+request.getParameter("transData"));	
+}else{
+	out.println("<script>document.getElementById(\"formid\").submit();</script>");
+}
+ %>
 </html>
