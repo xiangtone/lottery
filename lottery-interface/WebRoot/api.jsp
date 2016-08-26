@@ -30,8 +30,6 @@
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	PreparePostToWeb preparePostToWeb = new PreparePostToWeb();
-// 	ThreadPool.mThreadPool.execute(new PostLogInsert(preparePostToWeb.getChannelId(),
-// 			preparePostToWeb.getTransSerialNumber(), preparePostToWeb.getTransData()));
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">

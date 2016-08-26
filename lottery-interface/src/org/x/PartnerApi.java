@@ -1,16 +1,18 @@
 package org.x;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.log4j.Logger;
 import org.common.util.ConfigManager;
+import org.common.util.ConnectionService;
 import org.common.util.GenerateIdService;
 import org.x.info.PageAction;
 import org.x.info.PartnerInfo;
@@ -21,7 +23,6 @@ import com.alibaba.fastjson.JSON;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
 import com.iwt.yt.api.base.ReqHead;
-import com.iwt.yt.api.trans.BetInfo;
 import com.iwt.yt.api.trans.PointExchangeLotteryReq;
 import com.iwt.yt.api.trans.PointExchangeLotteryReqBody;
 import com.iwt.yt.plugin.ClientTransH5Service;
@@ -44,17 +45,26 @@ public class PartnerApi {
 
 	private PageAction pageAction;
 	private String localErrorMsg; // can not do callback error message
+
 	private String partnerId;
 	private String partnerTransData;
 	private String ip;
-	private String pointTotalAmount;
-	private String transDataDecode;
-	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
-	private BetInfo betInfo = new BetInfo();
 	private PartnerInfo partnerInfo;
 	private PartnerOrderInfo partnerOrderInfo;
 	private ClientUtilInterface clientUtil;
 	private ClientTransServiceInterface clientTransService;
+	private PreparedStatement ps = null;
+	private Connection con = null;
+	private static final int LOG_ID = 3001;
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public PageAction getPageAction() {
 		return pageAction;
@@ -111,7 +121,7 @@ public class PartnerApi {
 		}
 	}
 
-	public void processToYT() throws RsaEncryptException {
+	private void processToYT() throws RsaEncryptException {
 		switchPartnerState();
 		String channelId = clientUtil.getChannelId();
 		String transSerialNumber = UUID.randomUUID().toString().replaceAll("-", "");
@@ -131,17 +141,18 @@ public class PartnerApi {
 		entity.put("transData", transData);
 		LOG.debug(transData);
 		pageAction.setEntity(entity);
-//		 ThreadPool.mThreadPool
-//		 .execute(new PostLogInsert(req.getHead().getChannelId(),
-//		 req.getHead().getTransSerialNumber(), transData,
-//		 req.getBody().getChannelReserved(), req.getBody().getOrderNumber(),
-//		 req.getBody().getUserPhoneNumber(),
-//		 req.getBody().getTransDateTime(), req.getBody().getUserName(),
-//		 req.getBody().getPointMerchantId(),
-//		 req.getBody().getGameId(), req.getBody().getNumberSelectType(),
-//		 req.getBody().getBetTotalAmount(),
-//		 req.getBody().getPointTotalAmount(), req.getBody().get
-//		 betInfo.getBetDetail(), req.getBody().getCallbackURL(), ip));
+		partnerOrderInfoLogInsert();
+		// ThreadPool.mThreadPool
+		// .execute(new PostLogInsert(req.getHead().getChannelId(),
+		// req.getHead().getTransSerialNumber(), transData,
+		// req.getBody().getChannelReserved(), req.getBody().getOrderNumber(),
+		// req.getBody().getUserPhoneNumber(),
+		// req.getBody().getTransDateTime(), req.getBody().getUserName(),
+		// req.getBody().getPointMerchantId(),
+		// req.getBody().getGameId(), req.getBody().getNumberSelectType(),
+		// req.getBody().getBetTotalAmount(),
+		// req.getBody().getPointTotalAmount(), req.getBody().get
+		// betInfo.getBetDetail(), req.getBody().getCallbackURL(), ip));
 	}
 
 	private void switchPartnerState() {
@@ -253,7 +264,6 @@ public class PartnerApi {
 	// String redball
 	// }
 
-
 	private void configBody() {
 		body.setOrderNumber(UUID.randomUUID().toString().replaceAll("-", ""));
 		body.setTransDateTime(new Date());
@@ -285,6 +295,41 @@ public class PartnerApi {
 			// body.setBetInfoList(betInfoList);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void partnerOrderInfoLogInsert() {
+		setId(Long.parseLong(body.getOrderNumber()));
+		try {
+			con = ConnectionService.getInstance().getConnectionForLocal();
+			ps = con.prepareStatement(
+					"insert into `log_sync_generals` (id,logId,para01,para02,para03,para04,para05,para06,para07,para08,para09,para10) values (?,?,?,?,?,?,?,?,?,?,?,?)");
+			int m = 1;
+			ps.setLong(m++, this.getId());
+			ps.setInt(m++, LOG_ID);
+			ps.setString(m++, partnerOrderInfo.getAppId());
+			ps.setString(m++, this.getPartnerId());
+			ps.setString(m++, partnerOrderInfo.getPartnerChannelId());
+			ps.setString(m++, partnerOrderInfo.getPartnerReserved());
+			ps.setString(m++, partnerOrderInfo.getPartnerOrderNumber());
+			ps.setString(m++, partnerOrderInfo.getUserPhoneNumber());
+			ps.setString(m++, partnerOrderInfo.getUserName());
+			ps.setString(m++, partnerOrderInfo.getLotteryId());
+			ps.setString(m++, partnerOrderInfo.getBetTotalAmount());
+			ps.setString(m++, partnerOrderInfo.getPartnerCallbackURL());
+			ps.executeUpdate();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 

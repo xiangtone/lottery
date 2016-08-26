@@ -1,12 +1,24 @@
 package org.x;
 
-import org.apache.log4j.Logger;
-import org.common.util.ThreadPool;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.iwt.vasoss.common.security.exception.RsaDecryptException;
+import org.apache.log4j.Logger;
+import org.common.util.ConnectionService;
+import org.common.util.ThreadPool;
+import org.x.info.PageAction;
+
 import com.iwt.yt.api.trans.PointExchangeLotteryResultReq;
 import com.iwt.yt.api.trans.TicketInfo;
 import com.iwt.yt.plugin.ClientTransService;
+import com.iwt.yt.plugin.ClientTransServiceInterface;
+import com.iwt.yt.plugin.ClientTransTestWebService;
 
 public class DecryptWebCallback {
 
@@ -17,16 +29,67 @@ public class DecryptWebCallback {
 	private String transSerialNumber;
 	private TicketInfo ticketInfo = new TicketInfo();
 	private String ip;
+	private PageAction pageAction;
+	private String method;
 
-	public void decrypt() throws Exception {
+	private PreparedStatement ps = null;
+	private Connection con = null;
+	private ResultSet rs = null;
+
+	PointExchangeLotteryResultReq result;
+
+	private void decrypt() throws Exception {
 		LOG.debug(this);
-		PointExchangeLotteryResultReq result = ClientTransService.getInstance()
-				.decryptPointExchangeLotteryResultReq(getChannelId(), getTransSerialNumber(), getTransData());
+		ClientTransServiceInterface clientTransService;
+		if (method.equals("test")) {
+			clientTransService = ClientTransTestWebService.getInstance();
+		} else {
+			clientTransService = ClientTransService.getInstance();
+		}
+
+		result = clientTransService.decryptPointExchangeLotteryResultReq(getChannelId(), getTransSerialNumber(),
+				getTransData());
 		LOG.debug(result);
 		ThreadPool.mThreadPool.execute(new WebCallbackLogInsert(result.getHead().getChannelId(),
 				result.getHead().getTransSerialNumber(), this.getTransData(), result.getBody().getChannelReserved(),
 				result.getBody().getOrderNumber(), result.getBody().getResult(), result.getBody().getResultDesc(),
 				result.getBody().getIssueNumber(), result.getBody().getBetSuccAmount(), ticketInfo.getBetDetail(), ip));
+	}
+
+	public void process() throws Exception {
+		decrypt();
+		selectPartnerOrderInfo();
+	}
+
+	public void selectPartnerOrderInfo() {
+		LOG.debug(result.getBody().getOrderNumber());
+		Map<String, String> entity = new HashMap<String, String>();
+		List<Map<String, String>> partnerOrderInfoList = new ArrayList<Map<String, String>>();
+		try {
+			con = ConnectionService.getInstance().getConnectionForLocal();
+			String sql = "select * from `log_sync_generals` where id=?";
+			ps = con.prepareStatement(sql);
+			int m = 1;
+			ps.setString(m++, result.getBody().getOrderNumber());
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				LOG.debug(rs.getString("logId"));
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		// pageAction.setEntity(entity);
+		LOG.debug(partnerOrderInfoList);
 	}
 
 	public String getIp() {
@@ -61,21 +124,26 @@ public class DecryptWebCallback {
 		this.transSerialNumber = transSerialNumber;
 	}
 
+	public PageAction getPageAction() {
+		return pageAction;
+	}
+
+	public void setPageAction(PageAction pageAction) {
+		this.pageAction = pageAction;
+	}
+
 	@Override
 	public String toString() {
 		return "DecryptWebCallback [transData=" + transData + ", channelId=" + channelId + ", transSerialNumber="
 				+ transSerialNumber + "]";
 	}
 
-	public static void main(String args[]) throws RsaDecryptException {
-		DecryptWebCallback decryptWebCallback = new DecryptWebCallback();
-		decryptWebCallback.setTransData(
-				"dF_s13NGcBmk3rXJ7-0k31IcHyDBAEe9mSDTf6-tL7haDdJF6CA7645GulRY5jDibmcz05XH3GEB4eTAfj8X09_UNlS4PP7748fU3bG5Sw763Fi8ps9_LDduYacHJ0Hbtvsvu36F95uj08_v6WgmlpMl_YGCzrEZ92XDqmCSRf1roAon-6Q_xVBDS5UtPKtjVtB6xStkrQGF8G9FHKrV6cJE4X4nerVpm0h86aLR3zrR_L3NaqKUmnZKp12-EPvtJ-ewU-dtKSmAMelwD9E2pdQ7FylIoc3-PQxs-BM7tg9SBh_XwF-d3jmMeBF_LN5e0b9OGSlhFSP8AD8_WLB0Rw");
-		decryptWebCallback.setChannelId("C11000");
-		decryptWebCallback.setTransSerialNumber("ff80808155a5e5a60155b8b640a6004e");
-		PointExchangeLotteryResultReq result = ClientTransService.getInstance().decryptPointExchangeLotteryResultReq(
-				decryptWebCallback.getChannelId(), decryptWebCallback.getTransSerialNumber(),
-				decryptWebCallback.getTransData());
-		LOG.debug(result);
+	public String getMethod() {
+		return method;
 	}
+
+	public void setMethod(String method) {
+		this.method = method;
+	}
+
 }

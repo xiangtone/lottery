@@ -2,6 +2,7 @@ package org.x.info;
 
 public class PartnerOrderInfo {
 
+	private String appId;
 	private String partnerChannelId;
 	private String partnerReserved;
 	private String partnerOrderNumber;
@@ -18,7 +19,15 @@ public class PartnerOrderInfo {
 				+ userName + ", lotteryId=" + lotteryId + ", betTotalAmount=" + betTotalAmount + ", partnerCallbackURL="
 				+ partnerCallbackURL + "]";
 	}
+	
+	public String getAppId() {
+		return appId;
+	}
 
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+	
 	public String getPartnerChannelId() {
 		return partnerChannelId;
 	}

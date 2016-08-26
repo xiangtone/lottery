@@ -11,7 +11,7 @@ import com.iwt.yt.plugin.ClientTransTestWebService;
 
 public class DecryptWebQueryCallbackTest {
 
-	private final static Logger LOG = Logger.getLogger(DecryptWebCallbackTest.class);
+	private final static Logger LOG = Logger.getLogger(DecryptWebCallback.class);
 
 	private String transData;
 	private String channelId;

@@ -87,14 +87,14 @@ public class PreparePostToWeb {
 		testSend.sendTest();
 	}
 
-	public String inputUserPhoneNumber() {
-		String userPhoneNumber = JOptionPane.showInputDialog(null, "请输入您的手机号码：");
-		while (userPhoneNumber.length() != 11) {
-			JOptionPane.showMessageDialog(null, "输入错误！！！请重新输入您的手机号码！！！", "error", JOptionPane.ERROR_MESSAGE);
-			userPhoneNumber = JOptionPane.showInputDialog(null, "请输入您的手机号码：");
-		}
-		return userPhoneNumber;
-	}
+//	public String inputUserPhoneNumber() {
+//		String userPhoneNumber = JOptionPane.showInputDialog(null, "请输入您的手机号码：");
+//		while (userPhoneNumber.length() != 11) {
+//			JOptionPane.showMessageDialog(null, "输入错误！！！请重新输入您的手机号码！！！", "error", JOptionPane.ERROR_MESSAGE);
+//			userPhoneNumber = JOptionPane.showInputDialog(null, "请输入您的手机号码：");
+//		}
+//		return userPhoneNumber;
+//	}
 
 	public void sendTest() throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
 		configBody();
