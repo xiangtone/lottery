@@ -1,5 +1,10 @@
 package org.x.info;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.iwt.yt.api.trans.BetInfo;
+
 public class PartnerOrderInfo {
 
 	private String appId;
@@ -9,17 +14,20 @@ public class PartnerOrderInfo {
 	private String userPhoneNumber;
 	private String userName;
 	private String lotteryId;
+	private int numberSelectType;
 	private String betTotalAmount;
 	private String partnerCallbackURL;
+	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
 
 	@Override
 	public String toString() {
-		return "PartnerOrderInfo [partnerChannelId=" + partnerChannelId + ", partnerReserved=" + partnerReserved
-				+ ", partnerOrderNumber=" + partnerOrderNumber + ", userPhoneNumber=" + userPhoneNumber + ", userName="
-				+ userName + ", lotteryId=" + lotteryId + ", betTotalAmount=" + betTotalAmount + ", partnerCallbackURL="
-				+ partnerCallbackURL + "]";
+		return "PartnerOrderInfo [appId=" + appId + ", partnerChannelId=" + partnerChannelId + ", partnerReserved="
+				+ partnerReserved + ", partnerOrderNumber=" + partnerOrderNumber + ", userPhoneNumber="
+				+ userPhoneNumber + ", userName=" + userName + ", lotteryId=" + lotteryId + ", numberSelectType="
+				+ numberSelectType + ", betTotalAmount=" + betTotalAmount + ", partnerCallbackURL=" + partnerCallbackURL
+				+ ", betInfoList=" + betInfoList + "]";
 	}
-	
+
 	public String getAppId() {
 		return appId;
 	}
@@ -27,7 +35,7 @@ public class PartnerOrderInfo {
 	public void setAppId(String appId) {
 		this.appId = appId;
 	}
-	
+
 	public String getPartnerChannelId() {
 		return partnerChannelId;
 	}
@@ -90,6 +98,22 @@ public class PartnerOrderInfo {
 
 	public void setPartnerCallbackURL(String partnerCallbackURL) {
 		this.partnerCallbackURL = partnerCallbackURL;
+	}
+
+	public int getNumberSelectType() {
+		return numberSelectType;
+	}
+
+	public void setNumberSelectType(int numberSelectType) {
+		this.numberSelectType = numberSelectType;
+	}
+
+	public List<BetInfo> getBetInfoList() {
+		return betInfoList;
+	}
+
+	public void setBetInfoList(List<BetInfo> betInfoList) {
+		this.betInfoList = betInfoList;
 	}
 
 }

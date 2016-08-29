@@ -12,11 +12,12 @@ public class DaoService {
 
 	private final static Logger LOG = Logger.getLogger(DaoService.class);
 
+	PreparedStatement ps = null;
+	Connection con = null;
+	ResultSet rs = null;
+
 	public PartnerInfo getTargetUrlByTitle(String id) {
 		PartnerInfo result = null;
-		PreparedStatement ps = null;
-		Connection con = null;
-		ResultSet rs = null;
 		try {
 			con = ConnectionServiceLottery.getInstance().getConnectionForLottery();
 			String sql = "SELECT * FROM `tbl_partners` where id=?;";
@@ -27,8 +28,8 @@ public class DaoService {
 			rs = ps.executeQuery();
 			if (rs.next()) {
 				result = new PartnerInfo(rs.getString("id"), rs.getString("partnername"), rs.getString("state"),
-						rs.getInt("realBalance"), rs.getInt("creditBalance"), rs.getString("method"), rs.getInt("unitPrice"),
-						rs.getString("keyAES"));
+						rs.getInt("realBalance"), rs.getInt("creditBalance"), rs.getString("method"),
+						rs.getInt("unitPrice"), rs.getString("keyAES"));
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

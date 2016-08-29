@@ -4,16 +4,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.common.util.ConnectionService;
 import org.common.util.ThreadPool;
 import org.x.info.PageAction;
+import org.x.info.PartnerOrderInfo;
 
+import com.alibaba.fastjson.JSON;
 import com.iwt.yt.api.trans.PointExchangeLotteryResultReq;
 import com.iwt.yt.api.trans.TicketInfo;
 import com.iwt.yt.plugin.ClientTransService;
@@ -29,14 +29,17 @@ public class DecryptWebCallback {
 	private String transSerialNumber;
 	private TicketInfo ticketInfo = new TicketInfo();
 	private String ip;
-	private PageAction pageAction;
+	private PageAction pageAction = new PageAction();
 	private String method;
 
 	private PreparedStatement ps = null;
 	private Connection con = null;
 	private ResultSet rs = null;
 
-	PointExchangeLotteryResultReq result;
+	private PointExchangeLotteryResultReq result = new PointExchangeLotteryResultReq();
+	private String partnerOrderInfoJson;
+	private PartnerOrderInfo partnerOrderInfo;
+	private String partnerCallbackURL;
 
 	private void decrypt() throws Exception {
 		LOG.debug(this);
@@ -51,20 +54,30 @@ public class DecryptWebCallback {
 				getTransData());
 		LOG.debug(result);
 		ThreadPool.mThreadPool.execute(new WebCallbackLogInsert(result.getHead().getChannelId(),
-				result.getHead().getTransSerialNumber(), this.getTransData(), result.getBody().getChannelReserved(),
-				result.getBody().getOrderNumber(), result.getBody().getResult(), result.getBody().getResultDesc(),
-				result.getBody().getIssueNumber(), result.getBody().getBetSuccAmount(), ticketInfo.getBetDetail(), ip));
+				result.getHead().getTransSerialNumber(), this.getTransData(), result.getBody().toString(),
+				result.getBody().getChannelReserved(), result.getBody().getOrderNumber(), result.getBody().getResult(),
+				result.getBody().getResultDesc(), result.getBody().getIssueNumber(),
+				result.getBody().getBetSuccAmount(), ticketInfo.getBetDetail(), ip));
 	}
 
+	@SuppressWarnings("unused")
 	public void process() throws Exception {
 		decrypt();
-		selectPartnerOrderInfo();
+		queryPartnerOrderInfoFromDb();
+		LOG.debug(partnerOrderInfoJson);
+		partnerOrderInfo = JSON.parseObject(partnerOrderInfoJson, PartnerOrderInfo.class);
+		LOG.debug(partnerOrderInfo);
+		pageAction = new PageAction();
+		pageAction.setUrl(partnerCallbackURL);
+		LOG.debug(pageAction.getUrl());
+		Map<String, String> entity = new HashMap<String, String>();
+		entity.put("transData", partnerOrderInfoJson);
+		LOG.debug(entity);
+		pageAction.setEntity(entity);
 	}
 
-	public void selectPartnerOrderInfo() {
+	private void queryPartnerOrderInfoFromDb() {
 		LOG.debug(result.getBody().getOrderNumber());
-		Map<String, String> entity = new HashMap<String, String>();
-		List<Map<String, String>> partnerOrderInfoList = new ArrayList<Map<String, String>>();
 		try {
 			con = ConnectionService.getInstance().getConnectionForLocal();
 			String sql = "select * from `log_sync_generals` where id=?";
@@ -74,6 +87,8 @@ public class DecryptWebCallback {
 			rs = ps.executeQuery();
 			if (rs.next()) {
 				LOG.debug(rs.getString("logId"));
+				partnerOrderInfoJson = rs.getString("para02");
+				partnerCallbackURL = rs.getString("para03");
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -88,8 +103,6 @@ public class DecryptWebCallback {
 				}
 			}
 		}
-		// pageAction.setEntity(entity);
-		LOG.debug(partnerOrderInfoList);
 	}
 
 	public String getIp() {

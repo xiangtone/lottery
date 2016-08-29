@@ -1,6 +1,8 @@
 <%@ page language="java" pageEncoding="utf-8"%>
 <%@page import="org.x.DecryptWebCallback"%>
 <%@page import="org.apache.log4j.Logger"%>
+<%@page import="com.alibaba.fastjson.JSON"%>
+<%@page import="com.alibaba.fastjson.serializer.SerializerFeature"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -17,5 +19,45 @@
 					? request.getHeader("X-Real-IP")
 					: request.getRemoteAddr());
 	decryptWebCallback.setMethod("test");
-	decryptWebCallback.process();	
+	decryptWebCallback.process();
+	String partnerOrderInfoEncryptData = JSON.toJSONString(decryptWebCallback.getPageAction().getEntity(),
+	 new SerializerFeature[] { SerializerFeature.WriteMapNullValue });
+	LOG.debug(partnerOrderInfoEncryptData);
 %>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+
+<title>My JSP 'index.jsp' starting page</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<!--
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	-->
+</head>
+
+<body>
+	<br>
+	<form id="formid"
+		action="<%=decryptWebCallback.getPageAction().getUrl()%>"
+		method="post">
+		<%
+		for(String key : decryptWebCallback.getPageAction().getEntity().keySet()){
+			%>
+			<input name="<%=key %>" type="hidden"
+			value='<%=decryptWebCallback.getPageAction().getEntity().get(key)%>'>
+			<%
+		}
+		%>
+		<button type="submit">submit</button>
+	</form>
+</body>
+<script>
+//document.getElementById("formid").submit();
+</script>
+</html>

@@ -1,6 +1,6 @@
 package org.x.info;
 
-public class BetInfo {
+public class BackReqBetInfo {
 
 	private String betDateTime;
 	private String betDetail;

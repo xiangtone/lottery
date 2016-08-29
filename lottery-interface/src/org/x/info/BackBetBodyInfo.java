@@ -12,7 +12,7 @@ public class BackBetBodyInfo {
 	private Date orderAcceptTime;
 	private String channelReserved;
 	private String resultDesc;
-	private List<BetInfo> ticketInfoList;
+	private List<BackReqBetInfo> ticketInfoList;
 
 	public String getChannelReserved() {
 		return channelReserved;
@@ -54,11 +54,11 @@ public class BackBetBodyInfo {
 		this.orderNumber = orderNumber;
 	}
 
-	public List<BetInfo> getTicketInfoList() {
+	public List<BackReqBetInfo> getTicketInfoList() {
 		return ticketInfoList;
 	}
 
-	public void setTicketInfoList(List<BetInfo> ticketInfoList) {
+	public void setTicketInfoList(List<BackReqBetInfo> ticketInfoList) {
 		this.ticketInfoList = ticketInfoList;
 	}
 

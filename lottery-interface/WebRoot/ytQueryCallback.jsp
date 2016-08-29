@@ -11,5 +11,6 @@
 	decryptWebQueryCallback
 			.setIp(request.getHeader("X-Real-IP") != null && request.getHeader("X-Real-IP").length() > 0
 					? request.getHeader("X-Real-IP") : request.getRemoteAddr());
+	decryptWebQueryCallback.setMethod("formal");
 	decryptWebQueryCallback.decrypt();
 %>

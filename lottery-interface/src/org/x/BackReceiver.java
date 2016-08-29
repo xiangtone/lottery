@@ -9,9 +9,10 @@ import org.apache.log4j.Logger;
 import org.common.util.ThreadPool;
 import org.x.info.BackBetBodyInfo;
 import org.x.info.BackReq;
-import org.x.info.BetInfo;
+import org.x.info.BackReqBetInfo;
 import org.x.utils.AES;
 import org.x.utils.ConnectionServiceLottery;
+
 import com.alibaba.fastjson.JSON;
 
 public class BackReceiver {
@@ -40,7 +41,7 @@ public class BackReceiver {
 			break;
 		case "2011":
 			LOG.debug(backReq.getHead().getBusinessId());
-			List<BetInfo> betInfoList = backBetBodyInfo.getTicketInfoList();
+			List<BackReqBetInfo> betInfoList = backBetBodyInfo.getTicketInfoList();
 			LOG.debug(backBetBodyInfo);
 			LOG.debug(betInfoList);
 			sucessExchangeOrderInfoLogInsert(backBetBodyInfo);
@@ -57,11 +58,10 @@ public class BackReceiver {
 				backBetBodyInfo.getTicketInfoList(), ip));
 	}
 
-	private void successExchangeBetsInfoLogInsert(List<BetInfo> betInfoList, BackBetBodyInfo backBetBodyInfo) {
+	private void successExchangeBetsInfoLogInsert(List<BackReqBetInfo> betInfoList, BackBetBodyInfo backBetBodyInfo) {
 		try {
 			String betDetail = betInfoList.get(0).getBetDetail();
-			do
-			{
+			do {
 				con = ConnectionServiceLottery.getInstance().getConnectionForLottery();
 				ps = con.prepareStatement(
 						"insert into `tbl_success_exchange_bets` (ticketId,betDateTime,betDetail,orderNumber,insertTime,rewardlevel,rewardMoney,rewardUpdateTime) values (?,?,?,?,?,?,?,?)");
@@ -76,7 +76,7 @@ public class BackReceiver {
 				ps.setLong(m++, 1);// rewardUpdateTime
 				ps.executeUpdate();
 				betDetail = betDetail.substring(21);
-			}while(betDetail.length()!=0);
+			} while (betDetail.length() != 0);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -92,7 +92,7 @@ public class BackReceiver {
 		}
 	}
 
-	private void successExchangeTicketsInfoLogInsert(List<BetInfo> betInfoList, BackBetBodyInfo backBetBodyInfo) {
+	private void successExchangeTicketsInfoLogInsert(List<BackReqBetInfo> betInfoList, BackBetBodyInfo backBetBodyInfo) {
 		try {
 			con = ConnectionServiceLottery.getInstance().getConnectionForLottery();
 			ps = con.prepareStatement(

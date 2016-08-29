@@ -30,15 +30,13 @@ import com.iwt.yt.api.trans.PointExchangeLotteryReqBody;
 import com.iwt.yt.plugin.ClientTransService;
 import com.iwt.yt.util.ClientUtil;
 
-import javax.swing.*;
-
 public class PreparePostToWeb {
 
 	private static final Logger LOG = Logger.getLogger(PreparePostToWeb.class);
 
 	private final long serialVersionUID = 8756559814195904326L;
 	private PointExchangeLotteryReqBody body = new PointExchangeLotteryReqBody();
-	
+
 	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
 	private BetInfo betInfo = new BetInfo();
 
@@ -57,7 +55,7 @@ public class PreparePostToWeb {
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
-	
+
 	public PreparePostToWeb() throws RsaEncryptException {
 		super();
 	}
@@ -81,20 +79,12 @@ public class PreparePostToWeb {
 				req.getBody().getPointTotalAmount(), betInfo, req.getBody().getCallbackURL(), ip));
 	}
 
-	public static void main(String[] args)
-			throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
-		PreparePostToWeb testSend = new PreparePostToWeb();
-		testSend.sendTest();
-	}
-
-//	public String inputUserPhoneNumber() {
-//		String userPhoneNumber = JOptionPane.showInputDialog(null, "请输入您的手机号码：");
-//		while (userPhoneNumber.length() != 11) {
-//			JOptionPane.showMessageDialog(null, "输入错误！！！请重新输入您的手机号码！！！", "error", JOptionPane.ERROR_MESSAGE);
-//			userPhoneNumber = JOptionPane.showInputDialog(null, "请输入您的手机号码：");
-//		}
-//		return userPhoneNumber;
-//	}
+	// public static void main(String[] args)
+	// throws RsaEncryptException, RsaDecryptException, ClientProtocolException,
+	// IOException {
+	// PreparePostToWeb testSend = new PreparePostToWeb();
+	// testSend.sendTest();
+	// }
 
 	public void sendTest() throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
 		configBody();
@@ -124,12 +114,11 @@ public class PreparePostToWeb {
 			// body.setUserPhoneNumber("18025314707");// fuming
 			// body.setUserPhoneNumber("15285960182");// fuming guizhou CMCCtest
 			// body.setUserPhoneNumber("13603054736");// lijiaqi
-			// body.setUserPhoneNumber(inputUserPhoneNumber());
 			// body.setUserPhoneNumber("13923832816");//guojining
 			// body.setUserPhoneNumber("18676382886");//fengquchi
 			// body.setUserPhoneNumber("13590100561");//wanghua
-			//body.setUserPhoneNumber("17090415005");
-			//body.setUserPhoneNumber("15910667914");
+			// body.setUserPhoneNumber("17090415005");
+			// body.setUserPhoneNumber("15910667914");
 			body.setUserPhoneNumber("13530274162");// longxu
 			body.setPointMerchantId("1200100001");
 			body.setGameId("10001");
@@ -139,7 +128,7 @@ public class PreparePostToWeb {
 			betInfoList.add(betInfo);
 			body.setBetInfoList(betInfoList);
 		} catch (Exception e) {
-			
+
 			e.printStackTrace();
 		}
 	}

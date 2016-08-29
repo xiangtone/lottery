@@ -3,10 +3,10 @@ package org.x;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
 import org.common.util.ConfigManager;
 import org.common.util.ConnectionService;
 import org.common.util.GenerateIdService;
-import org.x.utils.ConnectionServiceLog;
 
 public class WebCallbackLogInsert implements Runnable {
 
@@ -14,6 +14,7 @@ public class WebCallbackLogInsert implements Runnable {
 
 	private Long id;
 	private String channelId;
+	private String body;
 	private String transSerialNumber;
 	private String transData;
 	private String channelReserved;
@@ -25,12 +26,13 @@ public class WebCallbackLogInsert implements Runnable {
 	private String ticketInfo;
 	private String ip;
 
-	public WebCallbackLogInsert(String channelId, String transSerialNumber, String transData, String channelReserved,
-			String orderNumber, int result, String resultDesc, String ip) {
+	public WebCallbackLogInsert(String channelId, String transSerialNumber, String transData, String body,
+			String channelReserved, String orderNumber, int result, String resultDesc, String ip) {
 		super();
 		this.channelId = channelId;
 		this.transSerialNumber = transSerialNumber;
 		this.transData = transData;
+		this.body = body;
 		this.channelReserved = channelReserved;
 		this.orderNumber = orderNumber;
 		this.result = result;
@@ -38,9 +40,9 @@ public class WebCallbackLogInsert implements Runnable {
 		this.ip = ip;
 	}
 
-	public WebCallbackLogInsert(String channelId, String transSerialNumber, String transData, String channelReserved,
-			String orderNumber, int result, String resultDesc, String issueNumber, int betSuccAmount, String ticketInfo,
-			String ip) {
+	public WebCallbackLogInsert(String channelId, String transSerialNumber, String transData, String body,
+			String channelReserved, String orderNumber, int result, String resultDesc, String issueNumber,
+			int betSuccAmount, String ticketInfo, String ip) {
 
 		super();
 		this.channelId = channelId;
@@ -49,6 +51,7 @@ public class WebCallbackLogInsert implements Runnable {
 		this.channelReserved = channelReserved;
 		this.orderNumber = orderNumber;
 		this.result = result;
+		this.body = body;
 		this.resultDesc = resultDesc;
 		this.issueNumber = issueNumber;
 		this.betSuccAmount = betSuccAmount;
@@ -67,20 +70,18 @@ public class WebCallbackLogInsert implements Runnable {
 			try {
 				con = ConnectionService.getInstance().getConnectionForLocal();
 				ps = con.prepareStatement(
-						"insert into `log_async_generals` (id,logId,para01,para02,para03,para04,para05,para06,para07,para08,para09,para10,para11) values (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+						"insert into `log_async_generals` (id,logId,para01,para02,para03,para04,para05,para06,para07,para08,para09) values (?,?,?,?,?,?,?,?,?,?,?)");
 				int m = 1;
 				ps.setLong(m++, this.getId());
 				ps.setInt(m++, LOG_ID);
 				ps.setString(m++, this.getChannelId());
 				ps.setString(m++, this.getTransSerialNumber());
 				ps.setString(m++, this.getTransData());
+				ps.setString(m++, this.getBody());
 				ps.setString(m++, this.getChannelReserved());
 				ps.setString(m++, this.getOrderNumber());
 				ps.setInt(m++, this.getResult());
 				ps.setString(m++, this.getResultDesc());
-				ps.setString(m++, this.getIssueNumber());
-				ps.setInt(m++, this.getBetSuccAmount());
-				ps.setString(m++, this.getTicketInfo());
 				ps.setString(m++, this.getIp());
 				ps.executeUpdate();
 			} catch (Exception e) {
@@ -193,5 +194,13 @@ public class WebCallbackLogInsert implements Runnable {
 
 	public void setIp(String ip) {
 		this.ip = ip;
+	}
+
+	public String getBody() {
+		return body;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
 	}
 }

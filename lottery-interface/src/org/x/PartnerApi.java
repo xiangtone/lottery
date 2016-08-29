@@ -246,24 +246,6 @@ public class PartnerApi {
 		// testSend.sendTest();
 	}
 
-	// public String selectBetNumber(){
-	// int[] redBall = new int[12];
-	// int blueBall;
-	// for(int i=0;i<6;i++){
-	// redBall[i]=(int)Math.random()*33+1;
-	// for(int j=0;j<i;j++)
-	// {
-	// if(redBall[i]==redBall[j])
-	// {
-	// redBall[i]=(int)Math.random()*33+1;
-	// j=0;
-	// }
-	//
-	// }
-	// }
-	// String redball
-	// }
-
 	private void configBody() {
 		body.setOrderNumber(UUID.randomUUID().toString().replaceAll("-", ""));
 		body.setTransDateTime(new Date());
@@ -300,22 +282,16 @@ public class PartnerApi {
 
 	private void partnerOrderInfoLogInsert() {
 		setId(Long.parseLong(body.getOrderNumber()));
+		LOG.debug(body.getOrderNumber());
 		try {
 			con = ConnectionService.getInstance().getConnectionForLocal();
 			ps = con.prepareStatement(
-					"insert into `log_sync_generals` (id,logId,para01,para02,para03,para04,para05,para06,para07,para08,para09,para10) values (?,?,?,?,?,?,?,?,?,?,?,?)");
+					"insert into `log_sync_generals` (id,logId,para01,para02,para03) values (?,?,?,?,?)");
 			int m = 1;
 			ps.setLong(m++, this.getId());
 			ps.setInt(m++, LOG_ID);
-			ps.setString(m++, partnerOrderInfo.getAppId());
-			ps.setString(m++, this.getPartnerId());
-			ps.setString(m++, partnerOrderInfo.getPartnerChannelId());
-			ps.setString(m++, partnerOrderInfo.getPartnerReserved());
-			ps.setString(m++, partnerOrderInfo.getPartnerOrderNumber());
-			ps.setString(m++, partnerOrderInfo.getUserPhoneNumber());
-			ps.setString(m++, partnerOrderInfo.getUserName());
-			ps.setString(m++, partnerOrderInfo.getLotteryId());
-			ps.setString(m++, partnerOrderInfo.getBetTotalAmount());
+			ps.setString(m++, partnerTransData);
+			ps.setString(m++, partnerTransData);
 			ps.setString(m++, partnerOrderInfo.getPartnerCallbackURL());
 			ps.executeUpdate();
 		} catch (Exception e) {

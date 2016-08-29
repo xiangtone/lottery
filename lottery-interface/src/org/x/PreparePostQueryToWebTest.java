@@ -20,7 +20,6 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.common.util.ThreadPool;
 
-
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
 import com.iwt.yt.api.base.ReqHead;
 import com.iwt.yt.api.trans.QueryModifyBetAccountInfoUrlReq;
@@ -61,19 +60,22 @@ public class PreparePostQueryToWebTest {
 
 		ClientTransServiceInterface clientTransService = ClientTransTestWebService.getInstance();
 		transData = clientTransService.encryptQueryModifyBetAccountInfoUrlReq(req);
-		ThreadPool.mThreadPool.execute(new PostLogInsert(req.getHead().getChannelId(), req.getHead().getTransSerialNumber(),
-				this.getTransData(), req.getBody().getChannelReserved(), req.getBody().getOrderNumber(),
-				req.getBody().getUserPhoneNumber(), req.getBody().getTransDateTime(), req.getBody().getCallbackURL(), ip));
-		
+		ThreadPool.mThreadPool.execute(new PostLogInsert(req.getHead().getChannelId(),
+				req.getHead().getTransSerialNumber(), this.getTransData(), req.getBody().getChannelReserved(),
+				req.getBody().getOrderNumber(), req.getBody().getUserPhoneNumber(), req.getBody().getTransDateTime(),
+				req.getBody().getCallbackURL(), ip));
+
 	}
 
 	public String inputUserPhoneNumber() {
 		String userPhoneNumber = JOptionPane.showInputDialog(null, "请输入您的手机号码：");
 		while (userPhoneNumber.length() != 11) {
-			userPhoneNumber = JOptionPane.showInputDialog(null, "输入错误！！！请重新输入您的手机号码:", "error", JOptionPane.ERROR_MESSAGE);
+			userPhoneNumber = JOptionPane.showInputDialog(null, "输入错误！！！请重新输入您的手机号码:", "error",
+					JOptionPane.ERROR_MESSAGE);
 		}
 		return userPhoneNumber;
 	}
+
 	private void configBody() {
 		body.setOrderNumber(UUID.randomUUID().toString().replaceAll("-", ""));
 		body.setTransDateTime(new Date());

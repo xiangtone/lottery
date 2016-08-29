@@ -9,8 +9,7 @@ import java.util.List;
 import org.common.util.ConfigManager;
 import org.common.util.ConnectionService;
 import org.common.util.GenerateIdService;
-import org.x.info.BetInfo;
-import org.x.utils.ConnectionServiceLog;
+import org.x.info.BackReqBetInfo;
 
 public class LogInsert implements Runnable {
 
@@ -29,7 +28,7 @@ public class LogInsert implements Runnable {
 	private Date orderAcceptTime;
 	private int result;
 	private String resultDesc;
-	private List<BetInfo> ticketInfoList;
+	private List<BackReqBetInfo> ticketInfoList;
 	private String ip;
 
 	public LogInsert(String channelId, String transSerialNumber, String businessId, String transData,
@@ -45,7 +44,7 @@ public class LogInsert implements Runnable {
 
 	public LogInsert(String channelId, String transSerialNumber, String businessId, String transData,
 			String decryptInfo, String orderNumber, String channelReserved, String issueNumber, int betSuccAmount,
-			Date orderAcceptTime, int result, String resultDesc, List<BetInfo> ticketInfoList, String ip) {
+			Date orderAcceptTime, int result, String resultDesc, List<BackReqBetInfo> ticketInfoList, String ip) {
 		// TODO Auto-generated constructor stub
 		super();
 		this.channelId = channelId;
@@ -213,11 +212,11 @@ public class LogInsert implements Runnable {
 		this.resultDesc = resultDesc;
 	}
 
-	public List<BetInfo> getTicketInfoList() {
+	public List<BackReqBetInfo> getTicketInfoList() {
 		return ticketInfoList;
 	}
 
-	public void setTicketInfoList(List<BetInfo> ticketInfoList) {
+	public void setTicketInfoList(List<BackReqBetInfo> ticketInfoList) {
 		this.ticketInfoList = ticketInfoList;
 	}
 

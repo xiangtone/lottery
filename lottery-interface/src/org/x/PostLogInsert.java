@@ -9,12 +9,15 @@ import org.common.util.ConfigManager;
 import org.common.util.ConnectionService;
 import org.common.util.GenerateIdService;
 
+import com.iwt.yt.api.base.ReqHead;
 import com.iwt.yt.api.trans.BetInfo;
+import com.iwt.yt.api.trans.PointExchangeLotteryReqBody;
 
 public class PostLogInsert implements Runnable {
 
 	private static final int LOG_ID = 3001;
-
+	private ReqHead head;
+	private PointExchangeLotteryReqBody body;
 	private Long id;
 	private String channelId;
 	private String transSerialNumber;
@@ -254,6 +257,22 @@ public class PostLogInsert implements Runnable {
 
 	public void setIp(String ip) {
 		this.ip = ip;
+	}
+
+	public ReqHead getHead() {
+		return head;
+	}
+
+	public void setHead(ReqHead head) {
+		this.head = head;
+	}
+
+	public PointExchangeLotteryReqBody getBody() {
+		return body;
+	}
+
+	public void setBody(PointExchangeLotteryReqBody body) {
+		this.body = body;
 	}
 
 }

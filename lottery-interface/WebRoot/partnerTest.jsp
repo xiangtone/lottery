@@ -50,7 +50,7 @@
 	<br> betMode:
 	<input id="betMode" name="betMode" value="101" size="40">
 	<br> betDetail:
-	<input id="betDetail" name="betDetail" value="001060102030405060107"
+	<input id="betDetail" name="betDetail" value=""
 		size="40">
 	<br>
 	

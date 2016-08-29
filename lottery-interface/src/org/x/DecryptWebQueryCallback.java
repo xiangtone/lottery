@@ -2,13 +2,12 @@ package org.x;
 
 import org.apache.log4j.Logger;
 import org.common.util.ThreadPool;
-import org.x.utils.AES;
 
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
-import com.iwt.yt.api.trans.PointExchangeLotteryResultReq;
-import com.iwt.yt.api.trans.QueryModifyBetAccountInfoUrlReqBody;
 import com.iwt.yt.api.trans.QueryModifyBetAccountInfoUrlResultReq;
 import com.iwt.yt.plugin.ClientTransService;
+import com.iwt.yt.plugin.ClientTransServiceInterface;
+import com.iwt.yt.plugin.ClientTransTestWebService;
 
 public class DecryptWebQueryCallback {
 
@@ -18,15 +17,23 @@ public class DecryptWebQueryCallback {
 	private String channelId;
 	private String transSerialNumber;
 	private String ip;
+	private String method;
 
 	public void decrypt() throws Exception {
 		LOG.debug(this);
-		QueryModifyBetAccountInfoUrlResultReq result = ClientTransService.getInstance()
-				.decryptQueryModifyBetAccountInfoUrlResultReq(channelId, transSerialNumber, transData);
+		ClientTransServiceInterface clientTransService;
+		if (method.equals("test")) {
+			clientTransService = ClientTransTestWebService.getInstance();
+		} else {
+			clientTransService = ClientTransService.getInstance();
+		}
+		QueryModifyBetAccountInfoUrlResultReq result = clientTransService
+				.decryptQueryModifyBetAccountInfoUrlResultReq(getChannelId(), getTransSerialNumber(), getTransData());
 		LOG.debug(result);
 		ThreadPool.mThreadPool.execute(new WebCallbackLogInsert(result.getHead().getChannelId(),
-				result.getHead().getTransSerialNumber(), this.getTransData(), result.getBody().getChannelReserved(),
-				result.getBody().getOrderNumber(), result.getBody().getResult(), result.getBody().getResultDesc(), ip));
+				result.getHead().getTransSerialNumber(), this.getTransData(), result.getBody().toString(),
+				result.getBody().getChannelReserved(), result.getBody().getOrderNumber(), result.getBody().getResult(),
+				result.getBody().getResultDesc(), ip));
 	}
 
 	public String getIp() {
@@ -61,6 +68,14 @@ public class DecryptWebQueryCallback {
 		this.transSerialNumber = transSerialNumber;
 	}
 
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
+	}
+
 	@Override
 	public String toString() {
 		return "DecryptWebCallback [transData=" + transData + ", channelId=" + channelId + ", transSerialNumber="
@@ -78,4 +93,5 @@ public class DecryptWebQueryCallback {
 						decryptWebQueryCallback.getTransSerialNumber(), decryptWebQueryCallback.getTransData());
 		LOG.debug(result);
 	}
+
 }

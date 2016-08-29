@@ -6,9 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.swing.JOptionPane;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -74,15 +71,6 @@ public class PreparePostQueryToWeb {
 		testSend.sendTest();
 	}
 
-	public String inputUserPhoneNumber() {
-		String userPhoneNumber = JOptionPane.showInputDialog(null, "请输入您的手机号码：");
-		while (userPhoneNumber.length() != 11) {
-			userPhoneNumber = JOptionPane.showInputDialog(null, "输入错误！！！请重新输入您的手机号码:", "error",
-					JOptionPane.ERROR_MESSAGE);
-		}
-		return userPhoneNumber;
-	}
-
 	public void sendTest() throws RsaEncryptException, RsaDecryptException, ClientProtocolException, IOException {
 		configBody();
 		LOG.debug(body.getCallbackURL());
@@ -111,7 +99,6 @@ public class PreparePostQueryToWeb {
 			// test
 			// body.setUserPhoneNumber("13603054736");// lijiaqi
 			// body.setUserPhoneNumber("13530274162");//longxu
-			// body.setUserPhoneNumber(inputUserPhoneNumber());
 			body.setUserPhoneNumber("17090415005");
 			body.setOrderNumber("1469413604412");
 		} catch (Exception e) {
