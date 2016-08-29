@@ -285,12 +285,10 @@ public class PartnerApi {
 		LOG.debug(body.getOrderNumber());
 		try {
 			con = ConnectionService.getInstance().getConnectionForLocal();
-			ps = con.prepareStatement(
-					"insert into `log_sync_generals` (id,logId,para01,para02,para03) values (?,?,?,?,?)");
+			ps = con.prepareStatement("insert into `log_sync_generals` (id,logId,para01,para02) values (?,?,?,?)");
 			int m = 1;
 			ps.setLong(m++, this.getId());
 			ps.setInt(m++, LOG_ID);
-			ps.setString(m++, partnerTransData);
 			ps.setString(m++, partnerTransData);
 			ps.setString(m++, partnerOrderInfo.getPartnerCallbackURL());
 			ps.executeUpdate();

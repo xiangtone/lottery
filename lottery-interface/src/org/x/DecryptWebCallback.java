@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -14,6 +16,7 @@ import org.x.info.PageAction;
 import org.x.info.PartnerOrderInfo;
 
 import com.alibaba.fastjson.JSON;
+import com.iwt.vasoss.common.security.exception.RsaEncryptException;
 import com.iwt.yt.api.trans.PointExchangeLotteryResultReq;
 import com.iwt.yt.api.trans.TicketInfo;
 import com.iwt.yt.plugin.ClientTransService;
@@ -64,14 +67,33 @@ public class DecryptWebCallback {
 	public void process() throws Exception {
 		decrypt();
 		queryPartnerOrderInfoFromDb();
+		transDataConfig();
+	}
+
+	private void transDataConfig() throws RsaEncryptException {
 		LOG.debug(partnerOrderInfoJson);
 		partnerOrderInfo = JSON.parseObject(partnerOrderInfoJson, PartnerOrderInfo.class);
 		LOG.debug(partnerOrderInfo);
 		pageAction = new PageAction();
 		pageAction.setUrl(partnerCallbackURL);
 		LOG.debug(pageAction.getUrl());
-		Map<String, String> entity = new HashMap<String, String>();
-		entity.put("transData", partnerOrderInfoJson);
+		Map<String, String> entity = new LinkedHashMap<String, String>();
+		Map<String, String> transDataMap = new LinkedHashMap<String, String>();
+		List<Map<String, String>> transData = new ArrayList<Map<String, String>>();
+		transDataMap.put("transDateTime", result.getBody().getTransDateTime().toString());
+		transDataMap.put("partnerChannelId", partnerOrderInfo.getPartnerChannelId());
+		transDataMap.put("partnerReserved", partnerOrderInfo.getPartnerReserved());
+		transDataMap.put("appId", partnerOrderInfo.getAppId());
+		transDataMap.put("partnerOrderNumber", partnerOrderInfo.getPartnerOrderNumber());
+		transDataMap.put("orderNumber", result.getBody().getOrderNumber());
+		transDataMap.put("result", result.getBody().getResult() + "");
+		transDataMap.put("resultDesc", result.getBody().getResultDesc());
+		transDataMap.put("issueNumber", result.getBody().getIssueNumber());
+		transDataMap.put("betSuccAmount", result.getBody().getBetSuccAmount() + "");
+		transDataMap.put("orderAcceptTime", result.getBody().getOrderAcceptTime().toString());
+		transDataMap.put("ticketInfoList", result.getBody().getTicketInfoList().toString());
+		transData.add(transDataMap);
+		entity.put("transData", transData.toString());
 		LOG.debug(entity);
 		pageAction.setEntity(entity);
 	}
@@ -87,8 +109,8 @@ public class DecryptWebCallback {
 			rs = ps.executeQuery();
 			if (rs.next()) {
 				LOG.debug(rs.getString("logId"));
-				partnerOrderInfoJson = rs.getString("para02");
-				partnerCallbackURL = rs.getString("para03");
+				partnerOrderInfoJson = rs.getString("para01");
+				partnerCallbackURL = rs.getString("para02");
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

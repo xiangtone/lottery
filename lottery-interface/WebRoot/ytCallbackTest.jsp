@@ -20,9 +20,6 @@
 					: request.getRemoteAddr());
 	decryptWebCallback.setMethod("test");
 	decryptWebCallback.process();
-	String partnerOrderInfoEncryptData = JSON.toJSONString(decryptWebCallback.getPageAction().getEntity(),
-	 new SerializerFeature[] { SerializerFeature.WriteMapNullValue });
-	LOG.debug(partnerOrderInfoEncryptData);
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
