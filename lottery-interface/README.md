@@ -14,6 +14,8 @@ http://124.205.38.84:13135/lottomagic/jfhcp/doRequest
 
 后：a8690000
 
-110105199312021302	苏三，省份选江苏，其他信息随便填就可以
+测试环境：
+点击发送验证码之后，输入111111，进行测试环境注册。
+绑定身份证110105199312021302	苏三，省份选江苏，其他信息(银行卡等)随便填就可以。
 
 mvn install:install-file -Dfile=vasoss-iwt-common-1.0-SNAPSHOT.jar -DgroupId=yt -DartifactId=vasoss-iwt-common -Dversion=1.0-SNAPSHOT -Dpackaging=jar -DgeneratePom=true
