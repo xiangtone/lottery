@@ -14,5 +14,6 @@ http://124.205.38.84:13135/lottomagic/jfhcp/doRequest
 
 后：a8690000
 
-mvn install:install-file -Dfile=lottomagic-channel-comm-plugin-1.0-SNAPSHOT.jar -DgroupId=yt -DartifactId=lottomagic-channel-comm-plugin -Dversion=1.0-SNAPSHOT -Dpackaging=jar -DgeneratePom=true
+110105199312021302	苏三，省份选江苏，其他信息随便填就可以
+
 mvn install:install-file -Dfile=vasoss-iwt-common-1.0-SNAPSHOT.jar -DgroupId=yt -DartifactId=vasoss-iwt-common -Dversion=1.0-SNAPSHOT -Dpackaging=jar -DgeneratePom=true
