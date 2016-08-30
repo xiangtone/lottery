@@ -4,15 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.common.util.ConnectionService;
 import org.common.util.ThreadPool;
 import org.x.info.PageAction;
+import org.x.info.PartnerInfo;
 import org.x.info.PartnerOrderInfo;
 import org.x.service.DaoService;
 
@@ -35,6 +34,7 @@ public class DecryptWebCallback {
 	private String ip;
 	private PageAction pageAction = new PageAction();
 	private String method;
+	private PartnerInfo partnerInfo;
 
 	private PreparedStatement ps = null;
 	private Connection con = null;
@@ -68,10 +68,24 @@ public class DecryptWebCallback {
 	}
 
 	public void process() throws Exception {
+		// erroMsgCallback();
 		decrypt();
 		queryPartnerOrderInfoFromDb();
 		partnerTransDataConfig();
 	}
+
+	// private void erroMsgCallback() throws Exception {
+	// partnerInfo =
+	// PartnerService.getInstance().getNameLoadingCache(partnerId);
+	// if(partnerInfo.getRealBalance()<=0&&partnerInfo.getCreditBalance()<=0){
+	// result.getBody().setResult(4003);
+	// result.getBody().setResultDesc("合作方余额不足！");
+	// }
+	// if(!(partnerInfo.getState().equals(method))){
+	// result.getBody().setResult(4004);
+	// result.getBody().setResultDesc("合作方状态不可用！");
+	// }
+	// }
 
 	private void partnerTransDataConfig() throws RsaEncryptException {
 		LOG.debug(partnerOrderInfoJson);
@@ -82,12 +96,12 @@ public class DecryptWebCallback {
 		LOG.debug(pageAction.getUrl());
 		Map<String, String> entity = new LinkedHashMap<String, String>();
 		Map<String, Object> transDataMap = new LinkedHashMap<String, Object>();
-		List<Map<String, Object>> transData = new ArrayList<Map<String, Object>>();
 		transDataMap.put("transDateTime", result.getBody().getTransDateTime());
 		transDataMap.put("partnerChannelId", partnerOrderInfo.getPartnerChannelId());
 		transDataMap.put("partnerReserved", partnerOrderInfo.getPartnerReserved());
 		transDataMap.put("appId", partnerOrderInfo.getAppId());
 		transDataMap.put("partnerOrderNumber", partnerOrderInfo.getPartnerOrderNumber());
+		transDataMap.put("orderStatus", this.getMethod());
 		transDataMap.put("orderNumber", result.getBody().getOrderNumber());
 		transDataMap.put("result", result.getBody().getResult());
 		transDataMap.put("resultDesc", result.getBody().getResultDesc());
@@ -95,9 +109,9 @@ public class DecryptWebCallback {
 		transDataMap.put("betSuccAmount", result.getBody().getBetSuccAmount());
 		transDataMap.put("orderAcceptTime", result.getBody().getOrderAcceptTime());
 		transDataMap.put("ticketInfoList", result.getBody().getTicketInfoList());
-		transData.add(transDataMap);
+		String transDataJson = JSON.toJSONString(transDataMap);
 		entity.put("partnerId", partnerId);
-		entity.put("transData", transData.toString());
+		entity.put("transData", transDataJson);
 		LOG.debug(entity);
 		pageAction.setEntity(entity);
 	}
