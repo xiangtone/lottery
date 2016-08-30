@@ -9,7 +9,6 @@
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	
-	PartnerApi partnerApi = new PartnerApi();
 	Logger LOG = Logger.getLogger(this.getClass());
 	LOG.debug(request.getParameter("channelId"));
 	DecryptWebCallback decryptWebCallback = new DecryptWebCallback();
@@ -58,6 +57,6 @@
 	</form>
 </body>
 <script>
-//document.getElementById("formid").submit();
+document.getElementById("formid").submit();
 </script>
 </html>
