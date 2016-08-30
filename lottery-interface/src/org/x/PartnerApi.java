@@ -156,22 +156,22 @@ public class PartnerApi {
 		case "web":
 			clientUtil = ClientUtil.getInstance();
 			clientTransService = ClientTransService.getInstance();
-			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallback.jsp");
+			body.setCallbackURL("http://api.youkala.com/ytCallback.jsp");
 			break;
 		case "h5":
 			clientUtil = ClientH5Util.getInstance();
 			clientTransService = ClientTransH5Service.getInstance();
-			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallback.jsp");
+			body.setCallbackURL("http://api.youkala.com/ytCallback.jsp");
 			break;
 		case "test":
 			clientUtil = TestWebClientUtil.getInstance();
 			clientTransService = ClientTransTestWebService.getInstance();
-			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallbackTest.jsp");
+			body.setCallbackURL("http://api.youkala.com/ytCallbackTest.jsp");
 			break;
 		case "testH5":
 			clientUtil = TestH5ClientUtil.getInstance();
 			clientTransService = ClientTransTestH5Service.getInstance();
-			body.setCallbackURL("http://a.yt.youkala.com:38080/ytCallbackTest.jsp");
+			body.setCallbackURL("http://api.youkala.com/ytCallbackTest.jsp");
 			break;
 		default:
 			break;
@@ -205,16 +205,14 @@ public class PartnerApi {
 					return result;
 				} else {
 					if (partnerInfo.getRealBalance() <= 0 && partnerInfo.getCreditBalance() <= -1000) {
-						setLocalErrorMsg(
-								"{\"status\":\"error\",\"result\":4003,\"msg\":\"partner balances is not enough !\"}");
+						setLocalErrorMsg("{\"status\":\"error\",\"result\":4003,\"msg\":\"partner balances is not enough !\"}");
 						return result;
 					} else {
 						if (partnerOrderInfo.getPartnerCallbackURL() != null
 								&& partnerOrderInfo.getPartnerCallbackURL().length() > 0) {
 							// todo check match http or https
 						} else {
-							setLocalErrorMsg(
-									"{\"status\":\"error\",\"result\":4005,\"msg\":\"Web callback URL is no currect!\"}");
+							setLocalErrorMsg("{\"status\":\"error\",\"result\":4005,\"msg\":\"Web callback URL is no currect!\"}");
 							return result;
 						}
 					}
@@ -288,8 +286,7 @@ public class PartnerApi {
 		LOG.debug(body.getOrderNumber());
 		try {
 			con = ConnectionService.getInstance().getConnectionForLocal();
-			ps = con.prepareStatement(
-					"insert into `log_sync_generals` (id,logId,para01,para02,para03) values (?,?,?,?,?)");
+			ps = con.prepareStatement("insert into `log_sync_generals` (id,logId,para01,para02,para03) values (?,?,?,?,?)");
 			int m = 1;
 			ps.setLong(m++, this.getId());
 			ps.setInt(m++, LOG_ID);
