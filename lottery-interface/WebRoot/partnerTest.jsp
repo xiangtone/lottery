@@ -13,7 +13,7 @@
 	</script>
 	<form id="partnerTest" action="api.jsp" method="post">
 		partnerId:<input id="partnerId" name="partnerId"
-			value="40a2154b89485d89c7ebeb0fe251c75f" size="40"> <br>
+			value="<%=(request.getParameter("partnerId")!=null&&request.getParameter("partnerId").length()==32?request.getParameter("partnerId"):"254b11b646400585c04d851910cb7051")%>" size="40"> <br>
 		<input type="hidden" id="transData" name="transData">
 		partnerDebug:<select id="partnerDebug" name="partnerDebug">
 		<option value="true" selected>true</option>
@@ -33,7 +33,7 @@
 		size="40">
 	<br> userPhoneNumber:
 	<input id="userPhoneNumber" name="userPhoneNumber" value="18025314707"
-		size="40">
+		size="40">请填入自己的手机号码进行完整流程(包含注册和银行卡绑定)测试
 	<br> userName:
 	<input id="userName" name="userName" value="" size="40">
 	<br> lotteryId:
@@ -46,7 +46,7 @@
 		readonly>
 	<br> partnerCallbackURL:
 	<input id="partnerCallbackURL" name="partnerCallbackURL"
-		value="http://a.yt.youkala.com:38080/partnerCallback.jsp" size="40">
+		value="http://api.youkala.com/partnerCallbackTest.jsp" size="40">
 	<br> betMode:
 	<input id="betMode" name="betMode" value="101" size="40">
 	<br> betDetail:
