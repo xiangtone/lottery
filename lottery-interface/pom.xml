@@ -145,5 +145,14 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 		</profile>
+		<profile>
+			<id>api</id>
+			<properties>
+				<runtime.env>packageConfig\api</runtime.env>
+				<final.name>api.youkala.com</final.name>
+				<ftp.server.id>a.yt.youkala.com</ftp.server.id>
+				<ftp.to.url>sftp://120.24.38.160:22/data/server/docker_apps/api.youkala.com/swap_dir</ftp.to.url>
+			</properties>
+		</profile>
 	</profiles>
 </project>
