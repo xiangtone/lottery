@@ -1,8 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
-<%@page import="org.x.PreparePostToWeb"%>
 <%@page import="org.x.PartnerApi"%>
-<%@page import="org.common.util.ThreadPool"%>
-<%@page import="org.x.PostLogInsert"%>
 <%@page import="org.apache.log4j.Logger"%>
 <%
 	Logger LOG = Logger.getLogger(this.getClass());
@@ -29,7 +26,6 @@
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	PreparePostToWeb preparePostToWeb = new PreparePostToWeb();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">

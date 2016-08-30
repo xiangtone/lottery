@@ -3,11 +3,13 @@
 <%@page import="org.apache.log4j.Logger"%>
 <%@page import="com.alibaba.fastjson.JSON"%>
 <%@page import="com.alibaba.fastjson.serializer.SerializerFeature"%>
+<%@page import="org.x.PartnerApi"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	
+	PartnerApi partnerApi = new PartnerApi();
 	Logger LOG = Logger.getLogger(this.getClass());
 	LOG.debug(request.getParameter("channelId"));
 	DecryptWebCallback decryptWebCallback = new DecryptWebCallback();
@@ -20,6 +22,7 @@
 					: request.getRemoteAddr());
 	decryptWebCallback.setMethod("test");
 	decryptWebCallback.process();
+	
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">

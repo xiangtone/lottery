@@ -1,7 +1,7 @@
 <%@ page language="java" pageEncoding="utf-8"%>
-<%@ page import = "org.x.PartnerApi" %>
+<%@page import="org.x.PartnerApi"%>
 <%
-PartnerApi partnerApi = new PartnerApi();
-out.println(request.getParameter(partnerApi.getPartnerId()));
-out.println(request.getParameter("transData"));
+out.println("partnerId:"+request.getParameter("partnerId"));
+out.println("<br>");
+out.println("transData:"+request.getParameter("transData"));	
 %>

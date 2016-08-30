@@ -46,11 +46,11 @@
 		readonly>
 	<br> partnerCallbackURL:
 	<input id="partnerCallbackURL" name="partnerCallbackURL"
-		value="http://" size="40">
+		value="http://a.yt.youkala.com:38080/partnerCallback.jsp" size="40">
 	<br> betMode:
 	<input id="betMode" name="betMode" value="101" size="40">
 	<br> betDetail:
-	<input id="betDetail" name="betDetail" value=""
+	<input id="betDetail" name="betDetail" value="001060102061016230114"
 		size="40">
 	<br>
 	

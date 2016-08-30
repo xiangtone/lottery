@@ -106,10 +106,6 @@ public class PartnerApi {
 		this.partnerTransData = partnerTransData;
 	}
 
-	public PartnerApi() throws RsaEncryptException {
-		super();
-	}
-
 	public void process() throws RsaEncryptException {
 		// check parameters;
 		if (checkParameters()) {
@@ -208,13 +204,19 @@ public class PartnerApi {
 					setLocalErrorMsg("{\"status\":\"error\",\"result\":4002,\"msg\":\"decrypt order info failure!\"}");
 					return result;
 				} else {
-					if (partnerOrderInfo.getPartnerCallbackURL() != null
-							&& partnerOrderInfo.getPartnerCallbackURL().length() > 0) {
-						// todo check match http or https
-					} else {
+					if (partnerInfo.getRealBalance() <= 0 && partnerInfo.getCreditBalance() <= -1000) {
 						setLocalErrorMsg(
-								"{\"status\":\"error\",\"result\":4005,\"msg\":\"Web callback URL is no currect!\"}");
+								"{\"status\":\"error\",\"result\":4003,\"msg\":\"partner balances is not enough !\"}");
 						return result;
+					} else {
+						if (partnerOrderInfo.getPartnerCallbackURL() != null
+								&& partnerOrderInfo.getPartnerCallbackURL().length() > 0) {
+							// todo check match http or https
+						} else {
+							setLocalErrorMsg(
+									"{\"status\":\"error\",\"result\":4005,\"msg\":\"Web callback URL is no currect!\"}");
+							return result;
+						}
 					}
 				}
 			}
@@ -282,13 +284,16 @@ public class PartnerApi {
 
 	private void partnerOrderInfoLogInsert() {
 		setId(Long.parseLong(body.getOrderNumber()));
+		LOG.debug(this.getPartnerId());
 		LOG.debug(body.getOrderNumber());
 		try {
 			con = ConnectionService.getInstance().getConnectionForLocal();
-			ps = con.prepareStatement("insert into `log_sync_generals` (id,logId,para01,para02) values (?,?,?,?)");
+			ps = con.prepareStatement(
+					"insert into `log_sync_generals` (id,logId,para01,para02,para03) values (?,?,?,?,?)");
 			int m = 1;
 			ps.setLong(m++, this.getId());
 			ps.setInt(m++, LOG_ID);
+			ps.setString(m++, this.getPartnerId());
 			ps.setString(m++, partnerTransData);
 			ps.setString(m++, partnerOrderInfo.getPartnerCallbackURL());
 			ps.executeUpdate();
