@@ -68,24 +68,10 @@ public class DecryptWebCallback {
 	}
 
 	public void process() throws Exception {
-		// erroMsgCallback();
 		decrypt();
 		queryPartnerOrderInfoFromDb();
 		partnerTransDataConfig();
 	}
-
-	// private void erroMsgCallback() throws Exception {
-	// partnerInfo =
-	// PartnerService.getInstance().getNameLoadingCache(partnerId);
-	// if(partnerInfo.getRealBalance()<=0&&partnerInfo.getCreditBalance()<=0){
-	// result.getBody().setResult(4003);
-	// result.getBody().setResultDesc("合作方余额不足！");
-	// }
-	// if(!(partnerInfo.getState().equals(method))){
-	// result.getBody().setResult(4004);
-	// result.getBody().setResultDesc("合作方状态不可用！");
-	// }
-	// }
 
 	private void partnerTransDataConfig() throws RsaEncryptException {
 		LOG.debug(partnerOrderInfoJson);

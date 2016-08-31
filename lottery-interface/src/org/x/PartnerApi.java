@@ -204,19 +204,19 @@ public class PartnerApi {
 					setLocalErrorMsg("{\"status\":\"error\",\"result\":4002,\"msg\":\"decrypt order info failure!\"}");
 					return result;
 				} else {
-					if (partnerInfo.getRealBalance() <= 0 && partnerInfo.getCreditBalance() <= -1000) {
-						setLocalErrorMsg("{\"status\":\"error\",\"result\":4003,\"msg\":\"partner balances is not enough !\"}");
-						return result;
+					if (partnerOrderInfo.getPartnerCallbackURL() != null
+							&& partnerOrderInfo.getPartnerCallbackURL().length() > 0) {
+						// todo check match http or https
 					} else {
-						if (partnerOrderInfo.getPartnerCallbackURL() != null
-								&& partnerOrderInfo.getPartnerCallbackURL().length() > 0) {
-							// todo check match http or https
-						} else {
-							setLocalErrorMsg("{\"status\":\"error\",\"result\":4005,\"msg\":\"Web callback URL is no currect!\"}");
-							return result;
-						}
+						setLocalErrorMsg(
+								"{\"status\":\"error\",\"result\":4005,\"msg\":\"Web callback URL is no currect!\"}");
+						return result;
 					}
 				}
+			}
+			if (partnerInfo.getRealBalance() <= 0 && partnerInfo.getCreditBalance() <= -1000) {
+				setLocalErrorMsg("{\"status\":\"error\",\"result\":4003,\"msg\":\"partner balances is not enough !\"}");
+				return result;
 			}
 			result = checkParnterId();
 		} catch (Exception e) {
@@ -284,9 +284,14 @@ public class PartnerApi {
 		setId(Long.parseLong(body.getOrderNumber()));
 		LOG.debug(this.getPartnerId());
 		LOG.debug(body.getOrderNumber());
+		if (body.getNumberSelectType() == 1) {
+			partnerOrderInfo.setBetInfoList(null);
+		}
+		partnerTransData = JSON.toJSONString(partnerOrderInfo);
 		try {
 			con = ConnectionService.getInstance().getConnectionForLocal();
-			ps = con.prepareStatement("insert into `log_sync_generals` (id,logId,para01,para02,para03) values (?,?,?,?,?)");
+			ps = con.prepareStatement(
+					"insert into `log_sync_generals` (id,logId,para01,para02,para03) values (?,?,?,?,?)");
 			int m = 1;
 			ps.setLong(m++, this.getId());
 			ps.setInt(m++, LOG_ID);
@@ -308,5 +313,4 @@ public class PartnerApi {
 			}
 		}
 	}
-
 }

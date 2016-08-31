@@ -23,8 +23,8 @@
 	</form>
 	appId:
 	<input id="appId" name="appId" value="" size="40">
-	<br> partnerIdchannelId:
-	<input id="partnerIdChannelId" name="partnerIdChannelId" value=""
+	<br>partnerChannelId:
+	<input id="partnerChannelId" name="partnerChannelId" value=""
 		size="40">
 	<br> partnerReserved:
 	<input id="partnerReserved" name="partnerReserved" value="" size="40">
@@ -32,7 +32,7 @@
 	<input id="partnerOrderNumber" name="partnerOrderNumber" value=""
 		size="40">
 	<br> userPhoneNumber:
-	<input id="userPhoneNumber" name="userPhoneNumber" value="18025314707"
+	<input id="userPhoneNumber" name="userPhoneNumber" value="13530274162"
 		size="40"><br>请填入自己的手机号码进行完整流程(包含注册和银行卡绑定)测试<br>测试环境：<br>
 点击发送验证码之后，输入111111，进行测试环境注册。<br>
 绑定身份证110105199312021302	苏三，省份选江苏，其他信息(银行卡等)随便填就可以。
@@ -52,7 +52,7 @@
 	<br> betMode:
 	<input id="betMode" name="betMode" value="101" size="40">
 	<br> betDetail:
-	<input id="betDetail" name="betDetail" value="001060102061016230114"
+	<input id="betDetail" name="betDetail" value=""
 		size="40">
 	<br>
 	
