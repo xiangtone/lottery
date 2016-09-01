@@ -13,7 +13,7 @@ import org.common.util.ThreadPool;
 import org.x.info.PageAction;
 import org.x.info.PartnerInfo;
 import org.x.info.PartnerOrderInfo;
-import org.x.service.DaoService;
+import org.x.utils.ConnectionServiceLottery;
 
 import com.alibaba.fastjson.JSON;
 import com.iwt.vasoss.common.security.exception.RsaEncryptException;
@@ -39,8 +39,6 @@ public class DecryptWebCallback {
 	private PreparedStatement ps = null;
 	private Connection con = null;
 	private ResultSet rs = null;
-
-	private DaoService daoService = new DaoService();
 
 	private PointExchangeLotteryResultReq result = new PointExchangeLotteryResultReq();
 	private String partnerOrderInfoJson;
@@ -71,6 +69,30 @@ public class DecryptWebCallback {
 		decrypt();
 		queryPartnerOrderInfoFromDb();
 		partnerTransDataConfig();
+		updateRealBalance();
+	}
+
+	private void updateRealBalance() {
+		try {
+			con = ConnectionServiceLottery.getInstance().getConnectionForLottery();
+			String sql = "update `tbl_partners` set realBalance=realBalance-unitPrice,creditBalance=realBalance where id=?";
+			ps = con.prepareStatement(sql);
+			int m = 1;
+			ps.setString(m++, this.partnerId);
+			ps.executeUpdate();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	private void partnerTransDataConfig() throws RsaEncryptException {
@@ -83,9 +105,9 @@ public class DecryptWebCallback {
 		Map<String, String> entity = new LinkedHashMap<String, String>();
 		Map<String, Object> transDataMap = new LinkedHashMap<String, Object>();
 		transDataMap.put("transDateTime", result.getBody().getTransDateTime());
+		transDataMap.put("appId", partnerOrderInfo.getAppId());
 		transDataMap.put("partnerChannelId", partnerOrderInfo.getPartnerChannelId());
 		transDataMap.put("partnerReserved", partnerOrderInfo.getPartnerReserved());
-		transDataMap.put("appId", partnerOrderInfo.getAppId());
 		transDataMap.put("partnerOrderNumber", partnerOrderInfo.getPartnerOrderNumber());
 		transDataMap.put("orderStatus", this.getMethod());
 		transDataMap.put("orderNumber", result.getBody().getOrderNumber());

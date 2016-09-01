@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -14,10 +16,12 @@ import org.apache.log4j.Logger;
 import org.common.util.ConfigManager;
 import org.common.util.ConnectionService;
 import org.common.util.GenerateIdService;
+import org.x.info.BackBetBodyInfo;
 import org.x.info.PageAction;
 import org.x.info.PartnerInfo;
 import org.x.info.PartnerOrderInfo;
 import org.x.service.PartnerService;
+import org.x.utils.ConnectionServiceLottery;
 
 import com.alibaba.fastjson.JSON;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
@@ -53,6 +57,7 @@ public class PartnerApi {
 	private PartnerOrderInfo partnerOrderInfo;
 	private ClientUtilInterface clientUtil;
 	private ClientTransServiceInterface clientTransService;
+	private List<BackBetBodyInfo> betInfoList = new ArrayList<BackBetBodyInfo>();
 	private PreparedStatement ps = null;
 	private Connection con = null;
 	private static final int LOG_ID = 3001;
@@ -111,9 +116,33 @@ public class PartnerApi {
 		if (checkParameters()) {
 			LOG.debug(" checkParameters check ok");
 			processToYT();
+			updateCreditBalance();
 		} else {
 			LOG.debug("ip:" + ip + "  . check parameter fail .");
 			return;
+		}
+	}
+
+	private void updateCreditBalance() {
+		try {
+			con = ConnectionServiceLottery.getInstance().getConnectionForLottery();
+			String sql = "update `tbl_partners` set creditBalance=creditBalance-unitPrice where id=?";
+			ps = con.prepareStatement(sql);
+			int m = 1;
+			ps.setString(m++, this.getPartnerId());
+			ps.executeUpdate();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -267,14 +296,10 @@ public class PartnerApi {
 			body.setGameId("10001");
 			body.setNumberSelectType(1);
 			body.setBetTotalAmount(1);
-
+			// 单式自选
 			// body.setNumberSelectType(12);
-			// body.setBetTotalAmount(4);
-			// BetInfo betInfo = new BetInfo("101", "001060607091516260113" +
-			// "001060508091517180114"
-			// + "001060307081418300115" + "001060213141927310116");
-			// betInfoList.add(betInfo);
-			// body.setBetInfoList(betInfoList);
+			// body.setBetTotalAmount(1);
+			// body.setBetInfoList(partnerOrderInfo.getBetInfoList());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
