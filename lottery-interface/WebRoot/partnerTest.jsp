@@ -32,7 +32,7 @@
 	<input id="partnerOrderNumber" name="partnerOrderNumber" value=""
 		size="40">
 	<br> userPhoneNumber:
-	<input id="userPhoneNumber" name="userPhoneNumber" value="13530274162"
+	<input id="userPhoneNumber" name="userPhoneNumber" value="<%=(request.getParameter("userPhoneNumber")!=null&&request.getParameter("userPhoneNumber").length()==32?request.getParameter("userPhoneNumber"):"13530274162")%>"
 		size="40"><br>请填入自己的手机号码进行完整流程(包含注册和银行卡绑定)测试<br>测试环境：<br>
 点击发送验证码之后，输入111111，进行测试环境注册。<br>
 绑定身份证110105199312021302	苏三，省份选江苏，其他信息(银行卡等)随便填就可以。
