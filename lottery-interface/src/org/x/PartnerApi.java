@@ -49,6 +49,7 @@ public class PartnerApi {
 
 	private PageAction pageAction;
 	private String localErrorMsg; // can not do callback error message
+	private String callbackErrorMsg; // can do callback error message
 
 	private String partnerId;
 	private String partnerTransData;
@@ -115,8 +116,25 @@ public class PartnerApi {
 		// check parameters;
 		if (checkParameters()) {
 			LOG.debug(" checkParameters check ok");
-			processToYT();
-			updateCreditBalance();
+			if (partnerInfo.getRealBalance() < partnerInfo.getUnitPrice() || partnerInfo.getCreditBalance() < -2000) {
+				// setLocalErrorMsg("{\"status\":\"error\",\"result\":4003,\"msg\":\"balances
+				// is not enough !\"}");
+				setCallbackErrorMsg("{\"status\":\"error\",\"result\":4003,\"msg\":\"balances is not enough !\"}");
+				pageAction = new PageAction();
+				pageAction.setUrl(partnerOrderInfo.getPartnerCallbackURL());
+				LOG.debug(pageAction.getUrl());
+				Map<String, String> entity = new HashMap<String, String>();
+				String transData = JSON.toJSONString(partnerOrderInfo);
+				entity.put("partnerId", partnerId);
+				entity.put("transData", transData);
+				entity.put("callbackErrorMsg", this.getCallbackErrorMsg().toString());
+				pageAction.setEntity(entity);
+			} else {
+				processToYT();
+				if (partnerInfo.getState().equals("web") || partnerInfo.getState().equals("h5")) {
+					updateCreditBalance();
+				}
+			}
 		} else {
 			LOG.debug("ip:" + ip + "  . check parameter fail .");
 			return;
@@ -243,10 +261,6 @@ public class PartnerApi {
 					}
 				}
 			}
-			if (partnerInfo.getRealBalance() <= 0 && partnerInfo.getCreditBalance() <= -1000) {
-				setLocalErrorMsg("{\"status\":\"error\",\"result\":4003,\"msg\":\"partner balances is not enough !\"}");
-				return result;
-			}
 			result = checkParnterId();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -294,12 +308,18 @@ public class PartnerApi {
 			body.setUserPhoneNumber(partnerOrderInfo.getUserPhoneNumber());// wanghua
 			body.setPointMerchantId("1200100001");
 			body.setGameId("10001");
-			body.setNumberSelectType(1);
-			body.setBetTotalAmount(1);
-			// 单式自选
-			// body.setNumberSelectType(12);
-			// body.setBetTotalAmount(1);
-			// body.setBetInfoList(partnerOrderInfo.getBetInfoList());
+			switch (partnerOrderInfo.getNumberSelectType()) {
+			case 1:
+				body.setNumberSelectType(1);
+				body.setBetTotalAmount(1);
+				break;
+			case 2:
+				// 单式自选
+				body.setNumberSelectType(12);
+				body.setBetTotalAmount(1);
+				body.setBetInfoList(partnerOrderInfo.getBetInfoList());
+				break;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -337,5 +357,13 @@ public class PartnerApi {
 				}
 			}
 		}
+	}
+
+	public String getCallbackErrorMsg() {
+		return callbackErrorMsg;
+	}
+
+	public void setCallbackErrorMsg(String callbackErrorMsg) {
+		this.callbackErrorMsg = callbackErrorMsg;
 	}
 }

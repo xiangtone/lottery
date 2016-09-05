@@ -69,7 +69,9 @@ public class DecryptWebCallback {
 		decrypt();
 		queryPartnerOrderInfoFromDb();
 		partnerTransDataConfig();
-		updateRealBalance();
+		if (!this.getMethod().equals("test")) {
+			updateRealBalance();
+		}
 	}
 
 	private void updateRealBalance() {
