@@ -120,12 +120,12 @@ public class PartnerApi {
 		if (checkParameters()) {
 			LOG.debug(" checkParameters check ok");
 			if (partnerInfo.getRealBalance() < partnerInfo.getUnitPrice() || partnerInfo.getCreditBalance() < -2000) {
-				errorBalanceNotEnough();
+				processToPartner(4003, "Balances is not enough!");
 			}
 			queryPartnerOrderNumberFromDb();
 			LOG.debug(partnerOrderNumber);
 			if (partnerOrderNumber != null || partnerOrderInfo.getPartnerOrderNumber().equals(partnerOrderNumber)) {
-				errorPartnerOrderNumberRepeated();
+				processToPartner(4007, "partnerOrderNumber is repeated!");
 			} else {
 				processToYT();
 				if (partnerInfo.getState().equals("web") || partnerInfo.getState().equals("h5")) {
@@ -138,7 +138,7 @@ public class PartnerApi {
 		}
 	}
 
-	private void errorPartnerOrderNumberRepeated() {
+	private void processToPartner(int result, String resultDesc) {
 		pageAction = new PageAction();
 		pageAction.setUrl(partnerOrderInfo.getPartnerCallbackURL());
 		Map<String, String> entity = new HashMap<String, String>();
@@ -150,32 +150,8 @@ public class PartnerApi {
 		transDataMap.put("partnerOrderNumber", partnerOrderInfo.getPartnerOrderNumber());
 		transDataMap.put("orderStatus", "");
 		transDataMap.put("orderNumber", "");
-		transDataMap.put("result", 4007);
-		transDataMap.put("resultDesc", "partnerOrderNumber is repeated!");
-		transDataMap.put("issueNumber", "");
-		transDataMap.put("betSuccAmount", "");
-		transDataMap.put("orderAcceptTime", "");
-		transDataMap.put("ticketInfoList", "");
-		String transDataJson = JSON.toJSONString(transDataMap);
-		entity.put("partnerId", partnerId);
-		entity.put("transData", transDataJson);
-		pageAction.setEntity(entity);
-	}
-
-	private void errorBalanceNotEnough() {
-		pageAction = new PageAction();
-		pageAction.setUrl(partnerOrderInfo.getPartnerCallbackURL());
-		Map<String, String> entity = new HashMap<String, String>();
-		Map<String, Object> transDataMap = new LinkedHashMap<String, Object>();
-		transDataMap.put("transDateTime", "");
-		transDataMap.put("appId", partnerOrderInfo.getAppId());
-		transDataMap.put("partnerChannelId", partnerOrderInfo.getPartnerChannelId());
-		transDataMap.put("partnerReserved", partnerOrderInfo.getPartnerReserved());
-		transDataMap.put("partnerOrderNumber", partnerOrderInfo.getPartnerOrderNumber());
-		transDataMap.put("orderStatus", "");
-		transDataMap.put("orderNumber", "");
-		transDataMap.put("result", 4003);
-		transDataMap.put("resultDesc", "Balances is not enough!");
+		transDataMap.put("result", result);
+		transDataMap.put("resultDesc", resultDesc);
 		transDataMap.put("issueNumber", "");
 		transDataMap.put("betSuccAmount", "");
 		transDataMap.put("orderAcceptTime", "");
@@ -192,10 +168,10 @@ public class PartnerApi {
 		ResultSet rs = null;
 		try {
 			con = ConnectionService.getInstance().getConnectionForLocal();
-			String sql = "select * from `log_sync_generals` where id=?";
+			String sql = "select * from `log_sync_generals` where para04=?";
 			ps = con.prepareStatement(sql);
 			int m = 1;
-			ps.setString(m++, body.getOrderNumber());
+			ps.setString(m++, partnerOrderInfo.getPartnerOrderNumber());
 			rs = ps.executeQuery();
 			if (rs.next()) {
 				partnerOrderNumber = rs.getString("para04");
