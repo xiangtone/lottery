@@ -192,10 +192,10 @@ public class PartnerApi {
 		ResultSet rs = null;
 		try {
 			con = ConnectionService.getInstance().getConnectionForLocal();
-			String sql = "select * from `log_sync_generals` where id=?";
+			String sql = "select * from `log_sync_generals` where para04=?";
 			ps = con.prepareStatement(sql);
 			int m = 1;
-			ps.setString(m++, body.getOrderNumber());
+			ps.setString(m++, partnerOrderInfo.getPartnerOrderNumber());
 			rs = ps.executeQuery();
 			if (rs.next()) {
 				partnerOrderNumber = rs.getString("para04");
