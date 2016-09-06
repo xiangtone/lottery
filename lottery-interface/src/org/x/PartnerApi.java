@@ -3,10 +3,12 @@ package org.x;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -49,7 +51,6 @@ public class PartnerApi {
 
 	private PageAction pageAction;
 	private String localErrorMsg; // can not do callback error message
-	private String callbackErrorMsg; // can do callback error message
 
 	private String partnerId;
 	private String partnerTransData;
@@ -63,6 +64,8 @@ public class PartnerApi {
 	private Connection con = null;
 	private static final int LOG_ID = 3001;
 	private Long id;
+
+	private String partnerOrderNumber;
 
 	public Long getId() {
 		return id;
@@ -117,27 +120,98 @@ public class PartnerApi {
 		if (checkParameters()) {
 			LOG.debug(" checkParameters check ok");
 			if (partnerInfo.getRealBalance() < partnerInfo.getUnitPrice() || partnerInfo.getCreditBalance() < -2000) {
-				// setLocalErrorMsg("{\"status\":\"error\",\"result\":4003,\"msg\":\"balances
-				// is not enough !\"}");
-				setCallbackErrorMsg("{\"status\":\"error\",\"result\":4003,\"msg\":\"balances is not enough !\"}");
-				pageAction = new PageAction();
-				pageAction.setUrl(partnerOrderInfo.getPartnerCallbackURL());
-				LOG.debug(pageAction.getUrl());
-				Map<String, String> entity = new HashMap<String, String>();
-				String transData = JSON.toJSONString(partnerOrderInfo);
-				entity.put("partnerId", partnerId);
-				entity.put("transData", transData);
-				entity.put("callbackErrorMsg", this.getCallbackErrorMsg().toString());
-				pageAction.setEntity(entity);
+				errorBalanceNotEnough();
+			}
+			queryPartnerOrderNumberFromDb();
+			LOG.debug(partnerOrderNumber);
+			if (partnerOrderNumber != null || partnerOrderInfo.getPartnerOrderNumber().equals(partnerOrderNumber)) {
+				errorPartnerOrderNumberRepeated();
 			} else {
 				processToYT();
 				if (partnerInfo.getState().equals("web") || partnerInfo.getState().equals("h5")) {
 					updateCreditBalance();
+				} else {
+					LOG.debug("ip:" + ip + "  . check parameter fail .");
+					return;
 				}
 			}
-		} else {
-			LOG.debug("ip:" + ip + "  . check parameter fail .");
-			return;
+		}
+	}
+
+	private void errorPartnerOrderNumberRepeated() {
+		pageAction = new PageAction();
+		pageAction.setUrl(partnerOrderInfo.getPartnerCallbackURL());
+		Map<String, String> entity = new HashMap<String, String>();
+		Map<String, Object> transDataMap = new LinkedHashMap<String, Object>();
+		transDataMap.put("transDateTime", "");
+		transDataMap.put("appId", partnerOrderInfo.getAppId());
+		transDataMap.put("partnerChannelId", partnerOrderInfo.getPartnerChannelId());
+		transDataMap.put("partnerReserved", partnerOrderInfo.getPartnerReserved());
+		transDataMap.put("partnerOrderNumber", partnerOrderInfo.getPartnerOrderNumber());
+		transDataMap.put("orderStatus", "");
+		transDataMap.put("orderNumber", "");
+		transDataMap.put("result", 4007);
+		transDataMap.put("resultDesc", "partnerOrderNumber is repeated!");
+		transDataMap.put("issueNumber", "");
+		transDataMap.put("betSuccAmount", "");
+		transDataMap.put("orderAcceptTime", "");
+		transDataMap.put("ticketInfoList", "");
+		String transDataJson = JSON.toJSONString(transDataMap);
+		entity.put("partnerId", partnerId);
+		entity.put("transData", transDataJson);
+		pageAction.setEntity(entity);
+	}
+
+	private void errorBalanceNotEnough() {
+		pageAction = new PageAction();
+		pageAction.setUrl(partnerOrderInfo.getPartnerCallbackURL());
+		Map<String, String> entity = new HashMap<String, String>();
+		Map<String, Object> transDataMap = new LinkedHashMap<String, Object>();
+		transDataMap.put("transDateTime", "");
+		transDataMap.put("appId", partnerOrderInfo.getAppId());
+		transDataMap.put("partnerChannelId", partnerOrderInfo.getPartnerChannelId());
+		transDataMap.put("partnerReserved", partnerOrderInfo.getPartnerReserved());
+		transDataMap.put("partnerOrderNumber", partnerOrderInfo.getPartnerOrderNumber());
+		transDataMap.put("orderStatus", "");
+		transDataMap.put("orderNumber", "");
+		transDataMap.put("result", 4003);
+		transDataMap.put("resultDesc", "Balances is not enough!");
+		transDataMap.put("issueNumber", "");
+		transDataMap.put("betSuccAmount", "");
+		transDataMap.put("orderAcceptTime", "");
+		transDataMap.put("ticketInfoList", "");
+		String transDataJson = JSON.toJSONString(transDataMap);
+		entity.put("partnerId", partnerId);
+		entity.put("transData", transDataJson);
+		pageAction.setEntity(entity);
+	}
+
+	private void queryPartnerOrderNumberFromDb() {
+		PreparedStatement ps = null;
+		Connection con = null;
+		ResultSet rs = null;
+		try {
+			con = ConnectionService.getInstance().getConnectionForLocal();
+			String sql = "select * from `log_sync_generals` where id=?";
+			ps = con.prepareStatement(sql);
+			int m = 1;
+			ps.setString(m++, body.getOrderNumber());
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				partnerOrderNumber = rs.getString("para04");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -336,13 +410,14 @@ public class PartnerApi {
 		try {
 			con = ConnectionService.getInstance().getConnectionForLocal();
 			ps = con.prepareStatement(
-					"insert into `log_sync_generals` (id,logId,para01,para02,para03) values (?,?,?,?,?)");
+					"insert into `log_sync_generals` (id,logId,para01,para02,para03,para04) values (?,?,?,?,?,?)");
 			int m = 1;
 			ps.setLong(m++, this.getId());
 			ps.setInt(m++, LOG_ID);
 			ps.setString(m++, this.getPartnerId());
 			ps.setString(m++, partnerTransData);
 			ps.setString(m++, partnerOrderInfo.getPartnerCallbackURL());
+			ps.setString(m++, partnerOrderInfo.getPartnerOrderNumber());
 			ps.executeUpdate();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -359,11 +434,12 @@ public class PartnerApi {
 		}
 	}
 
-	public String getCallbackErrorMsg() {
-		return callbackErrorMsg;
+	public String getPartnerOrderNumber() {
+		return partnerOrderNumber;
 	}
 
-	public void setCallbackErrorMsg(String callbackErrorMsg) {
-		this.callbackErrorMsg = callbackErrorMsg;
+	public void setPartnerOrderNumber(String partnerOrderNumber) {
+		this.partnerOrderNumber = partnerOrderNumber;
 	}
+
 }

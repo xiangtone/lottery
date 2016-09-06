@@ -53,7 +53,7 @@
 		for(String key : partnerApi.getPageAction().getEntity().keySet()){
 			%>
 			<input name="<%=key %>" type="hidden"
-			value="<%=partnerApi.getPageAction().getEntity().get(key)%>">
+			value='<%=partnerApi.getPageAction().getEntity().get(key)%>'>
 			<%
 		}
 		%>
