@@ -23,6 +23,7 @@ import org.x.info.PageAction;
 import org.x.info.PartnerInfo;
 import org.x.info.PartnerOrderInfo;
 import org.x.service.PartnerService;
+import org.x.utils.AES;
 import org.x.utils.ConnectionServiceLottery;
 
 import com.alibaba.fastjson.JSON;
@@ -115,7 +116,7 @@ public class PartnerApi {
 		this.partnerTransData = partnerTransData;
 	}
 
-	public void process() throws RsaEncryptException {
+	public void process() throws Exception {
 		// check parameters;
 		if (checkParameters()) {
 			LOG.debug(" checkParameters check ok");
@@ -123,7 +124,6 @@ public class PartnerApi {
 				processToPartner(4003, "Balances is not enough!");
 			} else {
 				queryPartnerOrderNumberFromDb();
-				LOG.debug(partnerOrderNumber);
 				if (partnerOrderNumber != null || partnerOrderInfo.getPartnerOrderNumber().equals(partnerOrderNumber)) {
 					processToPartner(4007, "partnerOrderNumber is repeated!");
 				} else {
@@ -139,7 +139,7 @@ public class PartnerApi {
 		}
 	}
 
-	private void processToPartner(int result, String resultDesc) {
+	private void processToPartner(int result, String resultDesc) throws Exception {
 		pageAction = new PageAction();
 		pageAction.setUrl(partnerOrderInfo.getPartnerCallbackURL());
 		Map<String, String> entity = new HashMap<String, String>();
@@ -158,6 +158,9 @@ public class PartnerApi {
 		transDataMap.put("orderAcceptTime", "");
 		transDataMap.put("ticketInfoList", "");
 		String transDataJson = JSON.toJSONString(transDataMap);
+		if (partnerInfo.getKeyAES() != null && partnerInfo.getKeyAES().length() > 0) {
+			transDataJson = AES.Encrypt(partnerTransData, partnerInfo.getKeyAES());
+		}
 		entity.put("partnerId", partnerId);
 		entity.put("transData", transDataJson);
 		pageAction.setEntity(entity);
@@ -297,7 +300,6 @@ public class PartnerApi {
 				return result;
 			} else {
 				processTransData();
-				LOG.debug(partnerOrderInfo);
 				if (partnerOrderInfo == null) {
 					setLocalErrorMsg("{\"status\":\"error\",\"result\":4002,\"msg\":\"decrypt order info failure!\"}");
 					return result;
@@ -320,10 +322,11 @@ public class PartnerApi {
 		return result;
 	}
 
-	private void processTransData() {
+	private void processTransData() throws Exception {
 		String json = partnerTransData;
 		if (partnerInfo.getKeyAES() != null && partnerInfo.getKeyAES().length() > 0) {
 			// todo decrypt
+			json = AES.Decrypt(partnerTransData, partnerInfo.getKeyAES());
 		}
 		partnerOrderInfo = JSON.parseObject(json, PartnerOrderInfo.class);
 	}
@@ -417,6 +420,14 @@ public class PartnerApi {
 
 	public void setPartnerOrderNumber(String partnerOrderNumber) {
 		this.partnerOrderNumber = partnerOrderNumber;
+	}
+
+	public PartnerInfo getPartnerInfo() {
+		return partnerInfo;
+	}
+
+	public void setPartnerInfo(PartnerInfo partnerInfo) {
+		this.partnerInfo = partnerInfo;
 	}
 
 }

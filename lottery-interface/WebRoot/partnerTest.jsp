@@ -13,7 +13,7 @@
 	</script>
 	<form id="partnerTest" action="api.jsp" method="post">
 		partnerId:<input id="partnerId" name="partnerId"
-			value="<%=(request.getParameter("partnerId")!=null&&request.getParameter("partnerId").length()==32?request.getParameter("partnerId"):"0ed1625f5fefde595d4f9ebd1ea0f155")%>" size="40"> <br>
+			value="<%=(request.getParameter("partnerId")!=null&&request.getParameter("partnerId").length()==32?request.getParameter("partnerId"):"254b11b646400585c04d851910cb7051")%>" size="40"> <br>
 		<input type="hidden" id="transData" name="transData">
 		partnerDebug:<select id="partnerDebug" name="partnerDebug">
 		<option value="true" selected>true</option>

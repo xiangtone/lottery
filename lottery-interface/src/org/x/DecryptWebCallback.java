@@ -13,10 +13,11 @@ import org.common.util.ThreadPool;
 import org.x.info.PageAction;
 import org.x.info.PartnerInfo;
 import org.x.info.PartnerOrderInfo;
+import org.x.service.PartnerService;
+import org.x.utils.AES;
 import org.x.utils.ConnectionServiceLottery;
 
 import com.alibaba.fastjson.JSON;
-import com.iwt.vasoss.common.security.exception.RsaEncryptException;
 import com.iwt.yt.api.trans.PointExchangeLotteryResultReq;
 import com.iwt.yt.api.trans.TicketInfo;
 import com.iwt.yt.plugin.ClientTransService;
@@ -97,7 +98,7 @@ public class DecryptWebCallback {
 		}
 	}
 
-	private void partnerTransDataConfig() throws RsaEncryptException {
+	private void partnerTransDataConfig() throws Exception {
 		LOG.debug(partnerOrderInfoJson);
 		partnerOrderInfo = JSON.parseObject(partnerOrderInfoJson, PartnerOrderInfo.class);
 		LOG.debug(partnerOrderInfo);
@@ -120,6 +121,10 @@ public class DecryptWebCallback {
 		transDataMap.put("orderAcceptTime", result.getBody().getOrderAcceptTime());
 		transDataMap.put("ticketInfoList", result.getBody().getTicketInfoList());
 		String transDataJson = JSON.toJSONString(transDataMap);
+		partnerInfo = PartnerService.getInstance().getNameLoadingCache(partnerId);
+		if (partnerInfo.getKeyAES() != null && partnerInfo.getKeyAES().length() > 0) {
+			transDataJson = AES.Encrypt(partnerOrderInfoJson, partnerInfo.getKeyAES());
+		}
 		entity.put("partnerId", partnerId);
 		entity.put("transData", transDataJson);
 		LOG.debug(entity);
