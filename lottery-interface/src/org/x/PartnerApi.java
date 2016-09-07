@@ -121,20 +121,21 @@ public class PartnerApi {
 			LOG.debug(" checkParameters check ok");
 			if (partnerInfo.getRealBalance() < partnerInfo.getUnitPrice() || partnerInfo.getCreditBalance() < -2000) {
 				processToPartner(4003, "Balances is not enough!");
-			}
-			queryPartnerOrderNumberFromDb();
-			LOG.debug(partnerOrderNumber);
-			if (partnerOrderNumber != null || partnerOrderInfo.getPartnerOrderNumber().equals(partnerOrderNumber)) {
-				processToPartner(4007, "partnerOrderNumber is repeated!");
 			} else {
-				processToYT();
-				if (partnerInfo.getState().equals("web") || partnerInfo.getState().equals("h5")) {
-					updateCreditBalance();
+				queryPartnerOrderNumberFromDb();
+				LOG.debug(partnerOrderNumber);
+				if (partnerOrderNumber != null || partnerOrderInfo.getPartnerOrderNumber().equals(partnerOrderNumber)) {
+					processToPartner(4007, "partnerOrderNumber is repeated!");
 				} else {
-					LOG.debug("ip:" + ip + "  . check parameter fail .");
-					return;
+					processToYT();
+					if (partnerInfo.getState().equals("web") || partnerInfo.getState().equals("h5")) {
+						updateCreditBalance();
+					}
 				}
 			}
+		} else {
+			LOG.debug("ip:" + ip + "  . check parameter fail .");
+			return;
 		}
 	}
 
