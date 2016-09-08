@@ -5,11 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,7 +16,6 @@ import org.apache.log4j.Logger;
 import org.common.util.ConfigManager;
 import org.common.util.ConnectionService;
 import org.common.util.GenerateIdService;
-import org.x.info.BackBetBodyInfo;
 import org.x.info.PageAction;
 import org.x.info.PartnerInfo;
 import org.x.info.PartnerOrderInfo;
@@ -60,7 +57,6 @@ public class PartnerApi {
 	private PartnerOrderInfo partnerOrderInfo;
 	private ClientUtilInterface clientUtil;
 	private ClientTransServiceInterface clientTransService;
-	private List<BackBetBodyInfo> betInfoList = new ArrayList<BackBetBodyInfo>();
 	private PreparedStatement ps = null;
 	private Connection con = null;
 	private static final int LOG_ID = 3001;
@@ -123,13 +119,18 @@ public class PartnerApi {
 			if (partnerInfo.getRealBalance() < partnerInfo.getUnitPrice() || partnerInfo.getCreditBalance() < -2000) {
 				processToPartner(4003, "Balances is not enough!");
 			} else {
-				queryPartnerOrderNumberFromDb();
-				if (partnerOrderNumber != null || partnerOrderInfo.getPartnerOrderNumber().equals(partnerOrderNumber)) {
-					processToPartner(4007, "partnerOrderNumber is repeated!");
+				if (partnerInfo.getState().equals("closed")) {
+					processToPartner(4004, "Status is not available !");
 				} else {
-					processToYT();
-					if (partnerInfo.getState().equals("web") || partnerInfo.getState().equals("h5")) {
-						updateCreditBalance();
+					queryPartnerOrderNumberFromDb();
+					if (partnerOrderNumber != null
+							|| partnerOrderInfo.getPartnerOrderNumber().equals(partnerOrderNumber)) {
+						processToPartner(4007, "partnerOrderNumber is repeated!");
+					} else {
+						processToYT();
+						if (partnerInfo.getState().equals("web") || partnerInfo.getState().equals("h5")) {
+							updateCreditBalance();
+						}
 					}
 				}
 			}
@@ -223,7 +224,6 @@ public class PartnerApi {
 		String channelId = clientUtil.getChannelId();
 		String transSerialNumber = UUID.randomUUID().toString().replaceAll("-", "");
 		configBody();
-		// LOG.debug(body.getCallbackURL());
 		PointExchangeLotteryReq req = new PointExchangeLotteryReq();
 		req.setHead(new ReqHead(channelId));
 		req.setBody(body);
@@ -351,14 +351,6 @@ public class PartnerApi {
 			body.setChannelReserved("youka");
 			body.setOrderNumber(Long.toString(GenerateIdService.getInstance()
 					.generateNew(Integer.parseInt(ConfigManager.getConfigData("server.id")), "order", 1)));
-			// body.setUserPhoneNumber("15829553521");// zhuxizhe
-			// body.setUserPhoneNumber("18025314707");// fuming
-			// body.setUserPhoneNumber("15285960182");// fuming guizhou CMCC
-			// test
-			// body.setUserPhoneNumber("13603054736");// lijiaqi
-			// body.setUserPhoneNumber(inputUserPhoneNumber());
-			// body.setUserPhoneNumber("13923832816");//guojining
-			// body.setUserPhoneNumber("18676382886");//fengquchi
 			body.setUserPhoneNumber(partnerOrderInfo.getUserPhoneNumber());// wanghua
 			body.setPointMerchantId("1200100001");
 			body.setGameId("10001");
@@ -421,13 +413,4 @@ public class PartnerApi {
 	public void setPartnerOrderNumber(String partnerOrderNumber) {
 		this.partnerOrderNumber = partnerOrderNumber;
 	}
-
-	public PartnerInfo getPartnerInfo() {
-		return partnerInfo;
-	}
-
-	public void setPartnerInfo(PartnerInfo partnerInfo) {
-		this.partnerInfo = partnerInfo;
-	}
-
 }

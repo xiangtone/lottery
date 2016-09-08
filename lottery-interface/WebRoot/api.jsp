@@ -67,7 +67,7 @@
 			<%
 		}
 		%>
-		<button type="submit">submit</button>
+		<button type="submit" id="submit">submit</button>
 	</form>
 </body>
 <%
@@ -80,7 +80,8 @@ if (request.getParameter("partnerDebug")!=null&&request.getParameter("partnerDeb
 		out.println("transData:"+request.getParameter("transData"));
 	}
 }else{
-	out.println("<script>document.getElementById(\"formid\").submit();</script>");
+	out.println("<script>document.getElementById(\"submit\").style .visibility =\'hidden\';</script>");
+	out.println("<script>document.getElementById(\"submit\").click();</script>");
 }
  %>
 </html>
