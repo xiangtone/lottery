@@ -13,9 +13,9 @@ import org.common.util.ThreadPool;
 import org.x.info.PageAction;
 import org.x.info.PartnerInfo;
 import org.x.info.PartnerOrderInfo;
+import org.x.service.DaoService;
 import org.x.service.PartnerService;
 import org.x.utils.AES;
-import org.x.utils.ConnectionServiceLottery;
 
 import com.alibaba.fastjson.JSON;
 import com.iwt.yt.api.trans.PointExchangeLotteryResultReq;
@@ -36,6 +36,7 @@ public class DecryptWebCallback {
 	private PageAction pageAction = new PageAction();
 	private String method;
 	private PartnerInfo partnerInfo;
+	private DaoService daoService = new DaoService();
 
 	private PreparedStatement ps = null;
 	private Connection con = null;
@@ -70,31 +71,8 @@ public class DecryptWebCallback {
 		decrypt();
 		queryPartnerOrderInfoFromDb();
 		partnerTransDataConfig();
-		if (!this.getMethod().equals("test")) {
-			updateRealBalance();
-		}
-	}
-
-	private void updateRealBalance() {
-		try {
-			con = ConnectionServiceLottery.getInstance().getConnectionForLottery();
-			String sql = "update `tbl_partners` set realBalance=realBalance-unitPrice,creditBalance=realBalance where id=?";
-			ps = con.prepareStatement(sql);
-			int m = 1;
-			ps.setString(m++, this.partnerId);
-			ps.executeUpdate();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			if (con != null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+		if (!this.getMethod().equals("test") && result.getBody().getResult() == 0) {
+			daoService.updateRealBalance(partnerId);
 		}
 	}
 

@@ -3,7 +3,6 @@ package org.x;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,9 +18,9 @@ import org.common.util.GenerateIdService;
 import org.x.info.PageAction;
 import org.x.info.PartnerInfo;
 import org.x.info.PartnerOrderInfo;
+import org.x.service.DaoService;
 import org.x.service.PartnerService;
 import org.x.utils.AES;
-import org.x.utils.ConnectionServiceLottery;
 
 import com.alibaba.fastjson.JSON;
 import com.iwt.vasoss.common.security.exception.RsaDecryptException;
@@ -61,7 +60,7 @@ public class PartnerApi {
 	private Connection con = null;
 	private static final int LOG_ID = 3001;
 	private Long id;
-
+	private DaoService daoService = new DaoService();
 	private String partnerOrderNumber;
 
 	public Long getId() {
@@ -122,14 +121,14 @@ public class PartnerApi {
 				if (partnerInfo.getState().equals("closed")) {
 					processToPartner(4004, "Status is not available !");
 				} else {
-					queryPartnerOrderNumberFromDb();
+					daoService.queryPartnerOrderNumberFromDb(partnerOrderInfo);
 					if (partnerOrderNumber != null
 							|| partnerOrderInfo.getPartnerOrderNumber().equals(partnerOrderNumber)) {
 						processToPartner(4007, "partnerOrderNumber is repeated!");
 					} else {
 						processToYT();
 						if (partnerInfo.getState().equals("web") || partnerInfo.getState().equals("h5")) {
-							updateCreditBalance();
+							daoService.updateCreditBalance(partnerId);
 						}
 					}
 				}
@@ -165,58 +164,6 @@ public class PartnerApi {
 		entity.put("partnerId", partnerId);
 		entity.put("transData", transDataJson);
 		pageAction.setEntity(entity);
-	}
-
-	private void queryPartnerOrderNumberFromDb() {
-		PreparedStatement ps = null;
-		Connection con = null;
-		ResultSet rs = null;
-		try {
-			con = ConnectionService.getInstance().getConnectionForLocal();
-			String sql = "select * from `log_sync_generals` where para04=?";
-			ps = con.prepareStatement(sql);
-			int m = 1;
-			ps.setString(m++, partnerOrderInfo.getPartnerOrderNumber());
-			rs = ps.executeQuery();
-			if (rs.next()) {
-				partnerOrderNumber = rs.getString("para04");
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			if (con != null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	private void updateCreditBalance() {
-		try {
-			con = ConnectionServiceLottery.getInstance().getConnectionForLottery();
-			String sql = "update `tbl_partners` set creditBalance=creditBalance-unitPrice where id=?";
-			ps = con.prepareStatement(sql);
-			int m = 1;
-			ps.setString(m++, this.getPartnerId());
-			ps.executeUpdate();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			if (con != null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 	private void processToYT() throws RsaEncryptException {
