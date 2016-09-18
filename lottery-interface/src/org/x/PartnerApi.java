@@ -360,4 +360,12 @@ public class PartnerApi {
 	public void setPartnerOrderNumber(String partnerOrderNumber) {
 		this.partnerOrderNumber = partnerOrderNumber;
 	}
+
+	public PartnerInfo getPartnerInfo() {
+		return partnerInfo;
+	}
+
+	public void setPartnerInfo(PartnerInfo partnerInfo) {
+		this.partnerInfo = partnerInfo;
+	}
 }
