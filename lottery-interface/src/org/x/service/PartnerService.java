@@ -1,5 +1,6 @@
 package org.x.service;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.x.info.PartnerInfo;
@@ -35,8 +36,17 @@ public class PartnerService {
 		return instance;
 	}
 
-	public PartnerInfo getNameLoadingCache(String name) throws Exception {
-		return cache.get(name);
+	@SuppressWarnings("finally")
+	public PartnerInfo getNameLoadingCache(String name) {
+		PartnerInfo partnerInfo = null;
+		try {
+			partnerInfo = cache.get(name);
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			partnerInfo = null;
+		} finally {
+			return partnerInfo;
+		}
 		// cache.invalidateAll();
 	}
 }

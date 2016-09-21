@@ -242,6 +242,7 @@ public class PartnerApi {
 				return result;
 			}
 			partnerInfo = PartnerService.getInstance().getNameLoadingCache(partnerId);
+			LOG.debug(partnerInfo);
 			if (partnerInfo == null) {
 				setLocalErrorMsg("{\"status\":\"error\",\"result\":4001,\"msg\":\"partnerId is not exist!\"}");
 				return result;

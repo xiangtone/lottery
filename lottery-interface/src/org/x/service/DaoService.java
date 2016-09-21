@@ -50,42 +50,6 @@ public class DaoService {
 		return result;
 	}
 
-	// public void queryPartnerOrderInfoFromDb() {
-	// PointExchangeLotteryResultReq result = new
-	// PointExchangeLotteryResultReq();
-	// String partnerOrderInfoJson;
-	// String partnerCallbackURL;
-	// String partnerId;
-	// ClientTransServiceInterface clientTransService;
-	// LOG.debug(result.getBody().getOrderNumber());
-	// try {
-	// con = ConnectionService.getInstance().getConnectionForLocal();
-	// String sql = "select * from `log_sync_generals` where id=?";
-	// ps = con.prepareStatement(sql);
-	// int m = 1;
-	// ps.setString(m++, result.getBody().getOrderNumber());
-	// rs = ps.executeQuery();
-	// if (rs.next()) {
-	// LOG.debug(rs.getString("logId"));
-	// partnerId = rs.getString("para01");
-	// partnerOrderInfoJson = rs.getString("para02");
-	// partnerCallbackURL = rs.getString("para03");
-	// }
-	// } catch (Exception e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } finally {
-	// if (con != null) {
-	// try {
-	// con.close();
-	// } catch (SQLException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
-	// }
-	// }
-
 	public void queryPartnerOrderNumberFromDb(PartnerOrderInfo partnerOrderInfo) {
 		PreparedStatement ps = null;
 		Connection con = null;
