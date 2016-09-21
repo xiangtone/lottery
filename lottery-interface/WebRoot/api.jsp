@@ -14,13 +14,15 @@
 			? request.getHeader("X-Real-IP") : request.getRemoteAddr());
 	partnerApi.setPartnerId(request.getParameter("partnerId"));
 	String encryptTransData;
-	PartnerInfo partnerInfo=null;
+	PartnerInfo partnerInfo = null;
 	partnerApi.setPartnerInfo(partnerInfo);
-	if (partnerApi.getPartnerInfo()!= null && partnerApi.getPartnerInfo().getKeyAES() != null && partnerApi.getPartnerInfo().getKeyAES().length() > 0) {
-		encryptTransData = AES.Encrypt(request.getParameter("transData"), partnerApi.getPartnerInfo().getKeyAES());
+	if (partnerApi.getPartnerInfo() != null && partnerApi.getPartnerInfo().getKeyAES() != null
+			&& partnerApi.getPartnerInfo().getKeyAES().length() > 0) {
+		encryptTransData = AES.Encrypt(request.getParameter("transData"),partnerApi.getPartnerInfo().getKeyAES());
 	} else {
 		encryptTransData = request.getParameter("transData");
-	 }
+	}
+
 	partnerApi.setPartnerTransData(encryptTransData);
 
 	partnerApi.process();
@@ -74,7 +76,9 @@
 	if (request.getParameter("partnerDebug") != null && request.getParameter("partnerDebug").equals("true")) {
 		out.println("partnerId:" + request.getParameter("partnerId"));
 		out.println("<br>");
-		if (partnerApi.getPartnerInfo()!= null && partnerApi.getPartnerInfo().getKeyAES() != null && partnerApi.getPartnerInfo().getKeyAES().length() > 0) {
+
+		if (partnerApi.getPartnerInfo() != null && partnerApi.getPartnerInfo().getKeyAES() != null
+				&& partnerApi.getPartnerInfo().getKeyAES().length() > 0) {
 			out.println("transData:" + encryptTransData);
 		} else {
 			out.println("transData:" + request.getParameter("transData"));
