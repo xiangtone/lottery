@@ -18,6 +18,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.x.utils.Base64;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ipp.order.utils.AESCoder;
 import com.ipp.order.utils.CertCoder;
@@ -28,10 +29,11 @@ public class TestZhiHuiFu {
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		TestZhiHuiFu testZhiHuiFu = new TestZhiHuiFu();
-		testZhiHuiFu.orderLogin();
+		String callbackInfo = testZhiHuiFu.orderLogin();
+		testZhiHuiFu.requestOrderNew(callbackInfo);
 	}
 
-	protected static boolean orderLogin() throws Exception {
+	protected static String orderLogin() throws Exception {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpPost request = new HttpPost("http://test.ippit.cn/orderform/iips2/order/login");
 		JSONObject json = new JSONObject();
@@ -67,13 +69,15 @@ public class TestZhiHuiFu {
 		r = CertCoder.decryptByPrivateKey(Base64.decode(msg), "D:/client.pfx", null, "123456");
 		String r1 = new String(r, "GBK");
 		System.out.println(bSign + rspText + "\n" + r1);
-		return true;
+		return r1;
 	}
 
-	protected static boolean requestOrderNew() throws Exception {
+	protected static boolean requestOrderNew(String r1) throws Exception {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
-		String aesKey = "d80fe585c247d15f22ebd8ad16999040";
-		String token = "5faf3b0187464f6f2c1cd8f0ef988684";
+		ZhiHuiFuCallbackInfo zhiHuiFuCallbackInfo = JSON.parseObject(r1, ZhiHuiFuCallbackInfo.class);
+		System.out.println("aeskey :" + zhiHuiFuCallbackInfo.getAes_key());
+		String aesKey = zhiHuiFuCallbackInfo.getAes_key();
+		String token = zhiHuiFuCallbackInfo.getToken();
 		HttpPost request = new HttpPost("http://test.ippit.cn/orderform/iips2/order/request");
 		JSONObject json = new JSONObject();
 		Date now = new Date();
@@ -82,20 +86,23 @@ public class TestZhiHuiFu {
 		// timeStr = "20160223152525";
 		json.put("chnl_type", "WEB");
 		json.put("chnl_id", "12345678");
-		json.put("chnl_sn", timeStr);
+		// json.put("chnl_sn", timeStr);
 		json.put("merch_trade_no", timeStr);
 		json.put("merch_id", "862900000000001");
 		json.put("termnl_id", "00011071");
-		json.put("trade_no", timeStr);
+		// json.put("trade_no", timeStr);
 		json.put("trade_amt", "10");
 		// json.put("pwd", "111111");
 		json.put("trade_cur", "CNY");
-		json.put("good_info", "test测试");
+		// json.put("good_info", "test测试");
 		json.put("order_type", "00");
-		json.put("merch_url", "http:/test.com");
+		// json.put("merch_url", "http:/test.com");
+		// json.put("reserved", "youka");
 		json.put("request_time", timeStr);
+		System.out.println(json.toString());
 		List<NameValuePair> pairs = new ArrayList<NameValuePair>();
 		pairs.add(new BasicNameValuePair("token", token));
+		System.out.println(pairs);
 		String msg = Base64.encode(AESCoder.encrypt(json.toString().getBytes("GBK"), aesKey.getBytes()));
 		pairs.add(new BasicNameValuePair("msg", msg));
 		pairs.add(new BasicNameValuePair("sign", Utils.SHA1(msg + aesKey + token)));
@@ -108,13 +115,14 @@ public class TestZhiHuiFu {
 		int a = rspText.indexOf("msg=");
 		int b = rspText.indexOf("&sign=");
 		msg = rspText.substring(a + 4, b);
-		Map<String, Object> masage = new LinkedHashMap<String, Object>();
-		masage.put("msg", msg);
 		String sign = rspText.substring(b + 6);
-		JSONObject o = new JSONObject(masage);
+		Map<String, Object> mesage = new LinkedHashMap<String, Object>();
+		mesage.put("msg", mesage);
+		JSONObject o = new JSONObject(mesage);
 		String newSign = Utils.SHA1(msg + aesKey + token);
 		System.out.println(msg + "\n" + sign + "\n" + newSign);
 		String data = o.getString("data");
+		System.out.println(data);
 		String data1 = new String(AESCoder.decrypt(Base64.decode(data), aesKey.getBytes()), "GBK");
 		System.out.println(data1);
 		return true;

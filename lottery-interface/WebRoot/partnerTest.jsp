@@ -11,7 +11,7 @@
 	<script type="text/javascript">
 		var timestamp = new Date().getTime();
 	</script>
-	<form id="partnerTest" action="api.jsp" method="post">
+	<form id="partnerTest" action="selectNumber.jsp" method="post">
 		partnerId:<input id="partnerId" name="partnerId"
 			value="<%=(request.getParameter("partnerId")!=null&&request.getParameter("partnerId").length()==32?request.getParameter("partnerId"):"254b11b646400585c04d851910cb7051")%>" size="40"> <br>
 		<input type="hidden" id="transData" name="transData">
