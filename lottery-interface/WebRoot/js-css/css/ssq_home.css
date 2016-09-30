@@ -1,0 +1,50 @@
+@charset "utf-8";
+/* CSS Document */
+#ssq_main { clear:both; width:100%; margin:0 auto;}
+.leftcenter { float:left; width:730px; margin:10px 0 0; overflow:hidden;align:center}
+
+.line_border { border:1px solid #eaeaea; border-width:0px 1px 1px 1px;}
+
+
+.dotline { clear:both; height:10px; border-bottom:1px dotted #ccc; margin:0 10px; overflow:hidden;}
+.dotline02 { clear:both; height:1px; line-height:1px; font-size:1px; border-bottom:1px dotted #ccc; margin:0 10px; overflow:hidden;}
+.dotline03 { clear:both; height:1px; line-height:1px; font-size:1px; border-bottom:1px dotted #ccc; margin:10px 0 ; overflow:hidden;}
+.imgAdbox{ margin:0 0px 10px 9px}
+
+.nTab2{ clear:both; width:722px; border:1px #FB9F4C solid; height:350px; overflow:hidden; position:relative;}
+.nTab2 .TabTitle2{ clear:both;overflow: hidden;height:30px;}
+.nTab2 .TabTitle2 ul{;border:0;margin:0;padding:4px 0 0 10px; background:url(ssqtabbj.jpg) no-repeat; height:26px;}
+.nTab2 .TabTitle2 li{float: left;width: 160px; height:18px; line-height:18px;cursor: pointer;padding: 4px 0px 2px 0px;list-style-type: none; text-align:center; margin-right:2px;}
+.nTab2 .TabTitle2 .active{background:url(ssqtab2.png) repeat-x;border-left:1px #CE1F03 solid;border-top:1px #CE1F03 solid;border-right:1px #CE1F03 solid;border-bottom:1px #FFF solid; color:#FF0000; font-weight:bold; text-decoration:underline;}
+.nTab2 .TabTitle2 .normal{background:url(ssqtab.png) repeat-x;color:#666;border:1px #CE1F03 solid; border-bottom-width:0px;}
+.nTab2 .TabTitle2 .normal a { font-weight:bold;}
+.nTab2 .TabContent2 {background:#fff;padding:13px 0; width:700px; height:200px; margin:0 auto; color:#000;}
+.nTab2 .TabContent2 h4 { height:20px; line-height:20px; font:normal 12px "宋体"; text-align:center;}
+.nTab2 .TabContent2 .ant { text-align:right; height:20px; padding:3px 250px 3px 0;}
+.nTab2 .TabContent2 .ant input { background:url(js-css/webindex_122.jpg); width:90px; height:20px; line-height:20px; border:0; cursor:pointer;}
+.nTab2 .TabContent2 .select {  overflow:hidden; height:125px;}
+.nTab2 .TabContent2 .select .left { float:left; width:60%; text-align:center;}	
+.nTab2 .TabContent2 .select .left h3 { height:19px; background:url(js-css/tabred.png); font: normal 12px/19px "";}
+.nTab2 .TabContent2 .select .left ul { width:300px; margin:0 auto; padding:10px 0; overflow:hidden;}
+.nTab2 .TabContent2 .select .left ul li { float:left; margin:0 5px 5px 0; cursor:pointer;}
+.nTab2 .TabContent2 .select .right { float:right; width:40%; text-align:center;}
+.nTab2 .TabContent2 .select .right h3 {background:url(js-css/tabblue.png); height:19px; font: normal 12px/19px "";}
+.nTab2 .TabContent2 .select .right ul { width:180px; margin:0 auto; padding:10px 0; overflow:hidden;}
+.nTab2 .TabContent2 .select .right ul li { float:left;margin:0 5px 5px 0; cursor:pointer;}
+.nTab2 .TabContent2 .select .nqiu { background:url(js-css/ssqnonq.png) repeat-x;  width:21px; height:17px; text-align:center; padding-top:4px; }
+.nTab2 .TabContent2 .select .redqiu { background:url(js-css/ssqredq.png) repeat-x; width:21px; height:17px; text-align:center; padding-top:4px; }
+.nTab2 .TabContent2 .select .blueqiu { background:url(js-css/ssqblueq.png) repeat-x; width:21px; height:17px; text-align:center; padding-top:4px; }
+.nTab2 .TabContent2 .result { overflow:hidden;}
+.nTab2 .TabContent2 .result p { float:left; height:30px; line-height:30px; padding-left:20px;}
+.nTab2 .TabContent2 .result p font { color:#F00;}
+.nTab2 .TabContent2 .result .select {  overflow:hidden;border:solid 1px #CCC; height:80px; margin-top:2px; padding-top:10px;}
+.nTab2 .TabContent2 .result .select .left { float:left; width:50%; text-align:left;}	
+.nTab2 .TabContent2 .result .select .left h3 { background:none; line-height:19px; height:19px; padding-left:40px;}
+.nTab2 .TabContent2 .result .select .left ul { width:270px; margin:0 auto; padding:5px 0 5px 5px;}
+.nTab2 .TabContent2 .result .select .left ul li { float:left; margin:0 5px 5px 0;}
+.nTab2 .TabContent2 .result .select .right { float:right; width:50%; text-align:left;}
+.nTab2 .TabContent2 .result .select .right h3 {background:none; line-height:19px; height:19px; padding-left:40px;}
+.nTab2 .TabContent2 .result .select .right ul { width:220px; margin:0 auto; padding:5px 0;}
+.nTab2 .TabContent2 .result .select .right ul li { float:left;margin:0 5px 5px 0;}
+
+
