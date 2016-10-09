@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Insert title here</title>
-<script src="js/jquery-2.2.3.min.js"></script>
+<script src="js-css/jquery-2.2.3.min.js"></script>
 </head>
 <body>
 	<script type="text/javascript">
@@ -53,10 +53,9 @@
 	<br> betMode:
 	<input id="betMode" name="betMode" value="101" size="40">
 	<br> betDetail:
-	<input id="betDetail" name="betDetail" value=""
+	<input id="betDetail" name="betDetail" value="<%= request.getParameter("betDetail") %>"
 		size="40">
 	<br>
-	
 	<button id="testButton">test</button>
 </body>
 <script>

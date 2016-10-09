@@ -8,7 +8,6 @@
 	Logger LOG = Logger.getLogger(this.getClass());
 	LOG.debug(request.getParameter("partnerId"));
 	LOG.debug(request.getParameter("transData"));
-	LOG.debug(request.getParameter("partnerInfo"));
 	PartnerApi partnerApi = new PartnerApi();
 	partnerApi.setIp(request.getHeader("X-Real-IP") != null && request.getHeader("X-Real-IP").length() > 0
 			? request.getHeader("X-Real-IP") : request.getRemoteAddr());
