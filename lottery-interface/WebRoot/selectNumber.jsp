@@ -4,6 +4,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name=”viewport” content=”width=device-width, initial-scale=2.0,
+	minimum-scale=0.5, maximum-scale=3.0, user-scalable=yes” />
 <script src="js-css/js/jquery-1.7.2.min.js"></script>
 <script src="js-css/js/global.js"></script>
 <script src="js-css/js/stat.js"></script>
@@ -18,10 +20,24 @@
 			for (var i = 0; i < cNode.length; i++) {
 				if (oo.innerHTML == cNode[i].innerHTML) {
 					cNode[i].style.display = "";
-					document.getElementById("fs_red").innerHTML++;
-					if(document.getElementById("fs_red").innerHTML==6&&document.getElementById("fs_blue").innerHTML==1){
-						document.getElementById("fs_zhushu").innerHTML=1;
-						document.getElementById("fs_money").innerHTML=2;
+					document.getElementById("fs_red").innerHTML = countRedQiu();
+					if (countRedQiu() == 6 && countBlueQiu() == 1) {
+						document.getElementById("fs_zhushu").innerHTML = 1;
+						document.getElementById("fs_money").innerHTML = 2;
+					}
+				}
+			}
+		} else {
+			oo.className = "nqiu";
+			var cNode = document.getElementById("check-left")
+					.getElementsByTagName('li');
+			for (var i = 0; i < cNode.length; i++) {
+				if (oo.innerHTML == cNode[i].innerHTML) {
+					cNode[i].style.display = "none";
+					document.getElementById("fs_red").innerHTML = countRedQiu();
+					if (countRedQiu() < 6 || countBlueQiu() < 1) {
+						document.getElementById("fs_zhushu").innerHTML = 0;
+						document.getElementById("fs_money").innerHTML = 0;
 					}
 				}
 			}
@@ -36,43 +52,48 @@
 			for (var i = 0; i < cNode.length; i++) {
 				if (oo.innerHTML == cNode[i].innerHTML) {
 					cNode[i].style.display = "block";
-					document.getElementById("fs_blue").innerHTML++;
-					if(document.getElementById("fs_red").innerHTML==6&&document.getElementById("fs_blue").innerHTML==1){
-						document.getElementById("fs_zhushu").innerHTML=1;
-						document.getElementById("fs_money").innerHTML=2;
+					document.getElementById("fs_blue").innerHTML = countBlueQiu();
+					if (countRedQiu() == 6 && countBlueQiu() == 1) {
+						document.getElementById("fs_zhushu").innerHTML = 1;
+						document.getElementById("fs_money").innerHTML = 2;
+					}
+				}
+			}
+		} else {
+			oo.className = "nqiu";
+			var cNode = document.getElementById("check-right")
+					.getElementsByTagName('li');
+			for (var i = 0; i < cNode.length; i++) {
+				if (oo.innerHTML == cNode[i].innerHTML) {
+					cNode[i].style.display = "none";
+					document.getElementById("fs_blue").innerHTML = countBlueQiu();
+					if (countRedQiu() < 6 || countBlueQiu() < 1) {
+						document.getElementById("fs_zhushu").innerHTML = 0;
+						document.getElementById("fs_money").innerHTML = 0;
 					}
 				}
 			}
 		}
 	}
 
-	function cancelBlueQiu(oo) {
-		if (oo.style.display == "block") {
-			oo.style.display = "none";
-			var cNode = document.getElementById("select-right")
-					.getElementsByTagName('li');
-			for (var i = 0; i < cNode.length; i++) {
-				if (oo.innerHTML == cNode[i].innerHTML) {
-					cNode[i].className = "nqiu";
-					document.getElementById("fs_blue").innerHTML--;
-				}
+	function countRedQiu() {
+		var redCount = 0;
+		for (var i = 1; i <= 33; i++) {
+			if (document.getElementById("redQiu" + i).className == "redqiu") {
+				redCount++;
 			}
 		}
+		return redCount;
 	}
 
-	function cancelRedQiu(oo) {
-		if (oo.style.display == "") {
-			oo.style.display = "none";
-			var cNode = document.getElementById("select-left")
-					.getElementsByTagName('li');
-			for (var i = 0; i < cNode.length; i++) {
-				if (oo.innerHTML == cNode[i].innerHTML) {
-					cNode[i].className = "nqiu";
-					document.getElementById("fs_red").innerHTML--;
-				}
+	function countBlueQiu() {
+		var blueCount = 0;
+		for (var i = 1; i <= 16; i++) {
+			if (document.getElementById("blueQiu" + i).className == "blueqiu") {
+				blueCount++;
 			}
 		}
-
+		return blueCount;
 	}
 
 	function clearQiu() {
@@ -82,7 +103,7 @@
 			if (cNode[i].className == "redqiu"
 					|| cNode[i].className == "blueqiu")
 				cNode[i].className = "nqiu";
-			document.getElementById("fs_red").innerHTML=0;
+			document.getElementById("fs_red").innerHTML = 0;
 		}
 		var cNode = document.getElementById("result")
 				.getElementsByTagName('li');
@@ -90,10 +111,10 @@
 			if (cNode[i].style.display == "block"
 					|| cNode[i].style.display == "")
 				cNode[i].style.display = "none";
-			document.getElementById("fs_blue").innerHTML=0;
+			document.getElementById("fs_blue").innerHTML = 0;
 		}
-		document.getElementById("fs_zhushu").innerHTML=0;
-		document.getElementById("fs_money").innerHTML=0;
+		document.getElementById("fs_zhushu").innerHTML = 0;
+		document.getElementById("fs_money").innerHTML = 0;
 	}
 
 	function jixuanRedBall() {
@@ -120,7 +141,7 @@
 						&& redBall == cNode[i].innerHTML) {
 					sNode[i].className = "redqiu";
 					cNode[i].style.display = "";
-					document.getElementById("fs_red").innerHTML=6;
+					document.getElementById("fs_red").innerHTML = 6;
 				}
 			}
 		}
@@ -140,11 +161,11 @@
 					&& blueBall == sNode[i].innerHTML) {
 				sNode[i].className = "blueqiu";
 				cNode[i].style.display = "block";
-				document.getElementById("fs_blue").innerHTML=1;
+				document.getElementById("fs_blue").innerHTML = 1;
 			}
 		}
-		document.getElementById("fs_zhushu").innerHTML=1;
-		document.getElementById("fs_money").innerHTML=2;
+		document.getElementById("fs_zhushu").innerHTML = 1;
+		document.getElementById("fs_money").innerHTML = 2;
 	}
 
 	function touzhu() {
@@ -167,23 +188,32 @@
 			}
 		}
 		var betDetail = "00106" + res + "01" + blueBall;
+		if(countRedQiu()<6||countBlueQiu()<1){
+			betDetail=null;
+		}
 		return betDetail;
 	}
 
+	$("#nTab2").css( "height" , $(window).height +"px")
 	$().ready(function() {
 		$("#touzhu").click(function() {
 			document.getElementById("betDetail").value = touzhu();
 			$("#selectNumber").submit();
 		});
 	})
-
 </script>
 
 <title>有卡科技-双色球</title>
 </head>
 <body>
-	<form id="selectNumber" action="partnerTest.jsp" method="post">
-		<input id="betDetail" name="betDetail" type="hidden" value="">
+	<form id="selectNumber" action="api.jsp" method="post">
+		<input id="partnerDebug" name="partnerDebug" type="hidden"
+			value="<%=request.getParameter("partnerDebug")%>"> <input
+			id="partnerId" name="partnerId" type="hidden"
+			value="<%=request.getParameter("partnerId")%>"> <input
+			id="transData" name="transData" type="hidden"
+			value='<%=request.getParameter("transData")%>'> <input
+			id="betDetail" name="betDetail" type="hidden" value="">
 	</form>
 	<div class="nTab2">
 		<!--内容开始 -->
@@ -207,7 +237,7 @@
 			<div id="select" class="select">
 				<div id="select-left" class="left">
 					<h3>红球(选择6个红球)</h3>
-					<ul id="a">
+					<ul >
 						<li id="redQiu1" class="nqiu" onclick="changeRedQiu(this)">01</li>
 						<li id="redQiu2" class="nqiu" onclick="changeRedQiu(this)">02</li>
 						<li id="redQiu3" class="nqiu" onclick="changeRedQiu(this)">03</li>
@@ -269,113 +299,64 @@
 				<table width="100%" border="0" cellpadding="0" cellspacing="0">
 					<tbody>
 						<tr>
-							<td width="25%" align="center" bgcolor="#FDF8EC"><strong>投注结果<br>(点击号码可取消选择)
+							<td width="25%" align="center" bgcolor="#FDF8EC"><strong>投注结果
 							</strong></td>
 							<td><div class="select">
 									<div id="check-left" class="left">
 										<ul>
-											<li id="redQiuCheck1" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">01</li>
-											<li id="redQiuCheck2" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">02</li>
-											<li id="redQiuCheck3" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">03</li>
-											<li id="redQiuCheck4" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">04</li>
-											<li id="redQiuCheck5" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">05</li>
-											<li id="redQiuCheck6" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">06</li>
-											<li id="redQiuCheck7" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">07</li>
-											<li id="redQiuCheck8" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">08</li>
-											<li id="redQiuCheck9" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">09</li>
-											<li id="redQiuCheck10" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">10</li>
-											<li id="redQiuCheck11" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">11</li>
-											<li id="redQiuCheck12" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">12</li>
-											<li id="redQiuCheck13" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">13</li>
-											<li id="redQiuCheck14" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">14</li>
-											<li id="redQiuCheck15" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">15</li>
-											<li id="redQiuCheck16" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">16</li>
-											<li id="redQiuCheck17" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">17</li>
-											<li id="redQiuCheck18" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">18</li>
-											<li id="redQiuCheck19" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">19</li>
-											<li id="redQiuCheck20" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">20</li>
-											<li id="redQiuCheck21" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">21</li>
-											<li id="redQiuCheck22" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">22</li>
-											<li id="redQiuCheck23" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">23</li>
-											<li id="redQiuCheck24" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">24</li>
-											<li id="redQiuCheck25" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">25</li>
-											<li id="redQiuCheck26" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">26</li>
-											<li id="redQiuCheck27" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">27</li>
-											<li id="redQiuCheck28" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">28</li>
-											<li id="redQiuCheck29" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">29</li>
-											<li id="redQiuCheck30" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">30</li>
-											<li id="redQiuCheck31" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">31</li>
-											<li id="redQiuCheck32" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">32</li>
-											<li id="redQiuCheck33" style="DISPLAY: none" class="redqiu"
-												onclick="cancelRedQiu(this)">33</li>
+											<li id="redQiuCheck1" style="DISPLAY: none" class="redqiu">01</li>
+											<li id="redQiuCheck2" style="DISPLAY: none" class="redqiu">02</li>
+											<li id="redQiuCheck3" style="DISPLAY: none" class="redqiu">03</li>
+											<li id="redQiuCheck4" style="DISPLAY: none" class="redqiu">04</li>
+											<li id="redQiuCheck5" style="DISPLAY: none" class="redqiu">05</li>
+											<li id="redQiuCheck6" style="DISPLAY: none" class="redqiu">06</li>
+											<li id="redQiuCheck7" style="DISPLAY: none" class="redqiu">07</li>
+											<li id="redQiuCheck8" style="DISPLAY: none" class="redqiu">08</li>
+											<li id="redQiuCheck9" style="DISPLAY: none" class="redqiu">09</li>
+											<li id="redQiuCheck10" style="DISPLAY: none" class="redqiu">10</li>
+											<li id="redQiuCheck11" style="DISPLAY: none" class="redqiu">11</li>
+											<li id="redQiuCheck12" style="DISPLAY: none" class="redqiu">12</li>
+											<li id="redQiuCheck13" style="DISPLAY: none" class="redqiu">13</li>
+											<li id="redQiuCheck14" style="DISPLAY: none" class="redqiu">14</li>
+											<li id="redQiuCheck15" style="DISPLAY: none" class="redqiu">15</li>
+											<li id="redQiuCheck16" style="DISPLAY: none" class="redqiu">16</li>
+											<li id="redQiuCheck17" style="DISPLAY: none" class="redqiu">17</li>
+											<li id="redQiuCheck18" style="DISPLAY: none" class="redqiu">18</li>
+											<li id="redQiuCheck19" style="DISPLAY: none" class="redqiu">19</li>
+											<li id="redQiuCheck20" style="DISPLAY: none" class="redqiu">20</li>
+											<li id="redQiuCheck21" style="DISPLAY: none" class="redqiu">21</li>
+											<li id="redQiuCheck22" style="DISPLAY: none" class="redqiu">22</li>
+											<li id="redQiuCheck23" style="DISPLAY: none" class="redqiu">23</li>
+											<li id="redQiuCheck24" style="DISPLAY: none" class="redqiu">24</li>
+											<li id="redQiuCheck25" style="DISPLAY: none" class="redqiu">25</li>
+											<li id="redQiuCheck26" style="DISPLAY: none" class="redqiu">26</li>
+											<li id="redQiuCheck27" style="DISPLAY: none" class="redqiu">27</li>
+											<li id="redQiuCheck28" style="DISPLAY: none" class="redqiu">28</li>
+											<li id="redQiuCheck29" style="DISPLAY: none" class="redqiu">29</li>
+											<li id="redQiuCheck30" style="DISPLAY: none" class="redqiu">30</li>
+											<li id="redQiuCheck31" style="DISPLAY: none" class="redqiu">31</li>
+											<li id="redQiuCheck32" style="DISPLAY: none" class="redqiu">32</li>
+											<li id="redQiuCheck33" style="DISPLAY: none" class="redqiu">33</li>
 										</ul>
 									</div>
 									<div id="check-right" class="right">
 										<ul>
-											<li id="blueQiuCheck1" style="DISPLAY: none" class="blueqiu"
-												onclick="cancelBlueQiu(this)">01</li>
-											<li id="blueQiuCheck2" style="DISPLAY: none" class="blueqiu"
-												onclick="cancelBlueQiu(this)">02</li>
-											<li id="blueQiuCheck3" style="DISPLAY: none" class="blueqiu"
-												onclick="cancelBlueQiu(this)">03</li>
-											<li id="blueQiuCheck4" style="DISPLAY: none" class="blueqiu"
-												onclick="cancelBlueQiu(this)">04</li>
-											<li id="blueQiuCheck5" style="DISPLAY: none" class="blueqiu"
-												onclick="cancelBlueQiu(this)">05</li>
-											<li id="blueQiuCheck6" style="DISPLAY: none" class="blueqiu"
-												onclick="cancelBlueQiu(this)">06</li>
-											<li id="blueQiuCheck7" style="DISPLAY: none" class="blueqiu"
-												onclick="cancelBlueQiu(this)">07</li>
-											<li id="blueQiuCheck8" style="DISPLAY: none" class="blueqiu"
-												onclick="cancelBlueQiu(this)">08</li>
-											<li id="blueQiuCheck9" style="DISPLAY: none" class="blueqiu"
-												onclick="cancelBlueQiu(this)">09</li>
-											<li id="blueQiuCheck10" style="DISPLAY: none" class="blueqiu"
-												onclick="cancelBlueQiu(this)">10</li>
-											<li id="blueQiuCheck11" style="DISPLAY: none" class="blueqiu"
-												onclick="cancelBlueQiu(this)">11</li>
-											<li id="blueQiuCheck12" style="DISPLAY: none" class="blueqiu"
-												onclick="cancelBlueQiu(this)">12</li>
-											<li id="blueQiuCheck13" style="DISPLAY: none" class="blueqiu"
-												onclick="cancelBlueQiu(this)">13</li>
-											<li id="blueQiuCheck14" style="DISPLAY: none" class="blueqiu"
-												onclick="cancelBlueQiu(this)">14</li>
-											<li id="blueQiuCheck15" style="DISPLAY: none" class="blueqiu"
-												onclick="cancelBlueQiu(this)">15</li>
-											<li id="blueQiuCheck16" style="DISPLAY: none" class="blueqiu"
-												onclick="cancelBlueQiu(this)">16</li>
+											<li id="blueQiuCheck1" style="DISPLAY: none" class="blueqiu">01</li>
+											<li id="blueQiuCheck2" style="DISPLAY: none" class="blueqiu">02</li>
+											<li id="blueQiuCheck3" style="DISPLAY: none" class="blueqiu">03</li>
+											<li id="blueQiuCheck4" style="DISPLAY: none" class="blueqiu">04</li>
+											<li id="blueQiuCheck5" style="DISPLAY: none" class="blueqiu">05</li>
+											<li id="blueQiuCheck6" style="DISPLAY: none" class="blueqiu">06</li>
+											<li id="blueQiuCheck7" style="DISPLAY: none" class="blueqiu">07</li>
+											<li id="blueQiuCheck8" style="DISPLAY: none" class="blueqiu">08</li>
+											<li id="blueQiuCheck9" style="DISPLAY: none" class="blueqiu">09</li>
+											<li id="blueQiuCheck10" style="DISPLAY: none" class="blueqiu">10</li>
+											<li id="blueQiuCheck11" style="DISPLAY: none" class="blueqiu">11</li>
+											<li id="blueQiuCheck12" style="DISPLAY: none" class="blueqiu">12</li>
+											<li id="blueQiuCheck13" style="DISPLAY: none" class="blueqiu">13</li>
+											<li id="blueQiuCheck14" style="DISPLAY: none" class="blueqiu">14</li>
+											<li id="blueQiuCheck15" style="DISPLAY: none" class="blueqiu">15</li>
+											<li id="blueQiuCheck16" style="DISPLAY: none" class="blueqiu">16</li>
 										</ul>
 									</div>
 								</div></td>
@@ -420,109 +401,23 @@
 <style type="text/css">
 @charset "utf-8";
 /* CSS Document */
-.line_border {
-	border: 1px solid #eaeaea;
-	border-width: 0px 1px 1px 1px;
-}
-
-.dotline {
-	clear: both;
-	height: 10px;
-	border-bottom: 1px dotted #ccc;
-	margin: 0 10px;
-	overflow: hidden;
-}
-
-.dotline02 {
-	clear: both;
-	height: 1px;
-	line-height: 1px;
-	font-size: 1px;
-	border-bottom: 1px dotted #ccc;
-	margin: 0 10px;
-	overflow: hidden;
-}
-
-.dotline03 {
-	clear: both;
-	height: 1px;
-	line-height: 1px;
-	font-size: 1px;
-	border-bottom: 1px dotted #ccc;
-	margin: 10px 0;
-	overflow: hidden;
-}
-
-.imgAdbox {
-	margin: 0 0px 10px 9px
-}
-
 .nTab2 {
 	clear: both;
 	width: 100%;
-	height: 730px;
+	height: 100%;
 	overflow: hidden;
-	position: relative;
-}
-
-.nTab2 .TabTitle2 {
-	clear: both;
-	overflow: hidden;
-	height: 30px;
-}
-
-.nTab2 .TabTitle2 ul {;
-	border: 0;
-	margin: 0;
-	padding: 4px 0 0 10px;
-	background: url(ssqtabbj.jpg) no-repeat;
-	height: 26px;
-}
-
-.nTab2 .TabTitle2 li {
-	color: #CE1F03;
-	float: left;
-	width: 160px;
-	height: 18px;
-	line-height: 18px;
-	cursor: pointer;
-	padding: 4px 0px 2px 0px;
-	list-style-type: none;
-	text-align: center;
-	margin-right: 2px;
-}
-
-.nTab2 .TabTitle2 .active {
-	border-left: 1px #CE1F03 solid;
-	border-top: 1px #CE1F03 solid;
-	border-right: 1px #CE1F03 solid;
-	border-bottom: 1px #FFF solid;
-	color: #FF0000;
-	font-weight: bold;
-}
-
-.nTab2 .TabTitle2 .normal {
-	background: url(ssqtab.png) repeat-x;
-	color: #666;
-	border: 1px #CE1F03 solid;
-	border-bottom-width: 0px;
-}
-
-.nTab2 .TabTitle2 .normal a {
-	font-weight: bold;
+	position: absolute;
 }
 
 .nTab2 .TabContent2 {
 	background: #fff;
 	padding: 13px 0;
 	width: 700px;
-	height: 200px;
 	margin: 0 auto;
 	color: #000;
 }
 
 .nTab2 .TabContent2 h4 {
-	height: 20px;
 	line-height: 20px;
 	font: normal 12px "宋体";
 	text-align: center;
@@ -530,7 +425,7 @@
 
 .nTab2 .TabContent2 .box-header {
 	position: relative;
-	height: 115px;
+	height: 130px;
 	background: url("//888.gtimg.com/images/trade/public/p_head_topbg.png")
 		no-repeat;
 	font: 12px/1.5 tahoma, arial, '宋体';
@@ -628,13 +523,13 @@
 
 .nTab2 .TabContent2 .select {
 	overflow: hidden;
-	height: 173px;
+	height: 210px;
 	border: 1px #E2D5C6 solid;
 }
 
 .nTab2 .TabContent2 .select .left {
 	float: left;
-	width: 60%;
+	width: 50%;
 	text-align: center;
 }
 
@@ -655,13 +550,13 @@
 
 .nTab2 .TabContent2 .select .left ul li {
 	float: left;
-	margin: 2px 8px 8px 3px;
+	margin: 3px 9px 9px 3px;
 	cursor: pointer;
 }
 
 .nTab2 .TabContent2 .select .right {
 	float: right;
-	width: 40%;
+	width: 50%;
 	text-align: center;
 }
 
@@ -682,7 +577,7 @@
 
 .nTab2 .TabContent2 .select .right ul li {
 	float: left;
-	margin: 2px 8px 8px 3px;
+	margin: 3px 9px 9px 3px;
 	cursor: pointer;
 }
 
@@ -830,6 +725,7 @@
 	font-weight: bold;
 	position: relative;
 }
+
 </style>
 
 </html>

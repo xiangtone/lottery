@@ -299,7 +299,7 @@ public class PartnerApi {
 			body.setChannelReserved("youka");
 			body.setOrderNumber(Long.toString(GenerateIdService.getInstance()
 					.generateNew(Integer.parseInt(ConfigManager.getConfigData("server.id")), "order", 1)));
-			body.setUserPhoneNumber(partnerOrderInfo.getUserPhoneNumber());// wanghua
+			body.setUserPhoneNumber(partnerOrderInfo.getUserPhoneNumber());
 			body.setPointMerchantId("1200100001");
 			body.setGameId("10001");
 			switch (partnerOrderInfo.getNumberSelectType()) {

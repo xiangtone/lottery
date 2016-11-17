@@ -11,7 +11,7 @@
 	<script type="text/javascript">
 		var timestamp = new Date().getTime();
 	</script>
-	<form id="partnerTest" action="api.jsp" method="post">
+	<form id="partnerTest" action="selectNumberH5.jsp" method="post">
 		partnerId:<input id="partnerId" name="partnerId"
 			value="<%=(request.getParameter("partnerId")!=null&&request.getParameter("partnerId").length()==32?request.getParameter("partnerId"):"254b11b646400585c04d851910cb7051")%>" size="40"> <br>
 		<input type="hidden" id="transData" name="transData">
@@ -42,7 +42,7 @@
 	<br> lotteryId:
 	<input id="lotteryId" name="lotteryId" value="10001" size="40">
 	<br> numberSelectType:
-	<input id="numberSelectType" name="numberSelectType" value="1"
+	<input id="numberSelectType" name="numberSelectType" value="2"
 		size="4">1机选2单式自选
 	<br> betTotalAmount:
 	<input id="betTotalAmount" name="betTotalAmount" value="1" size="40"
@@ -53,7 +53,7 @@
 	<br> betMode:
 	<input id="betMode" name="betMode" value="101" size="40">
 	<br> betDetail:
-	<input id="betDetail" name="betDetail" value="<%= request.getParameter("betDetail") %>"
+	<input id="betDetail" name="betDetail" value=""
 		size="40">
 	<br>
 	<button id="testButton">test</button>

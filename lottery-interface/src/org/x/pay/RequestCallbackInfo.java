@@ -1,4 +1,4 @@
-package org.x;
+package org.x.pay;
 
 public class RequestCallbackInfo {
 	private String return_msg;

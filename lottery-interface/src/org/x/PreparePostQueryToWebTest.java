@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.swing.JOptionPane;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -65,15 +63,6 @@ public class PreparePostQueryToWebTest {
 				req.getBody().getOrderNumber(), req.getBody().getUserPhoneNumber(), req.getBody().getTransDateTime(),
 				req.getBody().getCallbackURL(), ip));
 
-	}
-
-	public String inputUserPhoneNumber() {
-		String userPhoneNumber = JOptionPane.showInputDialog(null, "请输入您的手机号码：");
-		while (userPhoneNumber.length() != 11) {
-			userPhoneNumber = JOptionPane.showInputDialog(null, "输入错误！！！请重新输入您的手机号码:", "error",
-					JOptionPane.ERROR_MESSAGE);
-		}
-		return userPhoneNumber;
 	}
 
 	private void configBody() {

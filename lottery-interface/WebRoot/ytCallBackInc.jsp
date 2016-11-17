@@ -55,7 +55,4 @@
 		<button type="submit">submit</button>
 	</form>
 </body>
-<script>
-document.getElementById("formid").submit();
-</script>
 </html>

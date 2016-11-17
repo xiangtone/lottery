@@ -1,4 +1,4 @@
-package org.x;
+package org.x.pay;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,12 +23,20 @@ import com.ipp.order.utils.CertCoder;
 import com.ipp.order.utils.Utils;
 
 public class TestZhiHuiFu {
+	private String pay_url;
 
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		TestZhiHuiFu testZhiHuiFu = new TestZhiHuiFu();
 		String callbackInfo = testZhiHuiFu.orderLogin();
-		testZhiHuiFu.requestOrderNew(callbackInfo);
+		String pay_url = testZhiHuiFu.requestOrderNew(callbackInfo);
+		testZhiHuiFu.process();
+	}
+
+	public void process() throws Exception {
+		String callbackInfo = orderLogin();
+		this.setPay_url(requestOrderNew(callbackInfo));
+		System.out.println(this.getPay_url());
 	}
 
 	protected static String orderLogin() throws Exception {
@@ -46,31 +54,46 @@ public class TestZhiHuiFu {
 		json.put("termnl_id", "00011071");
 		List pairs = new ArrayList<NameValuePair>();
 		String msg = json.toString();
-		msg = Base64.encode(CertCoder.encryptByPublicKey(msg.getBytes(), "D:/server.cer"));
-		System.out.println("加密" + msg);
+		msg = Base64.encode(CertCoder.encryptByPublicKey(msg.getBytes(),
+				"D:/youka-work/git-source/lottery/lottery-interface/src/server.cer"
+		// "/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/server.cer"
+		));
+		System.out.println("加密:" + msg);
+		System.out.println();
 		pairs.add(new BasicNameValuePair("msg", msg));
-		byte[] r = CertCoder.sign(msg.getBytes(), "d:/client.pfx", null, "123456");
+		byte[] r = CertCoder.sign(msg.getBytes(), "D:/youka-work/git-source/lottery/lottery-interface/src/client.pfx",
+				// "/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/client.pfx",
+				null, "123456");
 		String sign = Base64.encode(r);
 		System.out.println("sign=" + sign);
+		System.out.println();
 		pairs.add(new BasicNameValuePair("sign", sign));
 		request.setEntity(new UrlEncodedFormEntity(pairs, "GBK"));
 		HttpResponse rsp = httpClient.execute(request);
 		@SuppressWarnings("unused")
 		StatusLine status = rsp.getStatusLine();
 		String rspText = EntityUtils.toString(rsp.getEntity(), "GBK");
-		System.out.println(rspText);
+		System.out.println("rspText:" + rspText);
+		System.out.println();
 		int a = rspText.indexOf("msg=");
 		int b = rspText.indexOf("&sign=");
 		msg = rspText.substring(a + 4, b);
 		sign = rspText.substring(b + 6);
-		boolean bSign = CertCoder.verifySign(msg.getBytes(), Base64.decode(sign), "D:/server.cer");
-		r = CertCoder.decryptByPrivateKey(Base64.decode(msg), "D:/client.pfx", null, "123456");
+		boolean bSign = CertCoder.verifySign(msg.getBytes(), Base64.decode(sign),
+				"D:/youka-work/git-source/lottery/lottery-interface/src/server.cer"
+		// "/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/server.cer"
+		);
+		r = CertCoder.decryptByPrivateKey(Base64.decode(msg),
+				"D:/youka-work/git-source/lottery/lottery-interface/src/client.pfx",
+				// "/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/client.pfx",
+				null, "123456");
 		String r1 = new String(r, "GBK");
-		System.out.println(bSign + rspText + "\n" + r1);
+		System.out.println("bSign+rspText:" + bSign + rspText + "\n" + r1);
+		System.out.println();
 		return r1;
 	}
 
-	protected static boolean requestOrderNew(String r1) throws Exception {
+	protected static String requestOrderNew(String r1) throws Exception {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		ZhiHuiFuCallbackInfo zhiHuiFuCallbackInfo = JSON.parseObject(r1, ZhiHuiFuCallbackInfo.class);
 		String aesKey = zhiHuiFuCallbackInfo.getAes_key();
@@ -88,19 +111,23 @@ public class TestZhiHuiFu {
 		json.put("merch_id", "862900000000001");
 		json.put("termnl_id", "00011071");
 		json.put("trade_no", timeStr);
-		json.put("trade_amt", "5");
+		json.put("trade_amt", "0.1");
 		// json.put("pwd", "111111");
 		json.put("trade_cur", "CNY");
 		json.put("good_info", "test测试");
 		json.put("card_id", "5882572900500000182");
 		json.put("order_type", "03");
-		json.put("merch_url", "http:/test.com");
+		json.put("merch_url", "http://a.yt.youkala.com:38080/api.jsp");
 		json.put("reserved", "youka");
 		json.put("request_time", timeStr);
-		System.out.println(json.toString());
+		System.out.println("商户信息：" + json.toString());
 		List<NameValuePair> pairs = new ArrayList<NameValuePair>();
 		pairs.add(new BasicNameValuePair("token", token));
-		System.out.println(pairs);
+		System.out.println();
+		System.out.println("pairs:" + pairs);
+		System.out.println("token:" + token);
+		System.out.println("aesKey:" + aesKey);
+		System.out.println();
 		String msg = Base64.encode(AESCoder.encrypt(json.toString().getBytes("GBK"), aesKey.getBytes()));
 		pairs.add(new BasicNameValuePair("msg", msg));
 		pairs.add(new BasicNameValuePair("sign", Utils.SHA1(msg + aesKey + token)));
@@ -109,21 +136,37 @@ public class TestZhiHuiFu {
 		@SuppressWarnings("unused")
 		StatusLine status = rsp.getStatusLine();
 		String rspText = EntityUtils.toString(rsp.getEntity(), "GBK");
-		System.out.println(rspText);
+		System.out.println("rspText:" + rspText);
+		System.out.println();
 		int a = rspText.indexOf("msg=");
 		int b = rspText.indexOf("&sign=");
 		msg = rspText.substring(a + 4, b);
 		String sign = rspText.substring(b + 6);
 		RequestCallbackInfo requestCallbackInfo = JSON.parseObject(msg, RequestCallbackInfo.class);
 		System.out.println("message:" + msg.toString());
+		System.out.println();
 		String newSign = Utils.SHA1(msg + aesKey + token);
-		System.out.println(msg + "\n" + sign + "\n" + newSign);
+		System.out.println("msg+sign+newSign:" + msg + "\n" + sign + "\n" + newSign);
+		System.out.println();
 		System.out.println("requestCallbackInfo:" + requestCallbackInfo);
+		System.out.println();
 		String data = requestCallbackInfo.getData();
-		System.out.println(data);
+		System.out.println("data:" + data);
+		System.out.println();
 		String data1 = new String(AESCoder.decrypt(Base64.decode(data), aesKey.getBytes()), "GBK");
-		System.out.println(data1);
-		return true;
+		System.out.println("data1:" + data1);
+		System.out.println();
+		OrderCallback orderCallbackInfo = JSON.parseObject(data1, OrderCallback.class);
+		String url = orderCallbackInfo.getPay_url() + orderCallbackInfo.getOrder_id();
+		return url;
+	}
+
+	public String getPay_url() {
+		return pay_url;
+	}
+
+	public void setPay_url(String pay_url) {
+		this.pay_url = pay_url;
 	}
 
 }
