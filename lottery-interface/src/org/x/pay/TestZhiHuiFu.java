@@ -55,15 +55,15 @@ public class TestZhiHuiFu {
 		List pairs = new ArrayList<NameValuePair>();
 		String msg = json.toString();
 		msg = Base64.encode(CertCoder.encryptByPublicKey(msg.getBytes(),
-				"D:/youka-work/git-source/lottery/lottery-interface/src/server.cer"
-		// "/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/server.cer"
-		));
+				// "D:/youka-work/git-source/lottery/lottery-interface/src/server.cer"
+				"/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/server.cer"));
 		System.out.println("加密:" + msg);
 		System.out.println();
 		pairs.add(new BasicNameValuePair("msg", msg));
-		byte[] r = CertCoder.sign(msg.getBytes(), "D:/youka-work/git-source/lottery/lottery-interface/src/client.pfx",
-				// "/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/client.pfx",
-				null, "123456");
+		byte[] r = CertCoder.sign(msg.getBytes(),
+				// "D:/youka-work/git-source/lottery/lottery-interface/src/client.pfx",
+				"/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/client.pfx", null,
+				"123456");
 		String sign = Base64.encode(r);
 		System.out.println("sign=" + sign);
 		System.out.println();
@@ -80,16 +80,14 @@ public class TestZhiHuiFu {
 		msg = rspText.substring(a + 4, b);
 		sign = rspText.substring(b + 6);
 		boolean bSign = CertCoder.verifySign(msg.getBytes(), Base64.decode(sign),
-				"D:/youka-work/git-source/lottery/lottery-interface/src/server.cer"
-		// "/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/server.cer"
-		);
+				// "D:/youka-work/git-source/lottery/lottery-interface/src/server.cer"
+				"/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/server.cer");
 		r = CertCoder.decryptByPrivateKey(Base64.decode(msg),
-				"D:/youka-work/git-source/lottery/lottery-interface/src/client.pfx",
-				// "/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/client.pfx",
-				null, "123456");
+				// "D:/youka-work/git-source/lottery/lottery-interface/src/client.pfx",
+				"/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/client.pfx", null,
+				"123456");
 		String r1 = new String(r, "GBK");
 		System.out.println("bSign+rspText:" + bSign + rspText + "\n" + r1);
-		System.out.println();
 		return r1;
 	}
 
@@ -103,7 +101,6 @@ public class TestZhiHuiFu {
 		Date now = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");// 可以方便地修改日期格式
 		String timeStr = dateFormat.format(now);
-		// timeStr = "20160223152525";
 		json.put("chnl_type", "WEB");
 		json.put("chnl_id", "12345678");
 		json.put("chnl_sn", timeStr);
@@ -111,13 +108,13 @@ public class TestZhiHuiFu {
 		json.put("merch_id", "862900000000001");
 		json.put("termnl_id", "00011071");
 		json.put("trade_no", timeStr);
-		json.put("trade_amt", "0.1");
+		json.put("trade_amt", "2");
 		// json.put("pwd", "111111");
 		json.put("trade_cur", "CNY");
 		json.put("good_info", "test测试");
 		json.put("card_id", "5882572900500000182");
-		json.put("order_type", "03");
-		json.put("merch_url", "http://a.yt.youkala.com:38080/api.jsp");
+		json.put("order_type", "00");
+		json.put("merch_url", "http://a.yt.youkala.com:38080/api1.jsp");
 		json.put("reserved", "youka");
 		json.put("request_time", timeStr);
 		System.out.println("商户信息：" + json.toString());
@@ -157,7 +154,9 @@ public class TestZhiHuiFu {
 		System.out.println("data1:" + data1);
 		System.out.println();
 		OrderCallback orderCallbackInfo = JSON.parseObject(data1, OrderCallback.class);
-		String url = orderCallbackInfo.getPay_url() + orderCallbackInfo.getOrder_id();
+		String url;
+		url = orderCallbackInfo.getPay_url(); // +
+												// orderCallbackInfo.getOrder_id();
 		return url;
 	}
 

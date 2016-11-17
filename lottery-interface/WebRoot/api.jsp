@@ -1,15 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-	<%@ page import = "org.x.PartnerApi"%>
+<%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
+<%@ page import = "org.x.PartnerApi"%>
 <%@ page import = "org.x.utils.AES"%>
-<%@ page import="org.x.pay.TestZhiHuiFu"%>
 <%@ page import = "org.x.info.PartnerInfo"%>
 <%@ page import = "org.x.info.PartnerOrderInfo"%>
 <%@ page import = "org.x.service.PartnerService"%>
 <%@ page import = "com.alibaba.fastjson.JSON"%>
+<%@ page import = "org.apache.log4j.Logger"%>
 <%
-	TestZhiHuiFu testZhiHuiFu = new TestZhiHuiFu();
-	testZhiHuiFu.process();
+	Logger LOG = Logger.getLogger(this.getClass());
+	LOG.debug(request.getParameter("partnerId"));
+	LOG.debug(request.getParameter("transData"));
 	PartnerOrderInfo partnerOrderInfo = JSON.parseObject(request.getParameter("transData"),
 			PartnerOrderInfo.class);
 	partnerOrderInfo.getBetInfoList().get(0).setBetDetail(request.getParameter("betDetail"));
@@ -33,9 +33,6 @@
 
 	partnerApi.process();
 
-	application.setAttribute("partnerId", partnerApi.getPartnerId());
-	application.setAttribute("transData", partnerApi.getPartnerTransData());
-	
 	if (partnerApi.getLocalErrorMsg() != null && partnerApi.getLocalErrorMsg().length() > 0) {
 		out.print(partnerApi.getLocalErrorMsg());
 		return;
@@ -45,25 +42,17 @@
 		return;
 	}
 
-	/*String path = request.getContextPath();
+	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	out.println("partnerId:" + request.getParameter("partnerId"));
-	out.println("<br>");
-	if (partnerApi.getPartnerInfo() != null && partnerApi.getPartnerInfo().getKeyAES() != null
-			&& partnerApi.getPartnerInfo().getKeyAES().length() > 0) {
-		out.println("transData:" + encryptTransData);
-	} else {
-		out.println("transData:" + transData);
-	}
-	out.println("<br>");
-	out.println("pay_url:" + testZhiHuiFu.getPay_url());	*/
 %>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<base href="<%=basePath%>">
 
-<title>支付</title>
+<title>My JSP 'index.jsp' starting page</title>
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
@@ -75,10 +64,34 @@
 </head>
 
 <body>
-	<form id="zhihuifu" action="<%=testZhiHuiFu.getPay_url()%>"
+	<br>
+	<form id="formid" action="<%=partnerApi.getPageAction().getUrl()%>"
 		method="post">
-			<button type="submit" id="submit">submit</button>
+		<%
+			for (String key : partnerApi.getPageAction().getEntity().keySet()) {
+		%>
+		<input name="<%=key%>" type="hidden"
+			value='<%=partnerApi.getPageAction().getEntity().get(key)%>'>
+		<%
+			}
+		%>
+		<button type="submit" id="submit">submit</button>
 	</form>
-	<script>document.getElementById("submit").click();</script>
 </body>
+<%
+	if (request.getParameter("partnerDebug") != null && request.getParameter("partnerDebug").equals("true")) {
+		out.println("partnerId:" + request.getParameter("partnerId"));
+		out.println("<br>");
+
+		if (partnerApi.getPartnerInfo() != null && partnerApi.getPartnerInfo().getKeyAES() != null
+				&& partnerApi.getPartnerInfo().getKeyAES().length() > 0) {
+			out.println("transData:" + encryptTransData);
+		} else {
+			out.println("transData:" + transData);
+		}
+	} else {
+		out.println("<script>document.getElementById(\"submit\").style .visibility =\'hidden\';</script>");
+		out.println("<script>document.getElementById(\"submit\").click();</script>");
+	}
+%>
 </html>
