@@ -1,9 +1,11 @@
 package org.x.pay;
 
+import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -40,6 +42,11 @@ public class TestZhiHuiFu {
 	}
 
 	protected static String orderLogin() throws Exception {
+		Properties prop = new Properties();// 属性集合对象
+		FileInputStream fis = new FileInputStream(
+				"/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/pay.properties");// 属性文件流
+		prop.load(fis);// 将属性文件流装载到Properties对象中
+
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpPost request = new HttpPost("http://test.ippit.cn/orderform/iips2/order/login");
 		JSONObject json = new JSONObject();
@@ -49,21 +56,16 @@ public class TestZhiHuiFu {
 		// timeStr = "20160223152525";
 		json.put("chnl_type", "WEB");
 		json.put("chnl_id", "12345678");
-		json.put("chnl_sn", "" + System.currentTimeMillis());
+		json.put("chnl_sn", timeStr);
 		json.put("merch_id", "862900000000001");
 		json.put("termnl_id", "00011071");
 		List pairs = new ArrayList<NameValuePair>();
 		String msg = json.toString();
-		msg = Base64.encode(CertCoder.encryptByPublicKey(msg.getBytes(),
-				// "D:/youka-work/git-source/lottery/lottery-interface/src/server.cer"
-				"/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/server.cer"));
+		msg = Base64.encode(CertCoder.encryptByPublicKey(msg.getBytes(), prop.getProperty("net.url") + "/server.cer"));
 		System.out.println("加密:" + msg);
 		System.out.println();
 		pairs.add(new BasicNameValuePair("msg", msg));
-		byte[] r = CertCoder.sign(msg.getBytes(),
-				// "D:/youka-work/git-source/lottery/lottery-interface/src/client.pfx",
-				"/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/client.pfx", null,
-				"123456");
+		byte[] r = CertCoder.sign(msg.getBytes(), prop.getProperty("net.url") + "/client.pfx", null, "123456");
 		String sign = Base64.encode(r);
 		System.out.println("sign=" + sign);
 		System.out.println();
@@ -80,11 +82,8 @@ public class TestZhiHuiFu {
 		msg = rspText.substring(a + 4, b);
 		sign = rspText.substring(b + 6);
 		boolean bSign = CertCoder.verifySign(msg.getBytes(), Base64.decode(sign),
-				// "D:/youka-work/git-source/lottery/lottery-interface/src/server.cer"
-				"/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/server.cer");
-		r = CertCoder.decryptByPrivateKey(Base64.decode(msg),
-				// "D:/youka-work/git-source/lottery/lottery-interface/src/client.pfx",
-				"/data/server/apache-tomcat-8.0.36/webapps/a.yt.youkala.com/WEB-INF/classes/client.pfx", null,
+				prop.getProperty("net.url") + "/server.cer");
+		r = CertCoder.decryptByPrivateKey(Base64.decode(msg), prop.getProperty("net.url") + "/client.pfx", null,
 				"123456");
 		String r1 = new String(r, "GBK");
 		System.out.println("bSign+rspText:" + bSign + rspText + "\n" + r1);
@@ -108,12 +107,12 @@ public class TestZhiHuiFu {
 		json.put("merch_id", "862900000000001");
 		json.put("termnl_id", "00011071");
 		json.put("trade_no", timeStr);
-		json.put("trade_amt", "2");
+		json.put("trade_amt", "0.01");
 		// json.put("pwd", "111111");
 		json.put("trade_cur", "CNY");
 		json.put("good_info", "test测试");
 		json.put("card_id", "5882572900500000182");
-		json.put("order_type", "00");
+		json.put("order_type", "02");
 		json.put("merch_url", "http://a.yt.youkala.com:38080/api1.jsp");
 		json.put("reserved", "youka");
 		json.put("request_time", timeStr);
@@ -154,9 +153,7 @@ public class TestZhiHuiFu {
 		System.out.println("data1:" + data1);
 		System.out.println();
 		OrderCallback orderCallbackInfo = JSON.parseObject(data1, OrderCallback.class);
-		String url;
-		url = orderCallbackInfo.getPay_url(); // +
-												// orderCallbackInfo.getOrder_id();
+		String url = orderCallbackInfo.getPay_url() + orderCallbackInfo.getOrder_id();
 		return url;
 	}
 

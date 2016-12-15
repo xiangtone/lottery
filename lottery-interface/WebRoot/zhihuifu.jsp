@@ -3,10 +3,12 @@
 	<%@ page import = "org.x.PartnerApi"%>
 <%@ page import = "org.x.utils.AES"%>
 <%@ page import="org.x.pay.TestZhiHuiFu"%>
+<%@ page import="org.x.pay.OrderCallback"%>
 <%@ page import = "org.x.info.PartnerInfo"%>
 <%@ page import = "org.x.info.PartnerOrderInfo"%>
 <%@ page import = "org.x.service.PartnerService"%>
 <%@ page import = "com.alibaba.fastjson.JSON"%>
+<%@ page import = "org.apache.log4j.Logger"%>
 <%
 	TestZhiHuiFu testZhiHuiFu = new TestZhiHuiFu();
 	testZhiHuiFu.process();
@@ -44,20 +46,6 @@
 		out.print(" error:page action is null");
 		return;
 	}
-
-	/*String path = request.getContextPath();
-	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
-	out.println("partnerId:" + request.getParameter("partnerId"));
-	out.println("<br>");
-	if (partnerApi.getPartnerInfo() != null && partnerApi.getPartnerInfo().getKeyAES() != null
-			&& partnerApi.getPartnerInfo().getKeyAES().length() > 0) {
-		out.println("transData:" + encryptTransData);
-	} else {
-		out.println("transData:" + transData);
-	}
-	out.println("<br>");
-	out.println("pay_url:" + testZhiHuiFu.getPay_url());	*/
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>

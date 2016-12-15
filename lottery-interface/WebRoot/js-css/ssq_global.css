@@ -1,0 +1,250 @@
+html,body {
+	position:absolute;
+	height:100%;
+	width:100%;
+	font-size: 12px;
+	line-height: 1.5;
+	background: #FFF
+}
+
+body, input, textarea, select {
+	font-size: 100%;
+	color: #333;
+	font-family: arial
+}
+
+body, h1, h2, h3, h4, p, ul, ol, dl, dt, dd {
+	margin: 0
+}
+
+ul, ol {
+	padding-left: 0;
+	list-style-type: none
+}
+
+.black {
+	color: #000
+}
+
+.white {
+	color: #fff
+}
+
+.grey {
+	color: #999
+}
+
+.red {
+	color: #c00
+}
+
+.green {
+	color: #090
+}
+
+.blue {
+	color: #467c9e
+}
+
+.bold {
+	font-weight: bold
+}
+
+.hide {
+	display: none
+}
+
+.red-bar {
+	color: red
+}
+
+.app-page{
+	position:absolute;
+	height:100%;
+	overflow-y:auto;
+	width:100%;
+}
+.select .select-red {
+	text-align: center;
+}
+
+.select .select-red ul {
+	margin: 0 auto;
+	padding: 10px 0 5px 0;
+	overflow: hidden;
+}
+
+.select .select-red ul li {
+	float: left;
+	margin: 1px 6px 6px 1px;
+	cursor: pointer;
+}
+
+.select .blue-bar {
+	color: blue
+}
+
+.select .select-blue {
+	text-align: center;
+}
+
+.select .select-blue ul {
+	margin: 0 auto;
+	padding: 10px 0;
+	overflow: hidden;
+}
+
+.select .select-blue ul li {
+	float: left;
+	margin: 1px 6px 6px 1px;
+	cursor: pointer;
+}
+
+
+.select .nqiu {
+	background: url(./ball_now.png) repeat-x;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	padding-top: 6px;
+	font-weight: bold;
+}
+
+.select .redqiu {
+	background: url(./ball_red.png) repeat-x;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	padding-top: 6px;
+	font-weight: bold;
+	font-size:16px;
+}
+
+.select .blueqiu {
+	background: url(./ball_blue.png) repeat-x;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	padding-top: 6px;
+	font-weight: bold;
+	font-size:16px;
+}
+
+.result .select {
+	overflow: hidden;
+	height: 40px;
+}
+
+.result .select .left {
+	float: left;
+	width: 70%;
+	text-align: left;
+}
+
+.result .select .left h3 {
+	background: none;
+	line-height: 19px;
+	height: 19px;
+	padding-left: 40px;
+}
+
+.result .select .left ul {
+	margin: 0 auto;
+	padding: 5px 5px;
+}
+
+.result .select .left ul li {
+	float: left;
+	margin: 0 5px 5px 0;
+}
+
+.result .select .right {
+	float: left;
+	width: 30%;
+	text-align: left;
+}
+
+.result .select .right h3 {
+	background: none;
+	line-height: 19px;
+	height: 19px;
+	padding-left: 40px;
+}
+
+.result .select .right ul {
+	margin: 0 auto;
+	padding: 5px 0;
+}
+
+.result .select .right ul li {
+	float: left;
+	margin: 0 5px 5px 0;
+}
+
+.total {
+	padding: 10px 0 10px 0;
+	font: 14px/20px "ËÎÌו";
+	text-align: center;
+	clear: left;
+}
+
+.btn {
+	height: 35px;
+}
+
+.jixuan {
+	float: left;
+	margin: 0 0 0 15%;
+}
+
+.button {
+	display: inline-block;
+	outline: none;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	font: 14px/100% Arial, Helvetica, sans-serif;
+	padding: .4em 1em .5em;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, .3);
+	-webkit-border-radius: .5em;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+	color: #fef4e9;
+	border: solid 1px #da7c0c;
+	background: #f78d1d;
+	background: -webkit-gradient(linear, left top, left bottom, from(#faa51a),
+		to(#f47a20));
+	background: -moz-linear-gradient(top, #faa51a, #f47a20);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a',
+		endColorstr='#f47a20');
+}
+
+.button:hover {
+	background: #f47c20;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f88e11),
+		to(#f06015));
+	background: -moz-linear-gradient(top, #f88e11, #f06015);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11',
+		endColorstr='#f06015');
+}
+
+.button:active {
+	color: #fcd3a5;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f47a20),
+		to(#faa51a));
+	background: -moz-linear-gradient(top, #f47a20, #faa51a);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20',
+		endColorstr='#faa51a');
+}
+
+.ant {
+	float: right;
+	margin: 0 15% 0 0;
+}
+
+.touzhu {
+	text-align: center;
+}

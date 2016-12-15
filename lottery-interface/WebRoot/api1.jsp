@@ -19,23 +19,8 @@
 	String encryptTransData;
 	PartnerInfo partnerInfo = PartnerService.getInstance().getNameLoadingCache(partnerApi.getPartnerId());
 	partnerApi.setPartnerInfo(partnerInfo);
-
 	partnerApi.setPartnerTransData(application.getAttribute("transData").toString());
-
 	partnerApi.process();
-
-	if (partnerApi.getLocalErrorMsg() != null && partnerApi.getLocalErrorMsg().length() > 0) {
-		out.print(partnerApi.getLocalErrorMsg());
-		return;
-	}
-	if (partnerApi.getPageAction() == null) {
-		out.print(" error:page action is null");
-		return;
-	}
-
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
 %>
     
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -45,7 +30,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form id="zhihuifu" action="<%=partnerApi.getPageAction().getUrl()%>"
+<form id="api1" action="<%=partnerApi.getPageAction().getUrl()%>"
 		method="post">
 		 <%
 			for (String key : partnerApi.getPageAction().getEntity().keySet()) {
@@ -57,6 +42,7 @@
 		%>
 			<button type="submit" id="submit">submit</button>
 	</form>
+	<script>document.getElementById("submit").style .visibility ='hidden';</script>
 	<script>document.getElementById("submit").click();</script>
 </body>
 </html>

@@ -43,4 +43,12 @@ public class OrderCallback {
 				+ expir_time + ", return_code=" + return_code + ", chnl_sn=" + chnl_sn + "]";
 	}
 
+	public String getCard_id() {
+		return card_id;
+	}
+
+	public void setCard_id(String card_id) {
+		this.card_id = card_id;
+	}
+
 }
