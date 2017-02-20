@@ -15,7 +15,7 @@ public class PartnerOrderInfo {
 	private String userName;
 	private String lotteryId;
 	private int numberSelectType;
-	private String betTotalAmount;
+	private int betTotalAmount;
 	private String partnerCallbackURL;
 	private List<BetInfo> betInfoList = new ArrayList<BetInfo>();
 
@@ -84,11 +84,11 @@ public class PartnerOrderInfo {
 		this.lotteryId = lotteryId;
 	}
 
-	public String getBetTotalAmount() {
+	public int getBetTotalAmount() {
 		return betTotalAmount;
 	}
 
-	public void setBetTotalAmount(String betTotalAmount) {
+	public void setBetTotalAmount(int betTotalAmount) {
 		this.betTotalAmount = betTotalAmount;
 	}
 

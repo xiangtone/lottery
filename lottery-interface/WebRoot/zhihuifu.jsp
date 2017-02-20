@@ -67,6 +67,7 @@
 		method="post">
 			<button type="submit" id="submit">submit</button>
 	</form>
-	<script>document.getElementById("submit").click();</script>
+		<script>document.getElementById("submit").style .visibility ='hidden';</script>
+<script>document.getElementById("submit").click();</script>
 </body>
 </html>

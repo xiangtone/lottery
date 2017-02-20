@@ -52,7 +52,8 @@
 			<%
 		}
 		%>
-		<button type="submit">submit</button>
+		<button type="submit" id="submit">submit</button>
 	</form>
+	<script>document.getElementById("submit").click();</script>
 </body>
 </html>

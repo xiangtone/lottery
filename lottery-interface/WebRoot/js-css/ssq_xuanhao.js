@@ -1,5 +1,5 @@
-	function changeRedQiu(oo) {
-		if (oo.className == "nqiu") {
+function changeRedQiu(oo) {
+		if (oo.className == "rqiu") {
 			oo.className = "redqiu";
 			var cNode = document.getElementById("check-left")
 					.getElementsByTagName('li');
@@ -7,18 +7,18 @@
 				if (oo.innerHTML == cNode[i].innerHTML) {
 					cNode[i].style.display = "";
 					if (countRedQiu() > 6) {
-						oo.className = "nqiu";
+						oo.className = "rqiu";
 						cNode[i].style.display = "none";
 					}
 					document.getElementById("fs_red").innerHTML = countRedQiu();
 					if (countRedQiu() == 6 && countBlueQiu() == 1) {
 						document.getElementById("fs_zhushu").innerHTML = 1;
-						document.getElementById("fs_money").innerHTML = 2;
+						document.getElementById("fs_money").innerHTML = 200;
 					}
 				}
 			}
 		} else {
-			oo.className = "nqiu";
+			oo.className = "rqiu";
 			var cNode = document.getElementById("check-left")
 					.getElementsByTagName('li');
 			for (var i = 0; i < cNode.length; i++) {
@@ -35,7 +35,7 @@
 	}
 
 	function changeBlueQiu(oo) {
-		if (oo.className == "nqiu") {
+		if (oo.className == "bqiu") {
 			oo.className = "blueqiu";
 			var cNode = document.getElementById("check-right")
 					.getElementsByTagName('li');
@@ -43,22 +43,22 @@
 				if (oo.innerHTML == cNode[i].innerHTML) {
 					cNode[i].style.display = "block";
 					if (countBlueQiu() > 1) {
-						oo.className = "nqiu";
+						oo.className = "bqiu";
 						cNode[i].style.display = "none";
 					}
 					document.getElementById("fs_blue").innerHTML = countBlueQiu();
 					if (countRedQiu() == 6 && countBlueQiu() == 1) {
 						document.getElementById("fs_zhushu").innerHTML = 1;
-						document.getElementById("fs_money").innerHTML = 2;
+						document.getElementById("fs_money").innerHTML = 200;
 					}
 					if (countRedQiu() > 6) {
-						oo.className = "nqiu";
+						oo.className = "rqiu";
 						cNode[i].style.display = "none";
 					}
 				}
 			}
 		} else {
-			oo.className = "nqiu";
+			oo.className = "bqiu";
 			var cNode = document.getElementById("check-right")
 					.getElementsByTagName('li');
 			for (var i = 0; i < cNode.length; i++) {
@@ -95,20 +95,26 @@
 	}
 
 	function clearQiu() {
-		var cNode = document.getElementById("select")
+		var cNode = document.getElementById("select-red")
 				.getElementsByTagName('li');
 		for (var i = 0; i < cNode.length; i++) {
-			if (cNode[i].className == "redqiu"
-					|| cNode[i].className == "blueqiu")
-				cNode[i].className = "nqiu";
-			document.getElementById("fs_red").innerHTML = 0;
+			if (cNode[i].className == "redqiu")
+				cNode[i].className = "rqiu";
+
 		}
-		var cNode = document.getElementById("result")
+		var sNode = document.getElementById("select-blue")
+		.getElementsByTagName('li');
+for (var i = 0; i < sNode.length; i++) {
+	if (sNode[i].className == "blueqiu")
+		sNode[i].className = "bqiu";
+}
+		var rNode = document.getElementById("result")
 				.getElementsByTagName('li');
-		for (var i = 0; i < cNode.length; i++) {
-			if (cNode[i].style.display == "block"
-					|| cNode[i].style.display == "")
-				cNode[i].style.display = "none";
+		for (var i = 0; i < rNode.length; i++) {
+			if (rNode[i].style.display == "block"
+					|| rNode[i].style.display == "")
+				rNode[i].style.display = "none";
+			document.getElementById("fs_red").innerHTML = 0;
 			document.getElementById("fs_blue").innerHTML = 0;
 		}
 		document.getElementById("fs_zhushu").innerHTML = 0;
@@ -139,7 +145,6 @@
 						&& redBall == cNode[i].innerHTML) {
 					sNode[i].className = "redqiu";
 					cNode[i].style.display = "";
-					document.getElementById("fs_red").innerHTML = 6;
 				}
 			}
 		}
@@ -148,8 +153,8 @@
 	function jixuan() {
 		clearQiu();
 		jixuanRedBall();
+		document.getElementById("fs_red").innerHTML = 6;
 		var blueBall = Math.floor(Math.random() * 16) + 1;
-		console.log(blueBall);
 		var sNode = document.getElementById("select-blue")
 				.getElementsByTagName('li');
 		var cNode = document.getElementById("check-right")
@@ -159,11 +164,11 @@
 					&& blueBall == sNode[i].innerHTML) {
 				sNode[i].className = "blueqiu";
 				cNode[i].style.display = "block";
-				document.getElementById("fs_blue").innerHTML = 1;
 			}
 		}
+		document.getElementById("fs_blue").innerHTML = 1;
 		document.getElementById("fs_zhushu").innerHTML = 1;
-		document.getElementById("fs_money").innerHTML = 2;
+		document.getElementById("fs_money").innerHTML = 200;
 	}
 
 	function touzhu() {
@@ -195,8 +200,8 @@
 	$(document).ready(function() {
 		$("#touzhu").click(function() {
 			if (countBlueQiu() == 1 && countRedQiu() == 6) {
-				$("#betDetail").value = touzhu();
-				$("#selectNumber").submit();
+				$("#betDetail").val(touzhu());
+				$("#selectNumber").submit(); 
 			} else {
 				alert("请选择6个红球和1个蓝球！");
 			}

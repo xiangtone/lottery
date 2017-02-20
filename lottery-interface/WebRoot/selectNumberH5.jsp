@@ -22,69 +22,66 @@
 			value="<%=request.getParameter("partnerId")%>"> <input
 			id="transData" name="transData" type="hidden"
 			value='<%=request.getParameter("transData")%>'> <input
-			id="betDetail" name="betDetail" type="hidden" value=""> <input
-			id="userPhoneNumber" name="userPhoneNumber" type="hidden"
-			value="<%=request.getParameter("userPhoneNumber")%>">
+			id="betDetail" name="betDetail" type="hidden" value=""> 
 	</form>
 	<div class="app-page" data-page="home">
 		<div class="select" id="select">
-			<h2 class="red-bar" style="background: #ffcccc">红球(请选择6个红球)：</h2>
+			<h2 class="red-bar">请选择6个红球1个蓝球：</h2>
 			<div class="select-red" id="select-red">
 				<ul>
-					<li id="redQiu1" class="nqiu" onclick="changeRedQiu(this)">01</li>
-					<li id="redQiu2" class="nqiu" onclick="changeRedQiu(this)">02</li>
-					<li id="redQiu3" class="nqiu" onclick="changeRedQiu(this)">03</li>
-					<li id="redQiu4" class="nqiu" onclick="changeRedQiu(this)">04</li>
-					<li id="redQiu5" class="nqiu" onclick="changeRedQiu(this)">05</li>
-					<li id="redQiu6" class="nqiu" onclick="changeRedQiu(this)">06</li>
-					<li id="redQiu7" class="nqiu" onclick="changeRedQiu(this)">07</li>
-					<li id="redQiu8" class="nqiu" onclick="changeRedQiu(this)">08</li>
-					<li id="redQiu9" class="nqiu" onclick="changeRedQiu(this)">09</li>
-					<li id="redQiu10" class="nqiu" onclick="changeRedQiu(this)">10</li>
-					<li id="redQiu11" class="nqiu" onclick="changeRedQiu(this)">11</li>
-					<li id="redQiu12" class="nqiu" onclick="changeRedQiu(this)">12</li>
-					<li id="redQiu13" class="nqiu" onclick="changeRedQiu(this)">13</li>
-					<li id="redQiu14" class="nqiu" onclick="changeRedQiu(this)">14</li>
-					<li id="redQiu15" class="nqiu" onclick="changeRedQiu(this)">15</li>
-					<li id="redQiu16" class="nqiu" onclick="changeRedQiu(this)">16</li>
-					<li id="redQiu17" class="nqiu" onclick="changeRedQiu(this)">17</li>
-					<li id="redQiu18" class="nqiu" onclick="changeRedQiu(this)">18</li>
-					<li id="redQiu19" class="nqiu" onclick="changeRedQiu(this)">19</li>
-					<li id="redQiu20" class="nqiu" onclick="changeRedQiu(this)">20</li>
-					<li id="redQiu21" class="nqiu" onclick="changeRedQiu(this)">21</li>
-					<li id="redQiu22" class="nqiu" onclick="changeRedQiu(this)">22</li>
-					<li id="redQiu23" class="nqiu" onclick="changeRedQiu(this)">23</li>
-					<li id="redQiu24" class="nqiu" onclick="changeRedQiu(this)">24</li>
-					<li id="redQiu25" class="nqiu" onclick="changeRedQiu(this)">25</li>
-					<li id="redQiu26" class="nqiu" onclick="changeRedQiu(this)">26</li>
-					<li id="redQiu27" class="nqiu" onclick="changeRedQiu(this)">27</li>
-					<li id="redQiu28" class="nqiu" onclick="changeRedQiu(this)">28</li>
-					<li id="redQiu29" class="nqiu" onclick="changeRedQiu(this)">29</li>
-					<li id="redQiu30" class="nqiu" onclick="changeRedQiu(this)">30</li>
-					<li id="redQiu31" class="nqiu" onclick="changeRedQiu(this)">31</li>
-					<li id="redQiu32" class="nqiu" onclick="changeRedQiu(this)">32</li>
-					<li id="redQiu33" class="nqiu" onclick="changeRedQiu(this)">33</li>
+					<li id="redQiu1" class="rqiu" onclick="changeRedQiu(this)">01</li>
+					<li id="redQiu2" class="rqiu" onclick="changeRedQiu(this)">02</li>
+					<li id="redQiu3" class="rqiu" onclick="changeRedQiu(this)">03</li>
+					<li id="redQiu4" class="rqiu" onclick="changeRedQiu(this)">04</li>
+					<li id="redQiu5" class="rqiu" onclick="changeRedQiu(this)">05</li>
+					<li id="redQiu6" class="rqiu" onclick="changeRedQiu(this)">06</li>
+					<li id="redQiu7" class="rqiu" onclick="changeRedQiu(this)">07</li>
+					<li id="redQiu8" class="rqiu" onclick="changeRedQiu(this)">08</li>
+					<li id="redQiu9" class="rqiu" onclick="changeRedQiu(this)">09</li>
+					<li id="redQiu10" class="rqiu" onclick="changeRedQiu(this)">10</li>
+					<li id="redQiu11" class="rqiu" onclick="changeRedQiu(this)">11</li>
+					<li id="redQiu12" class="rqiu" onclick="changeRedQiu(this)">12</li>
+					<li id="redQiu13" class="rqiu" onclick="changeRedQiu(this)">13</li>
+					<li id="redQiu14" class="rqiu" onclick="changeRedQiu(this)">14</li>
+					<li id="redQiu15" class="rqiu" onclick="changeRedQiu(this)">15</li>
+					<li id="redQiu16" class="rqiu" onclick="changeRedQiu(this)">16</li>
+					<li id="redQiu17" class="rqiu" onclick="changeRedQiu(this)">17</li>
+					<li id="redQiu18" class="rqiu" onclick="changeRedQiu(this)">18</li>
+					<li id="redQiu19" class="rqiu" onclick="changeRedQiu(this)">19</li>
+					<li id="redQiu20" class="rqiu" onclick="changeRedQiu(this)">20</li>
+					<li id="redQiu21" class="rqiu" onclick="changeRedQiu(this)">21</li>
+					<li id="redQiu22" class="rqiu" onclick="changeRedQiu(this)">22</li>
+					<li id="redQiu23" class="rqiu" onclick="changeRedQiu(this)">23</li>
+					<li id="redQiu24" class="rqiu" onclick="changeRedQiu(this)">24</li>
+					<li id="redQiu25" class="rqiu" onclick="changeRedQiu(this)">25</li>
+					<li id="redQiu26" class="rqiu" onclick="changeRedQiu(this)">26</li>
+					<li id="redQiu27" class="rqiu" onclick="changeRedQiu(this)">27</li>
+					<li id="redQiu28" class="rqiu" onclick="changeRedQiu(this)">28</li>
+					<li id="redQiu29" class="rqiu" onclick="changeRedQiu(this)">29</li>
+					<li id="redQiu30" class="rqiu" onclick="changeRedQiu(this)">30</li>
+					<li id="redQiu31" class="rqiu" onclick="changeRedQiu(this)">31</li>
+					<li id="redQiu32" class="rqiu" onclick="changeRedQiu(this)">32</li>
+					<li id="redQiu33" class="rqiu" onclick="changeRedQiu(this)">33</li>
 				</ul>
 			</div>
-			<h2 class="blue-bar" style="background: #66ffff">蓝球(请选择1个蓝球)：</h2>
 			<div id="select-blue" class="select-blue">
 				<ul>
-					<li id="blueQiu1" class="nqiu" onclick="changeBlueQiu(this)">01</li>
-					<li id="blueQiu2" class="nqiu" onclick="changeBlueQiu(this)">02</li>
-					<li id="blueQiu3" class="nqiu" onclick="changeBlueQiu(this)">03</li>
-					<li id="blueQiu4" class="nqiu" onclick="changeBlueQiu(this)">04</li>
-					<li id="blueQiu5" class="nqiu" onclick="changeBlueQiu(this)">05</li>
-					<li id="blueQiu6" class="nqiu" onclick="changeBlueQiu(this)">06</li>
-					<li id="blueQiu7" class="nqiu" onclick="changeBlueQiu(this)">07</li>
-					<li id="blueQiu8" class="nqiu" onclick="changeBlueQiu(this)">08</li>
-					<li id="blueQiu9" class="nqiu" onclick="changeBlueQiu(this)">09</li>
-					<li id="blueQiu10" class="nqiu" onclick="changeBlueQiu(this)">10</li>
-					<li id="blueQiu11" class="nqiu" onclick="changeBlueQiu(this)">11</li>
-					<li id="blueQiu12" class="nqiu" onclick="changeBlueQiu(this)">12</li>
-					<li id="blueQiu13" class="nqiu" onclick="changeBlueQiu(this)">13</li>
-					<li id="blueQiu14" class="nqiu" onclick="changeBlueQiu(this)">14</li>
-					<li id="blueQiu15" class="nqiu" onclick="changeBlueQiu(this)">15</li>
-					<li id="blueQiu16" class="nqiu" onclick="changeBlueQiu(this)">16</li>
+					<li id="blueQiu1" class="bqiu" onclick="changeBlueQiu(this)">01</li>
+					<li id="blueQiu2" class="bqiu" onclick="changeBlueQiu(this)">02</li>
+					<li id="blueQiu3" class="bqiu" onclick="changeBlueQiu(this)">03</li>
+					<li id="blueQiu4" class="bqiu" onclick="changeBlueQiu(this)">04</li>
+					<li id="blueQiu5" class="bqiu" onclick="changeBlueQiu(this)">05</li>
+					<li id="blueQiu6" class="bqiu" onclick="changeBlueQiu(this)">06</li>
+					<li id="blueQiu7" class="bqiu" onclick="changeBlueQiu(this)">07</li>
+					<li id="blueQiu8" class="bqiu" onclick="changeBlueQiu(this)">08</li>
+					<li id="blueQiu9" class="bqiu" onclick="changeBlueQiu(this)">09</li>
+					<li id="blueQiu10" class="bqiu" onclick="changeBlueQiu(this)">10</li>
+					<li id="blueQiu11" class="bqiu" onclick="changeBlueQiu(this)">11</li>
+					<li id="blueQiu12" class="bqiu" onclick="changeBlueQiu(this)">12</li>
+					<li id="blueQiu13" class="bqiu" onclick="changeBlueQiu(this)">13</li>
+					<li id="blueQiu14" class="bqiu" onclick="changeBlueQiu(this)">14</li>
+					<li id="blueQiu15" class="bqiu" onclick="changeBlueQiu(this)">15</li>
+					<li id="blueQiu16" class="bqiu" onclick="changeBlueQiu(this)">16</li>
 				</ul>
 			</div>
 			<div class="btn">
@@ -157,9 +154,9 @@
 			<div class="total">
 				您选择了 <span id="fs_red_count" class="red"><strong id="fs_red">0</strong></span>
 				个红球<span class="dt-total"></span>， <span id="fs_blue_count"
-					class="blue"><strong id="fs_blue">0</strong></span> 个蓝球，共 &nbsp;<span
-					id="fs_zhushu">0</span>&nbsp; 注，共 <span class="red"><strong
-					id="fs_money">0</strong></span> <span class="unit-text">元</span>
+					class="blue"><strong id="fs_blue">0</strong></span> 个蓝球，共 <span
+					id="fs_zhushu">0</span> 注，共 <span class="red"><strong id="fs_money">0</strong>
+					</span>积分
 			</div>
 			<div class="touzhu">
 				<input id="touzhu" type="button" class="button" value="立即投注">

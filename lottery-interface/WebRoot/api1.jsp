@@ -16,7 +16,6 @@
 	partnerApi.setIp(request.getHeader("X-Real-IP") != null && request.getHeader("X-Real-IP").length() > 0
 			? request.getHeader("X-Real-IP") : request.getRemoteAddr());
 	partnerApi.setPartnerId(application.getAttribute("partnerId").toString());
-	String encryptTransData;
 	PartnerInfo partnerInfo = PartnerService.getInstance().getNameLoadingCache(partnerApi.getPartnerId());
 	partnerApi.setPartnerInfo(partnerInfo);
 	partnerApi.setPartnerTransData(application.getAttribute("transData").toString());

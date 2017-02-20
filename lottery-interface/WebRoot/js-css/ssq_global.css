@@ -4,7 +4,6 @@ html,body {
 	width:100%;
 	font-size: 12px;
 	line-height: 1.5;
-	background: #FFF
 }
 
 body, input, textarea, select {
@@ -16,6 +15,7 @@ body, input, textarea, select {
 body, h1, h2, h3, h4, p, ul, ol, dl, dt, dd {
 	margin: 0
 }
+
 
 ul, ol {
 	padding-left: 0;
@@ -55,7 +55,7 @@ ul, ol {
 }
 
 .red-bar {
-	color: red
+	color: red;
 }
 
 .app-page{
@@ -63,9 +63,11 @@ ul, ol {
 	height:100%;
 	overflow-y:auto;
 	width:100%;
+	background:white;
 }
 .select .select-red {
-	text-align: center;
+	text-align:center;
+	margin: 0 auto;
 }
 
 .select .select-red ul {
@@ -80,12 +82,9 @@ ul, ol {
 	cursor: pointer;
 }
 
-.select .blue-bar {
-	color: blue
-}
-
 .select .select-blue {
-	text-align: center;
+	text-align:center;
+	margin: 0 auto;
 }
 
 .select .select-blue ul {
@@ -101,15 +100,25 @@ ul, ol {
 }
 
 
-.select .nqiu {
-	background: url(./ball_now.png) repeat-x;
+.select .bqiu {
+	background: url(./ball_blueover.png) repeat-x;
 	width: 30px;
 	height: 30px;
 	text-align: center;
 	padding-top: 6px;
 	font-weight: bold;
+	font-size: 14px;
 }
 
+.select .rqiu {
+	background: url(./ball_redover.png) repeat-x;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	padding-top: 6px;
+	font-weight: bold;
+	font-size: 14px;
+}
 .select .redqiu {
 	background: url(./ball_red.png) repeat-x;
 	width: 30px;
@@ -117,7 +126,8 @@ ul, ol {
 	text-align: center;
 	padding-top: 6px;
 	font-weight: bold;
-	font-size:16px;
+	color:white;
+	font-size: 14px;
 }
 
 .select .blueqiu {
@@ -127,7 +137,8 @@ ul, ol {
 	text-align: center;
 	padding-top: 6px;
 	font-weight: bold;
-	font-size:16px;
+	color:white;
+	font-size: 14px;
 }
 
 .result .select {
@@ -183,7 +194,7 @@ ul, ol {
 
 .total {
 	padding: 10px 0 10px 0;
-	font: 14px/20px "ËÎÌå";
+	font: 14px/20px "Ã‹ÃŽÃŒÃ¥";
 	text-align: center;
 	clear: left;
 }
@@ -247,4 +258,5 @@ ul, ol {
 
 .touzhu {
 	text-align: center;
+}
 }
